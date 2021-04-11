@@ -13,6 +13,13 @@ Board class >> withSize: aSize [
 ]
 
 { #category : #initialize }
+Board >> initialize [
+	"comment stating purpose of instance-side message"
+	"scope: class-variables  &  instance-variables"	
+	mySize :=0.
+]
+
+{ #category : #initialize }
 Board >> initializeUsing: aSize [
 	mySize:=aSize.
 ]
