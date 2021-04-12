@@ -35,6 +35,20 @@ Tests >> testCreateADiceWithNSides [
 ]
 
 { #category : #tests }
+Tests >> testCreateAPlayer [
+	| myPlayer |
+	myPlayer := Player new.
+	self assert: (myPlayer location) equals:0
+]
+
+{ #category : #tests }
+Tests >> testCreateAPlayerWithNLocation [
+	| myPlayer |
+	myPlayer := Player withLocation: 6.
+	self assert: (myPlayer location) equals:6.
+]
+
+{ #category : #tests }
 Tests >> testDummy [
 	"a dummy test comment"
 	"un dia en un cementerio de pizzas habian 2 pizzas"
