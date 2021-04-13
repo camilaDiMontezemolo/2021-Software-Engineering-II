@@ -9,7 +9,7 @@ Class {
 
 { #category : #'instance creation' }
 Dice class >> withSides: numberOfSides [ 
-	^self new initializeUsing: numberOfSides.
+	^self new initializeWithSides: numberOfSides.
 ]
 
 { #category : #initialize }
@@ -18,11 +18,16 @@ Dice >> initialize [
 ]
 
 { #category : #initialize }
-Dice >> initializeUsing: aNumberOfSides [ 
+Dice >> initializeWithSides: aNumberOfSides [ 
 	sides:= aNumberOfSides.
 ]
 
 { #category : #'as yet unclassified' }
 Dice >> sides [
 	^sides.
+]
+
+{ #category : #'as yet unclassified' }
+Dice >> spin [
+	^((1 to: sides) atRandom).
 ]

@@ -12,7 +12,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 Player class >> withLocation: aLocation [ 
-	^self new initializeUsing: aLocation.
+	^self new initializeWithLocation: aLocation.
 ]
 
 { #category : #initialization }
@@ -21,7 +21,7 @@ Player >> initialize [
 ]
 
 { #category : #initialization }
-Player >> initializeUsing: aLocation [
+Player >> initializeWithLocation: aLocation [
 	location:=aLocation.
 ]
 
@@ -34,6 +34,6 @@ Player >> location [
 Player >> tosses: someDie [
 	|distance|
 	distance:=0.
-	someDie do: [:dice | distance := distance + ((1 to: (dice sides)) atRandom)].
+	someDie do: [:dice | distance := distance + (dice spin)].
 	location := location + distance.
 ]

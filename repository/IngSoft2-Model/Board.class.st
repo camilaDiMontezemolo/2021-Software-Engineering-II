@@ -9,7 +9,7 @@ Class {
 
 { #category : #'instance creation' }
 Board class >> withSize: aSize [ 
-	^self new initializeUsing: aSize.
+	^self new initializeWithSize: aSize.
 ]
 
 { #category : #initialize }
@@ -20,7 +20,7 @@ Board >> initialize [
 ]
 
 { #category : #initialize }
-Board >> initializeUsing: aSize [
+Board >> initializeWithSize: aSize [
 	mySize:=aSize.
 ]
 
