@@ -7,19 +7,17 @@ Class {
 { #category : #tests }
 Tests >> testAPlayerTossesADice [
 "Un jugador tira un dado- su ubicacion cambia de acuerdo al numero que sacó"
-	| myPlayer myDice mySecondDice|
+	| myPlayer myDie |
 	
 	myPlayer := Player new.
 	self assert: (myPlayer location) equals:0.
 	
-	myDice := Dice withSides: 6.
-	self assert: (myDice sides) equals:6.
+	myDie:=OrderedCollection with: (Dice withSides: 6) with: (Dice withSides: 4).
 	
-	mySecondDice := Dice withSides: 4.
-	self assert: (mySecondDice sides) equals:4.
+	self assert: ((myDie at:1) sides) equals:6.
+	self assert: ((myDie at:2) sides) equals:4.
 	
-	myPlayer tosses: (myDice sides).
-	myPlayer tosses: (mySecondDice sides).
+	myPlayer tosses: myDie.
 	
 	self deny: (myPlayer location) equals:0.
 ]

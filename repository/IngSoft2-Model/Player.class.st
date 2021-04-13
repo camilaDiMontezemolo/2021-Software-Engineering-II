@@ -31,6 +31,9 @@ Player >> location [
 ]
 
 { #category : #'as yet unclassified' }
-Player >> tosses: arg [
-	location := location + ((1 to: arg) atRandom).
+Player >> tosses: someDie [
+	|distance|
+	distance:=0.
+	someDie do: [:dice | distance := distance + ((1 to: (dice sides)) atRandom)].
+	location := location + distance.
 ]
