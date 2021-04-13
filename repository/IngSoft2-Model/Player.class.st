@@ -29,3 +29,8 @@ Player >> initializeUsing: aLocation [
 Player >> location [
 	^location.
 ]
+
+{ #category : #'as yet unclassified' }
+Player >> tosses: arg [
+	location := location + ((1 to: arg) atRandom).
+]
