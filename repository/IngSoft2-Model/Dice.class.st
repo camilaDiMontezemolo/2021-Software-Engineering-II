@@ -29,5 +29,5 @@ Dice >> sides [
 
 { #category : #'as yet unclassified' }
 Dice >> spin [
-	^((1 to: sides) atRandom).
+	^(sides atRandom).
 ]
