@@ -7,18 +7,17 @@ Class {
 { #category : #tests }
 Tests >> testAPlayerTossesADice [
 "Un jugador tira un dado- su ubicacion cambia de acuerdo al numero que sacó"
-	| myPlayer myDie myBoard |
+	| myPlayer myDie |
 	
 	myPlayer := Player withName: 'Pizza Hawaiana'.
 	self assert: (myPlayer location) equals:0.
 	
-	myBoard:= Board withSize: 1 andPlayers: (OrderedCollection with: myPlayer).
 	myDie:=OrderedCollection with: (Dice withSides: 6) with: (Dice withSides: 4).
 	
 	self assert: ((myDie at:1) sides) equals:6.
 	self assert: ((myDie at:2) sides) equals:4.
 	
-	myPlayer tosses: myDie on: myBoard.
+	myPlayer tosses: myDie.
 	
 	self deny: (myPlayer location) equals:0.
 ]
@@ -54,15 +53,14 @@ Tests >> testCreateAGameSinglePLayer [
 	laQueHablaRaro:= Player new.
 	self assert: (laQueHablaRaro location) equals:0.
 	
-	myBoard:= Board withSize: 1 andPlayers: (OrderedCollection with: laQueHablaRaro).
-	
 	myDie := OrderedCollection with: (Dice withSides: 1).
 	
-	laQueHablaRaro tosses: myDie on: myBoard.
+	myBoard:= Board withSize: 5 andPlayers: (OrderedCollection with: laQueHablaRaro) andDie: myDie.
+	"self assert: (((myBoard players) at:0) isEqualTo: laQueHablaRaro)."
+	
+	myBoard play.
 	self deny: (laQueHablaRaro location) equals:0.
-	
 	self assert: (myBoard isFinished).
-	
 	
 ]
 

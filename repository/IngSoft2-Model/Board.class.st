@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'mySize',
-		'myPlayers'
+		'myPlayers',
+		'myDie'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -18,12 +19,18 @@ Board class >> withSize: aSize andPlayers: somePlayers [
 	^self new initializeWithSize: aSize andPlayers: somePlayers.
 ]
 
+{ #category : #'instance creation' }
+Board class >> withSize: aSize andPlayers: somePlayers andDie: someDie [.
+	^self new initializeWithSize: aSize andPlayers: somePlayers andDie: someDie.
+]
+
 { #category : #initialize }
 Board >> initialize [
 	"comment stating purpose of instance-side message"
 	"scope: class-variables  &  instance-variables"	
 	mySize :=0.
-	myPlayers := OrderedCollection new
+	myPlayers := OrderedCollection new.
+	myDie:= OrderedCollection new.
 ]
 
 { #category : #initialize }
@@ -37,9 +44,39 @@ Board >> initializeWithSize: aSize andPlayers: somePlayers [
 	myPlayers:=somePlayers.
 ]
 
+{ #category : #initialize }
+Board >> initializeWithSize: aSize andPlayers: somePlayers andDie: someDie [
+	mySize:=aSize.
+	myPlayers:=somePlayers.
+	myDie:=someDie.
+]
+
 { #category : #'as yet unclassified' }
 Board >> isFinished [
 	^myPlayers anySatisfy: [ :player | (player location) >= mySize].
+]
+
+{ #category : #'as yet unclassified' }
+Board >> play [
+	myPlayers do: [ :player |
+		(self isFinished) 
+		ifFalse: [
+			 player tosses: myDie.
+			].
+		].
+	(self isFinished ) ifFalse: self play.
+]
+
+{ #category : #'as yet unclassified' }
+Board >> playWithDie: someDie [
+	(self isFinished) whileFalse:[
+		myPlayers do: [ :player |
+			(self isFinished) 
+			ifFalse: [
+				 player tosses: someDie.
+				]
+			].
+	]
 ]
 
 { #category : #'as yet unclassified' }
@@ -52,7 +89,6 @@ Board >> showPositions [
 	myPlayers sort: [:a :c | (a location) > (c location)].
 	"myPlayers do: [ :player | Transcript show: 'Name: ', (player name), 'Location: ', (player location); cr]."
 	^myPlayers.
-	
 ]
 
 { #category : #'as yet unclassified' }

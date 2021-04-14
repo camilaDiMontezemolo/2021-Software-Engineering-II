@@ -60,16 +60,9 @@ Player >> name [
 ]
 
 { #category : #'as yet unclassified' }
-Player >> tosses: someDie on: aBoard [
+Player >> tosses: someDie [
 	|distance|
-	
-	(aBoard isFinished) ifFalse:[
 	distance:=0.
 	someDie do: [:dice | distance := distance + (dice spin)].
-	location := location + distance.].
-	
-	(aBoard isFinished) ifTrue:[
-		aBoard showPositions.
-		]
-	
+	location := location + distance.
 ]
