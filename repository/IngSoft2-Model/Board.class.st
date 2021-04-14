@@ -64,7 +64,7 @@ Board >> play [
 			 player tosses: myDie.
 			].
 		].
-	(self isFinished ) ifFalse: self play.
+	(self isFinished ) ifFalse: [self play].
 ]
 
 { #category : #'as yet unclassified' }
