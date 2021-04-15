@@ -8,9 +8,16 @@ Class {
 Tests >> test001_CreateABoard [
 	"a dummy test comment"
 	"un dia en un cementerio de pizzas habian 2 pizzas"
-	| myBoard |
-	myBoard := Board new.
-	self assert: (myBoard sizeOfBoard) equals: 0.
+	| myBoard myDie laQueHablaRaro |
+	
+	laQueHablaRaro:= Player withName: 'laQueHablaRaro'.
+	self assert: (laQueHablaRaro location) equals:0.
+	
+	myDie := OrderedCollection with: (Dice withSides: 1).
+	
+	myBoard:= Board withSize:0 andPlayers: (OrderedCollection with: laQueHablaRaro) andDie: myDie.
+	
+	self should: [myBoard sizeOfBoard] raise: Error.
 ]
 
 { #category : #tests }
@@ -35,9 +42,13 @@ Tests >> test003_CreateAPlayerWithNLocationAndName [
 
 { #category : #tests }
 Tests >> test004_CreateADiceWithNSides [
-	| myDice |
+	| myDice mySecondDice |
 	myDice := Dice withSides: 6.
-	self assert: (myDice sides) equals:6
+	self assert: (myDice sides) equals:6.
+	
+	mySecondDice := Dice withSides: 0.
+	self should: [mySecondDice sides] raise: Error.
+	"self should: [mySecondDice sides] raise: Error description: ('No existen los dados de 0 lados')."
 ]
 
 { #category : #tests }

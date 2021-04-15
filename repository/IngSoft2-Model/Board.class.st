@@ -25,6 +25,7 @@ Board >> initialize [
 
 { #category : #initialize }
 Board >> initializeWithSize: aSize andPlayers: somePlayers andDie: someDie [
+	(aSize < 1) ifTrue: [ ^(Error) ].
 	mySize:=aSize.
 	myPlayers:=somePlayers.
 	myDie:=someDie.

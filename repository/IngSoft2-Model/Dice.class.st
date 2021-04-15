@@ -19,6 +19,8 @@ Dice >> initialize [
 
 { #category : #initialize }
 Dice >> initializeWithSides: aNumberOfSides [ 
+	"aNumberOfSides < 1 ifTrue: [ ^(self error: 'No existen los dados de 0 lados') ]."
+	aNumberOfSides < 1 ifTrue: [ ^(Error) ].
 	sides:= aNumberOfSides.
 ]
 
