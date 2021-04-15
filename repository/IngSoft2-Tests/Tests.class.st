@@ -46,21 +46,47 @@ Tests >> testCreateADiceWithNSides [
 ]
 
 { #category : #tests }
-Tests >> testCreateAGameSinglePLayer [
+Tests >> testCreateAGameMultiPlayer [
 	
-	| myBoard myDie laQueHablaRaro |
+	| myBoard myDie napolitana positions margarita testPlayers |
 	
-	laQueHablaRaro:= Player new.
+	napolitana:= Player withLocation: 5 andName: 'Ana Bolena'.
+	self assert: (napolitana location) equals:5.
+	
+	margarita:= Player withLocation: 0 andName: 'Ben Reilly'.
+	self assert: (margarita location) equals:0.
+	
+	testPlayers:= OrderedCollection with: napolitana with: margarita.
+	
+	myDie := OrderedCollection with: (Dice withSides: 1).
+	
+	myBoard:= Board withSize: 10 andPlayers: testPlayers andDie: myDie.
+	
+	positions:= myBoard play.
+	self assert: (napolitana location) equals:10.
+	self assert: (margarita location) equals:4.
+	self assert: (myBoard isFinished).
+	self assert: ((positions at:1) equals: napolitana).
+	self assert: ((positions at:2) equals: margarita).
+	
+]
+
+{ #category : #tests }
+Tests >> testCreateAGameSinglePlayer [
+	
+	| myBoard myDie laQueHablaRaro positions |
+	
+	laQueHablaRaro:= Player withName: 'laQueHablaRaro'.
 	self assert: (laQueHablaRaro location) equals:0.
 	
 	myDie := OrderedCollection with: (Dice withSides: 1).
 	
 	myBoard:= Board withSize: 5 andPlayers: (OrderedCollection with: laQueHablaRaro) andDie: myDie.
-	"self assert: (((myBoard players) at:0) isEqualTo: laQueHablaRaro)."
 	
-	myBoard play.
+	positions:= myBoard play.
 	self deny: (laQueHablaRaro location) equals:0.
 	self assert: (myBoard isFinished).
+	self assert: ((positions at:1) equals: laQueHablaRaro).
 	
 ]
 

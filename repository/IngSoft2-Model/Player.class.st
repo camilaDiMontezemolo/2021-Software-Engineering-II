@@ -26,6 +26,11 @@ Player class >> withName: aName [
 	^self new initializeWithName: aName.
 ]
 
+{ #category : #'as yet unclassified' }
+Player >> equals: aPlayer [ 
+	^(location = (aPlayer location)) and: (myName = (aPlayer name)).
+]
+
 { #category : #initialization }
 Player >> initialize [ 
 	location:=0.

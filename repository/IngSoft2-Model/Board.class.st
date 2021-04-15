@@ -64,7 +64,9 @@ Board >> play [
 			 player tosses: myDie.
 			].
 		].
-	(self isFinished ) ifFalse: [self play].
+	(self isFinished )
+	ifFalse: [^(self play)]
+	ifTrue:[^(self showPositions)].
 ]
 
 { #category : #'as yet unclassified' }
@@ -87,7 +89,8 @@ Board >> players [
 { #category : #'as yet unclassified' }
 Board >> showPositions [
 	myPlayers sort: [:a :c | (a location) > (c location)].
-	"myPlayers do: [ :player | Transcript show: 'Name: ', (player name), 'Location: ', (player location); cr]."
+	myPlayers do: [ :player |
+		 Transcript show: 'Position: ' , ((myPlayers indexOf: player) printString), ' Name: ', (player name), ' Location: ', ((player location) printString); cr].
 	^myPlayers.
 ]
 
