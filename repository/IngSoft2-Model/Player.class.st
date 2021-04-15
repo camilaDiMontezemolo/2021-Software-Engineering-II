@@ -12,11 +12,6 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-Player class >> withLocation: aLocation [ 
-	^self new initializeWithLocation: aLocation.
-]
-
-{ #category : #'as yet unclassified' }
 Player class >> withLocation: aLocation andName: aName [
 	^self new initializeWithLocation: aLocation andName: aName.
 ]
@@ -38,12 +33,8 @@ Player >> initialize [
 ]
 
 { #category : #initialization }
-Player >> initializeWithLocation: aLocation [
-	location:=aLocation.
-]
-
-{ #category : #initialization }
 Player >> initializeWithLocation: aLocation andName: aName [
+	"Necesario para contrarrestar el random en los test"
 	location:=aLocation.
 	myName := aName.
 ]

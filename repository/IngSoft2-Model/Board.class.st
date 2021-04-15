@@ -10,16 +10,6 @@ Class {
 }
 
 { #category : #'instance creation' }
-Board class >> withSize: aSize [
-	^self new initializeWithSize: aSize
-]
-
-{ #category : #'instance creation' }
-Board class >> withSize: aSize andPlayers: somePlayers [
-	^self new initializeWithSize: aSize andPlayers: somePlayers.
-]
-
-{ #category : #'instance creation' }
 Board class >> withSize: aSize andPlayers: somePlayers andDie: someDie [.
 	^self new initializeWithSize: aSize andPlayers: somePlayers andDie: someDie.
 ]
@@ -31,17 +21,6 @@ Board >> initialize [
 	mySize :=0.
 	myPlayers := OrderedCollection new.
 	myDie:= OrderedCollection new.
-]
-
-{ #category : #initialize }
-Board >> initializeWithSize: aSize [
-	mySize:=aSize.
-]
-
-{ #category : #initialize }
-Board >> initializeWithSize: aSize andPlayers: somePlayers [
-	mySize:=aSize.
-	myPlayers:=somePlayers.
 ]
 
 { #category : #initialize }
@@ -67,18 +46,6 @@ Board >> play [
 	(self isFinished )
 	ifFalse: [^(self play)]
 	ifTrue:[^(self showPositions)].
-]
-
-{ #category : #'as yet unclassified' }
-Board >> playWithDie: someDie [
-	(self isFinished) whileFalse:[
-		myPlayers do: [ :player |
-			(self isFinished) 
-			ifFalse: [
-				 player tosses: someDie.
-				]
-			].
-	]
 ]
 
 { #category : #'as yet unclassified' }
