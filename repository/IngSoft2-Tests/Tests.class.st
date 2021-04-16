@@ -22,6 +22,9 @@ Tests >> test001_CreateABoard [
 	boardWithoutPlayers  := Board withSize:1 andPlayers: (OrderedCollection new) andDie: myDie.
 	self should: [boardWithoutPlayers  player] raise: Error.
 	
+	boardWithoutDie  := Board withSize:0 andPlayers: (OrderedCollection with: laQueHablaRaro) andDie: 	(OrderedCollection new).
+	self should: [boardWithoutDie die] raise: Error.
+	
 	
 ]
 

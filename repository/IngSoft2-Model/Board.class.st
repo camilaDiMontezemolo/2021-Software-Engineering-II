@@ -14,6 +14,11 @@ Board class >> withSize: aSize andPlayers: somePlayers andDie: someDie [.
 	^self new initializeWithSize: aSize andPlayers: somePlayers andDie: someDie.
 ]
 
+{ #category : #'as yet unclassified' }
+Board >> die [
+	^myDie.
+]
+
 { #category : #initialize }
 Board >> initialize [
 	"comment stating purpose of instance-side message"
@@ -27,6 +32,7 @@ Board >> initialize [
 Board >> initializeWithSize: aSize andPlayers: somePlayers andDie: someDie [
 	(aSize < 1) ifTrue: [ ^(Error) ].
 	(somePlayers isEmpty ) ifTrue: [ ^(Error) ].
+	(someDie isEmpty ) ifTrue: [ ^(Error) 	].
 	mySize:=aSize.
 	myPlayers:=somePlayers.
 	myDie:=someDie.
