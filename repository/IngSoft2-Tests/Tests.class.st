@@ -8,7 +8,7 @@ Class {
 Tests >> test001_CreateABoard [
 	"a dummy test comment"
 	"un dia en un cementerio de pizzas habian 2 pizzas"
-	| myBoard myDie laQueHablaRaro |
+	| myBoard myDie laQueHablaRaro boardWithoutPlayers boardWithoutDie|
 	
 	laQueHablaRaro:= Player withName: 'laQueHablaRaro'.
 	self assert: (laQueHablaRaro location) equals:0.
@@ -18,6 +18,11 @@ Tests >> test001_CreateABoard [
 	myBoard:= Board withSize:0 andPlayers: (OrderedCollection with: laQueHablaRaro) andDie: myDie.
 	
 	self should: [myBoard sizeOfBoard] raise: Error.
+	
+	boardWithoutPlayers  := Board withSize:1 andPlayers: (OrderedCollection new) andDie: myDie.
+	self should: [boardWithoutPlayers  player] raise: Error.
+	
+	
 ]
 
 { #category : #tests }
