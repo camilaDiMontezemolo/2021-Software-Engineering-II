@@ -5,7 +5,30 @@ Class {
 }
 
 { #category : #tests }
-Tests >> test001_CreateABoard [
+Tests >> test000_CreateABoard [
+	"a dummy test comment"
+	"un dia en un cementerio de pizzas habian 2 pizzas"
+	| myBoard myDie laQueHablaRaro myPlayers |
+	
+	laQueHablaRaro:= Player withName: 'laQueHablaRaro'.
+	self assert: (laQueHablaRaro location) equals:0.
+	
+	myDie := OrderedCollection with: (Dice withSides: 1).
+	
+	myPlayers:= (OrderedCollection with: laQueHablaRaro).
+	
+	myBoard:= Board withSize:10 andPlayers: myPlayers andDie: myDie.
+	
+	self assert: (myBoard sizeOfBoard) equals: 10.
+
+	self assert: (myBoard players) equals: myPlayers.
+	
+	self assert: (myBoard die) equals: myDie.
+	
+]
+
+{ #category : #tests }
+Tests >> test001_invalidBoardValuesRaiseError [
 	"a dummy test comment"
 	"un dia en un cementerio de pizzas habian 2 pizzas"
 	| myBoard myDie laQueHablaRaro boardWithoutPlayers boardWithoutDie|
@@ -99,15 +122,18 @@ Tests >> test006_CreateAGameSinglePlayer [
 { #category : #tests }
 Tests >> test007_CreateAGameMultiPlayer [
 	
-	| myBoard myDie napolitana positions margarita testPlayers |
+	| myBoard myDie napolitana positions margarita testPlayers mozzarella |
 	
 	napolitana:= Player withLocation: 5 andName: 'Ana Bolena'.
 	self assert: (napolitana location) equals:5.
 	
 	margarita:= Player withLocation: 0 andName: 'Ben Reilly'.
 	self assert: (margarita location) equals:0.
+
+	mozzarella:= Player withLocation: 1 andName: 'María Antonietta'.
+	self assert: (mozzarella location) equals:1.
 	
-	testPlayers:= OrderedCollection with: napolitana with: margarita.
+	testPlayers:= OrderedCollection with: napolitana with: margarita with: mozzarella.
 	
 	myDie := OrderedCollection with: (Dice withSides: 1).
 	
@@ -116,8 +142,10 @@ Tests >> test007_CreateAGameMultiPlayer [
 	positions:= myBoard play.
 	self assert: (napolitana location) equals:10.
 	self assert: (margarita location) equals:4.
+	self assert: (mozzarella location) equals:5.
 	self assert: (myBoard isFinished).
 	self assert: ((positions at:1) equals: napolitana).
-	self assert: ((positions at:2) equals: margarita).
+	self assert: ((positions at:2) equals: mozzarella).
+	self assert: ((positions at:3) equals: margarita).
 	
 ]
