@@ -11,6 +11,9 @@ Class {
 
 { #category : #'instance creation' }
 Board class >> withSize: aSize andPlayers: somePlayers andDie: someDie [.
+	(aSize < 1) ifTrue: [ Error signal: 'Un tablero no puede tener menos de 1 casilla.' ].
+	(somePlayers isEmpty ) ifTrue: [ Error signal: 'Un tablero no puede tener menos de 1 jugador.' ].
+	(someDie isEmpty ) ifTrue: [ Error signal: 'Un tablero no puede tener menos de 1 dado.' 	].
 	^self new initializeWithSize: aSize andPlayers: somePlayers andDie: someDie.
 ]
 
@@ -30,9 +33,6 @@ Board >> initialize [
 
 { #category : #initialize }
 Board >> initializeWithSize: aSize andPlayers: somePlayers andDie: someDie [
-	(aSize < 1) ifTrue: [ ^(Error) ].
-	(somePlayers isEmpty ) ifTrue: [ ^(Error) ].
-	(someDie isEmpty ) ifTrue: [ ^(Error) 	].
 	mySize:=aSize.
 	myPlayers:=somePlayers.
 	myDie:=someDie.
@@ -48,7 +48,7 @@ Board >> play [
 	myPlayers do: [ :player |
 		(self isFinished) 
 		ifFalse: [
-			 player tosses: myDie.
+			 self runTurnFor: player.
 			].
 		].
 	(self isFinished )
@@ -62,10 +62,23 @@ Board >> players [
 ]
 
 { #category : #'as yet unclassified' }
+Board >> runTurnFor: aPlayer [
+	|distance|
+	distance:=0.
+	myDie do: [:dice | distance := distance + (dice spin)].
+	
+	((aPlayer location + distance) < mySize)
+		ifTrue: [
+		aPlayer setLocation:((aPlayer location) + distance).
+		]
+		ifFalse: [
+			 aPlayer setLocation: mySize 
+		].
+]
+
+{ #category : #'as yet unclassified' }
 Board >> showPositions [
 	myPlayers sort: [:a :c | (a location) > (c location)].
-	myPlayers do: [ :player |
-		 Transcript show: 'Position: ' , ((myPlayers indexOf: player) printString), ' Name: ', (player name), ' Location: ', ((player location) printString); cr].
 	^myPlayers.
 ]
 

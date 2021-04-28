@@ -34,7 +34,6 @@ Player >> initialize [
 
 { #category : #initialization }
 Player >> initializeWithLocation: aLocation andName: aName [
-	"Necesario para contrarrestar el random en los test"
 	location:=aLocation.
 	myName := aName.
 ]
@@ -56,9 +55,6 @@ Player >> name [
 ]
 
 { #category : #'as yet unclassified' }
-Player >> tosses: someDie [
-	|distance|
-	distance:=0.
-	someDie do: [:dice | distance := distance + (dice spin)].
-	location := location + distance.
+Player >> setLocation: newLocation [
+	location := newLocation.
 ]
