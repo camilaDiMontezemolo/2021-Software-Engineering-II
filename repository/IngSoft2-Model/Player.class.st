@@ -12,12 +12,8 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-Player class >> withLocation: aLocation andName: aName [
-	^self new initializeWithLocation: aLocation andName: aName.
-]
-
-{ #category : #'as yet unclassified' }
 Player class >> withName: aName [
+	(aName = '') ifTrue: [ Error signal: 'Todo jugador debe tener un nombre.' ].
 	^self new initializeWithName: aName.
 ]
 
@@ -30,12 +26,6 @@ Player >> equals: aPlayer [
 Player >> initialize [ 
 	location:=0.
 	myName:=''.
-]
-
-{ #category : #initialization }
-Player >> initializeWithLocation: aLocation andName: aName [
-	location:=aLocation.
-	myName := aName.
 ]
 
 { #category : #initialization }
