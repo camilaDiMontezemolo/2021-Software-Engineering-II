@@ -6,5 +6,5 @@ Class {
 
 { #category : #'as yet unclassified' }
 AtomicBombBox >> pizzaEffect [
-	^[].
+	^[:a |].
 ]

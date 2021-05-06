@@ -17,10 +17,13 @@ Board class >> withSize: aSize [
 { #category : #'as yet unclassified' }
 Board >> add: aPercentage of: aBoxType [
 	| indice |
-	indice := 0.
-	[indice < (mySize *aPercentage ) and: (myBoxes size < mySize)]
-		whileTrue:[ myBoxes add: aBoxType new.
-			indice = (indice +1) ].
+	indice := 1.
+	[(indice <= (mySize *aPercentage)) & (myBoxes size < mySize)]
+		whileTrue:[
+			myBoxes add: (aBoxType new).
+			indice := (indice +1).
+			].
+		
 ]
 
 { #category : #'as yet unclassified' }
@@ -43,6 +46,11 @@ Board >> initializeWithSize: aSize [
 	self add: 0.2 of: WormHoleBox.
 	self add: 0.1 of: MoonWalkBox.
 	self add: 0.02 of: AtomicBombBox.
+	(myBoxes size < mySize)
+		ifTrue: [ 
+			(myBoxes size) to: (mySize -1) do: [:emptyBox | myBoxes add: (NoEffectBox new) ].
+		].
+	myBoxes := myBoxes shuffled.
 	
 ]
 

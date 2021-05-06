@@ -6,5 +6,15 @@ Class {
 
 { #category : #'as yet unclassified' }
 SpeedupBox >> pizzaEffect [
-	^[].
+	| aPlayer myBoard |
+	^[:a |
+		(aPlayer location - 4  > 0)
+		ifTrue: [
+			aPlayer setLocation:(aPlayer location - 4).
+		]
+		ifFalse: [ 
+			aPlayer setLocation: (myBoard sizeOfBoard - (aPlayer location - 4)).
+			"Acá considerar el cambio de VUELTAS al tablero."
+		].
+	].
 ]

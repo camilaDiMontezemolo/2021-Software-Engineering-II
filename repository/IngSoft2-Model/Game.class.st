@@ -66,7 +66,7 @@ Game >> runTurnFor: aPlayer [
 	((aPlayer location + distance) < (myBoard sizeOfBoard))
 		ifTrue: [
 		aPlayer setLocation:((aPlayer location) + distance).
-		((myBoard boxes) at: (aPlayer location)) pizzaEffect.
+		1 to: 2 do: (((myBoard boxes) at: (aPlayer location)) pizzaEffect).
 		]
 		ifFalse: [
 			 aPlayer setLocation: (myBoard sizeOfBoard).
