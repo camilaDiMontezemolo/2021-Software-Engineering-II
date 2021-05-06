@@ -1,10 +1,10 @@
 Class {
-	#name : #LoadedDice,
-	#superclass : #Dice,
+	#name : #Box,
+	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'as yet unclassified' }
-LoadedDice >> spin [
-	^sides.
+Box >> pizzaEffect [
+	^[].
 ]

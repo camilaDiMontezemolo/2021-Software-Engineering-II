@@ -1,10 +1,10 @@
 Class {
-	#name : #LoadedDice,
-	#superclass : #Dice,
+	#name : #MoonWalkBox,
+	#superclass : #Box,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'as yet unclassified' }
-LoadedDice >> spin [
-	^sides.
+MoonWalkBox >> pizzaEffect [
+	^[].
 ]
