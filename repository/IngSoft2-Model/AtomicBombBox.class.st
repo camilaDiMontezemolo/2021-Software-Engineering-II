@@ -1,10 +1,10 @@
 Class {
 	#name : #AtomicBombBox,
-	#superclass : #Box,
+	#superclass : #MultVictimBox,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'as yet unclassified' }
-AtomicBombBox >> pizzaEffect [
-	^[:a |].
+AtomicBombBox >> affect: aPlayer and: aBoard [
+	^[].
 ]

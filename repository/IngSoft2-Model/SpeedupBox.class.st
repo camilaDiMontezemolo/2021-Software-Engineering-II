@@ -1,20 +1,17 @@
 Class {
 	#name : #SpeedupBox,
-	#superclass : #Box,
+	#superclass : #SingleVictimBox,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'as yet unclassified' }
-SpeedupBox >> pizzaEffect [
-	| aPlayer myBoard |
-	^[:a |
-		(aPlayer location - 4  > 0)
-		ifTrue: [
-			aPlayer setLocation:(aPlayer location - 4).
-		]
-		ifFalse: [ 
-			aPlayer setLocation: (myBoard sizeOfBoard - (aPlayer location - 4)).
-			"Acá considerar el cambio de VUELTAS al tablero."
-		].
+SpeedupBox >> affect: aPlayer and: aBoard [
+	(aPlayer location + 4  < (aBoard sizeOfBoard))
+	ifTrue: [
+		aPlayer setLocation:(aPlayer location + 4).
+	]
+	ifFalse: [ 
+		aPlayer setLocation: (4 - (aBoard sizeOfBoard - aPlayer location)).
+		aPlayer increaseLaps.
 	].
 ]

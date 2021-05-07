@@ -1,21 +1,17 @@
 Class {
 	#name : #WormHoleBox,
-	#superclass : #Box,
+	#superclass : #SingleVictimBox,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'as yet unclassified' }
-WormHoleBox >> pizzaEffect [
-	| aPlayer myBoard |
-	^[
-		(aPlayer location - 4  > 0)
-		ifTrue: [
-			aPlayer setLocation:(aPlayer location - 4).
-		]
-		ifFalse: [ 
-			aPlayer setLocation: (myBoard sizeOfBoard - (aPlayer location - 4)).
-			"Acá considerar el cambio de VUELTAS al tablero."
-		].
+WormHoleBox >> affect: aPlayer and: aBoard [
+	(aPlayer location - 4  > 0)
+	ifTrue: [
+		aPlayer setLocation:(aPlayer location - 4).
+	]
+	ifFalse: [ 
+		aPlayer setLocation: (aBoard sizeOfBoard - (aPlayer location - 4)).
+		aPlayer increaseLaps.
 	].
-	"players do: [algo :)]"
 ]

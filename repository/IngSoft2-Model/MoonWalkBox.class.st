@@ -1,10 +1,10 @@
 Class {
 	#name : #MoonWalkBox,
-	#superclass : #Box,
+	#superclass : #MultVictimBox,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'as yet unclassified' }
-MoonWalkBox >> pizzaEffect [
-	^[:a |].
+MoonWalkBox >> affect: aPlayer and: aBoard [
+	^[].
 ]

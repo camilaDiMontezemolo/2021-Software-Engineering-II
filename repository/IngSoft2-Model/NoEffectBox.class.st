@@ -1,10 +1,10 @@
 Class {
 	#name : #NoEffectBox,
-	#superclass : #Box,
+	#superclass : #SingleVictimBox,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'as yet unclassified' }
-NoEffectBox >> pizzaEffect [
+NoEffectBox >> affect: aPlayer and: aBoard [
 	^[:a | Transcript show: 'No hubo efecto'.].
 ]
