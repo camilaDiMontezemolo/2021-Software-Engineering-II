@@ -35,7 +35,7 @@ Player >> increaseLaps [
 
 { #category : #initialization }
 Player >> initialize [ 
-	location:=0.
+	location:=1.
 	myLaps:=0.
 	myName:=''.
 ]
@@ -44,7 +44,7 @@ Player >> initialize [
 Player >> initializeWithName: aName [
 	myName := aName.
 	myLaps:=0.
-	location:=0.
+	location:=1.
 ]
 
 { #category : #'as yet unclassified' }
