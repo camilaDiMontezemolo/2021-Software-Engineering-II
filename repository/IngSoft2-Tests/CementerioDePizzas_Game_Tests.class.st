@@ -143,25 +143,27 @@ CementerioDePizzas_Game_Tests >> test006_CreateAGameSinglePlayer [
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> test007_CreateAGameMultiPlayer [
 	
-	| game myBoard myDie napolitana positions margarita testPlayers mozzarella sizeOfBoard |
+	| game myBoard myDie napolitana positions margarita testPlayers mozzarella sizeOfBoard myBoxes |
 	
 	napolitana:= Player withName: 'napolitana'.	
 	margarita:= Player withName: 'margarita'.
 	mozzarella:= Player withName: 'mozzarella'.
 	
-	sizeOfBoard:=10.
+	sizeOfBoard:=6.
 	
-	myBoard := Board withSize: sizeOfBoard.
+	myBoxes := OrderedCollection with: (NoEffectBox new) with: (NoEffectBox new) with: (WormHoleBox new) with: (AtomicBombBox new) with: (LoadedMoonWalkBox new) with: (SpeedupBox new).
+	
+	myBoard := LoadedBoard withBoxes: myBoxes.
 	
 	testPlayers:= OrderedCollection with: napolitana with: margarita with: mozzarella.
 	
-	myDie := OrderedCollection with: (LoadedDice withSides: 6).
+	myDie := OrderedCollection with: (LoadedDice withTosses: #(3 3 3 2 2 2 2 2 2 1 1 1 2 2 2)).
 	
 	game:= Game withBoard: myBoard andPlayers: testPlayers andDie: myDie andLaps: 1.
 	
 	positions:= game play.
 	
-	self assert: (napolitana location) equals: sizeOfBoard.
+	self assert: (testPlayers anySatisfy: [ :player | (player location) = sizeOfBoard]).
 	"self assert: (margarita location) equals:6.
 	self assert: (mozzarella location) equals:6."
 	self assert: (game isFinished).
