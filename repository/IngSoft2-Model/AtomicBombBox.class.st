@@ -5,6 +5,6 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-AtomicBombBox >> affect: aPlayer and: aBoard [
-	^[].
+AtomicBombBox >> affect: somePlayers and: aBoard [
+	somePlayers do: [:player | player setLocation: 0].
 ]

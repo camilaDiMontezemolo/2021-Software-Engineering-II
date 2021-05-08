@@ -44,11 +44,11 @@ Board >> initializeWithSize: aSize [
 	self add: 0.48 of: NoEffectBox.
 	self add: 0.2 of: SpeedupBox.
 	self add: 0.2 of: WormHoleBox.
-	"self add: 0.1 of: MoonWalkBox.
-	self add: 0.02 of: AtomicBombBox."
+	self add: 0.1 of: MoonWalkBox.
+	self add: 0.02 of: AtomicBombBox.
 	(myBoxes size < mySize)
 		ifTrue: [ 
-			(myBoxes size) to: (mySize -1) do: [:emptyBox | myBoxes add: (NoEffectBox new) ].
+			(myBoxes size) to: mySize do: [:emptyBox | myBoxes add: (NoEffectBox new) ].
 		].
 	myBoxes := myBoxes shuffled.
 	

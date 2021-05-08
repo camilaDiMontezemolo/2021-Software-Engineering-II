@@ -20,11 +20,23 @@ Game class >> withBoard: aBoard andPlayers: somePlayers andDie: someDie andLaps:
 
 { #category : #'as yet unclassified' }
 Game >> applyEffectFor: aPlayer [
-	| box |
-	box := myBoard boxes at: aPlayer location.
+	| box affectedPlayers |
+	box := myBoard boxes at: (aPlayer location+1).
 	(box isKindOf: MultVictimBox)
-		ifTrue: [ box affect: myPlayers and: myBoard ]
-		ifFalse: [ box affect: aPlayer and: myBoard ]
+		ifTrue: [ 
+			affectedPlayers:= myPlayers.
+			(box isKindOf: MoonWalkBox) 
+				ifTrue: [ 
+					affectedPlayers:= 
+						(myPlayers select: 
+							[:player| 
+								(player equals: aPlayer) not
+							]
+						)
+				].
+			box affect: affectedPlayers and: myBoard
+			]
+		ifFalse: [ box affect: aPlayer and: myBoard ].
 ]
 
 { #category : #'as yet unclassified' }
@@ -48,12 +60,6 @@ Game >> initializeWithBoard: aBoard andPlayers: somePlayers andDie: someDie andL
 
 { #category : #'as yet unclassified' }
 Game >> isFinished [
-	| winner |
-	(myPlayers anySatisfy: [ :player | (player laps) >= myLaps])
-	ifTrue: [
-		winner:= myPlayers select: [ :player | (player laps) >= myLaps].
-		(winner at:1) setLocation: (myBoard sizeOfBoard).
-	].
 	^myPlayers anySatisfy: [ :player | (player laps) >= myLaps].
 ]
 
@@ -80,18 +86,29 @@ Game >> runTurnFor: aPlayer [
 	| distance |
 	distance := 0.
 	myDie do: [ :dice | distance := distance + dice spin ].
-	(aPlayer location + distance < myBoard sizeOfBoard)
+	
+	(aPlayer location + distance <= myBoard sizeOfBoard)
 		ifTrue: [ 
 			aPlayer setLocation: aPlayer location + distance.]
 		ifFalse: [
 			aPlayer
 			setLocation: distance - (myBoard sizeOfBoard - aPlayer location).
-			aPlayer increaseLaps.].
-	self applyEffectFor: aPlayer.
+			aPlayer increaseLaps.
+			].
+		
+	(self isFinished)
+			ifTrue: [ aPlayer setLocation: (myBoard sizeOfBoard) ]
+			ifFalse: [self applyEffectFor: aPlayer.].
+	(self isFinished)
+			ifTrue: [ aPlayer setLocation: (myBoard sizeOfBoard) ]
 ]
 
 { #category : #'as yet unclassified' }
 Game >> showPositions [
-	myPlayers sort: [:a :c | (a location) > (c location)].
+	myPlayers sort: [:a :c | 
+		(a laps = (c laps))
+			ifTrue: [ (a location) > (c location)]
+			ifFalse:[ (a laps) > (c laps)].
+		].
 	^myPlayers.
 ]

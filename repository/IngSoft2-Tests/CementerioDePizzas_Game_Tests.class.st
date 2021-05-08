@@ -35,7 +35,7 @@ CementerioDePizzas_Game_Tests >> test000_CreateAGame [
 	| myBoard myDie laQueHablaRaro myPlayers myGame block |
 	
 	laQueHablaRaro:= Player withName: 'laQueHablaRaro'.
-	self assert: (laQueHablaRaro location) equals:1.
+	self assert: (laQueHablaRaro location) equals:0.
 	
 	myDie := OrderedCollection with: (Dice withSides: 1).
 	
@@ -63,7 +63,7 @@ CementerioDePizzas_Game_Tests >> test001_invalidBoardValuesRaiseError [
 	| myBoard myDie laQueHablaRaro boardWithoutPlayers boardWithoutDie block kindOfError errorMessage block2 block3 |
 	
 	laQueHablaRaro := Player withName: 'laQueHablaRaro'.
-	self assert: laQueHablaRaro location equals: 1.
+	self assert: laQueHablaRaro location equals: 0.
 	
 	myDie := OrderedCollection with: (Dice withSides: 1).
 		
@@ -102,7 +102,7 @@ CementerioDePizzas_Game_Tests >> test001_invalidBoardValuesRaiseError [
 CementerioDePizzas_Game_Tests >> test002_CreateAPlayer [
 	| myPlayer block |
 	myPlayer := Player withName: 'Push-Pop :)'.
-	self assert: (myPlayer location) equals:1.
+	self assert: (myPlayer location) equals:0.
 	self assert: (myPlayer name) equals: 'Push-Pop :)'.
 	
 	block:= [Player withName: ''.].
@@ -125,7 +125,7 @@ CementerioDePizzas_Game_Tests >> test006_CreateAGameSinglePlayer [
 	| myBoard game myDie laQueHablaRaro positions |
 	
 	laQueHablaRaro:= Player withName: 'laQueHablaRaro'.
-	self assert: (laQueHablaRaro location) equals:1.
+	self assert: (laQueHablaRaro location) equals:0.
 	
 	myDie := OrderedCollection with: (Dice withSides: 1).
 	
