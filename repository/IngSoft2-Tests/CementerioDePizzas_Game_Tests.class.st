@@ -141,27 +141,50 @@ CementerioDePizzas_Game_Tests >> test006_CreateAGameSinglePlayer [
 ]
 
 { #category : #tests }
-CementerioDePizzas_Game_Tests >> test007_ANoEffectBoxHasNoEffects [
+CementerioDePizzas_Game_Tests >> test007_AMoonWalkBoxJumpsAPlayerBoxesBack [
 	
 	| game myBoard myDie positions testPlayers mozzarella myBoxes |
 	
 	mozzarella:= Player withName: 'mozzarella'.
-	myBoxes := OrderedCollection with: (NoEffectBox new) with: (NoEffectBox new) with: (NoEffectBox new) with: (NoEffectBox new) with: (NoEffectBox new) with: (NoEffectBox new).
+	myBoxes := OrderedCollection with: (LoadedMoonWalkBox new) with: (LoadedMoonWalkBox new) with: (NoEffectBox new) with: (NoEffectBox new) with: (LoadedMoonWalkBox new) with: (NoEffectBox new).
 	myBoard := LoadedBoard withBoxes: myBoxes.
 
 	testPlayers:= OrderedCollection with: mozzarella.
 	
-	myDie := OrderedCollection with: (LoadedDice withTosses: #(3)).
+	myDie := OrderedCollection with: (LoadedDice withTosses: #(1 3 4 5 6)).
 	
 	
 	game:= Game withBoard: myBoard andPlayers: testPlayers andDie: myDie andLaps: 1.
 	
 	positions:= game play.
 	
-	"self assert: (testPlayers anySatisfy: [ :player | (player location) = (myBoxes size)]).
+	self assert: (testPlayers anySatisfy: [ :player | (player location) = (myBoard sizeOfBoard)]).
 	self assert: (game isFinished).
-	self assert: ((positions at:1) equals: napolitana).
-	self assert: ((positions at:2) equals: mozzarella)."
+	self assert: ((positions at:1) equals: mozzarella).
+	
+]
+
+{ #category : #tests }
+CementerioDePizzas_Game_Tests >> test007_ANoEffectBoxHasNoEffects [
+	
+	| game myBoard myDie positions testPlayers mozzarella myBoxes |
+	
+	mozzarella:= Player withName: 'mozzarella'.
+	myBoxes := OrderedCollection with: (NoEffectBox new) with: (LoadedMoonWalkBox new) with: (NoEffectBox new) with: (NoEffectBox new) with: (LoadedMoonWalkBox new) with: (NoEffectBox new).
+	myBoard := LoadedBoard withBoxes: myBoxes.
+
+	testPlayers:= OrderedCollection with: mozzarella.
+	
+	myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
+	
+	
+	game:= Game withBoard: myBoard andPlayers: testPlayers andDie: myDie andLaps: 1.
+	
+	positions:= game play.
+	
+	self assert: (testPlayers anySatisfy: [ :player | (player location) = (myBoard sizeOfBoard)]).
+	self assert: (game isFinished).
+	self assert: ((positions at:1) equals: mozzarella).
 	
 ]
 
