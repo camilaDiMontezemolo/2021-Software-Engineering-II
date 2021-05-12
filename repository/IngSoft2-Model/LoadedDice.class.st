@@ -2,8 +2,8 @@ Class {
 	#name : #LoadedDice,
 	#superclass : #Object,
 	#instVars : [
-		'index',
-		'myTosses'
+		'myTosses',
+		'indice'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -15,26 +15,26 @@ LoadedDice class >> withTosses: someTosses [
 ]
 
 { #category : #'as yet unclassified' }
-LoadedDice >> index [
-	^index.
+LoadedDice >> indice [
+	^indice.
 ]
 
 { #category : #'as yet unclassified' }
 LoadedDice >> initialize [ 
-	index:=0.
+	indice:=0.
 	myTosses := OrderedCollection new.
 ]
 
 { #category : #'as yet unclassified' }
 LoadedDice >> initializeWithTheFollowingTosses: someTosses [ 
 	myTosses:= someTosses.
-	index:=0.
+	indice:=0.
 ]
 
 { #category : #'as yet unclassified' }
 LoadedDice >> spin [
-	 (index >= (myTosses size))
-		ifTrue: [ index:=0 .].
-	index := index +1.
-	^(myTosses at: index).
+	 (indice >= (myTosses size))
+		ifTrue: [ indice:=0 .].
+	indice := indice +1.
+	^(myTosses at: indice).
 ]
