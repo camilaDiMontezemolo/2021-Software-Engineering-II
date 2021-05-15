@@ -2,8 +2,8 @@ Class {
 	#name : #LoadedBoard,
 	#superclass : #Object,
 	#instVars : [
-		'mySize',
-		'myBoxes'
+		'myBoxes',
+		'mySize'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -14,8 +14,48 @@ LoadedBoard class >> withBoxes: someBoxes [
 ]
 
 { #category : #'as yet unclassified' }
+LoadedBoard >> applyEffectFor: aPlayer and: otherPlayers [
+	| box affectedPlayers |
+	box := myBoxes at: (aPlayer location+1).
+	(box isKindOf: MultVictimBox)
+		ifTrue: [ 
+			affectedPlayers:= otherPlayers.
+			(box isKindOf: MoonWalkBox) 
+				ifTrue: [ 
+					affectedPlayers:= 
+						(otherPlayers  select: 
+							[:player| 
+								(player equals: aPlayer) not
+							]
+						)
+				].
+			box affect: affectedPlayers and: self
+			]
+		ifFalse: [ box affect: aPlayer and: self].
+	
+		
+]
+
+{ #category : #'as yet unclassified' }
 LoadedBoard >> boxes [
 	^myBoxes.
+	
+		
+]
+
+{ #category : #'as yet unclassified' }
+LoadedBoard >> change: aPosition rolling: myDie [
+	| distance |
+	distance := 0.
+	myDie do: [ :dice | distance := distance + dice spin ].	
+	(aPosition  location + distance <= mySize)
+		ifTrue: [ 
+			aPosition changeLocation: aPosition location + distance.]
+		ifFalse: [
+			aPosition
+			changeLocation: distance - (mySize - aPosition location).
+			aPosition changeLap.
+			].
 	
 		
 ]
@@ -31,7 +71,7 @@ LoadedBoard >> initialize [
 { #category : #'as yet unclassified' }
 LoadedBoard >> initializeWithBoxes: someBoxes [
 	myBoxes := someBoxes.
-	myBoxes add: (NoEffectBox new).
+	myBoxes addFirst: (NoEffectBox new).
 	mySize := ( (myBoxes size)-1 )
 	"Y el menos no se saca".
 	
@@ -40,7 +80,7 @@ LoadedBoard >> initializeWithBoxes: someBoxes [
 
 { #category : #'as yet unclassified' }
 LoadedBoard >> sizeOfBoard [
-	^(mySize).
+	^mySize.
 	
 		
 ]

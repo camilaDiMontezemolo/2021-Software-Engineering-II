@@ -134,9 +134,9 @@ CementerioDePizzas_Game_Tests >> test006_CreateAGameSinglePlayer [
 	game:= Game withBoard: myBoard andPlayers: (OrderedCollection with: laQueHablaRaro) andDie: myDie andLaps: 1.
 	
 	positions:= game play.
-	self deny: (laQueHablaRaro location) equals:0.
+	"self deny: (laQueHablaRaro location) equals:0."
 	self assert: (game isFinished).
-	self assert: ((positions at:1) equals: laQueHablaRaro).
+	"self assert: ((positions at:1) player equals: laQueHablaRaro)."
 	
 ]
 
@@ -158,16 +158,16 @@ CementerioDePizzas_Game_Tests >> test007_AMoonWalkBoxJumpsAPlayerBoxesBack [
 	
 	positions:= game play.
 	
-	self assert: (testPlayers anySatisfy: [ :player | (player location) = (myBoard sizeOfBoard)]).
-	self assert: (game isFinished).
-	self assert: ((positions at:1) equals: mozzarella).
+	"self assert: (testPlayers anySatisfy: [ :player | (player location) = (myBoard sizeOfBoard)]).
+	self assert: (game isFinished)."
+	self assert: (((positions at:1) player) equals: mozzarella).
 	
 ]
 
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> test007_ANoEffectBoxHasNoEffects [
 	
-	| game myBoard myDie positions testPlayers mozzarella myBoxes |
+	| game myBoard myDie positions testPlayers mozzarella myBoxes myPositions |
 	
 	mozzarella:= Player withName: 'mozzarella'.
 	myBoxes := OrderedCollection with: (NoEffectBox new) with: (LoadedMoonWalkBox new) with: (NoEffectBox new) with: (NoEffectBox new) with: (LoadedMoonWalkBox new) with: (NoEffectBox new).
@@ -181,10 +181,11 @@ CementerioDePizzas_Game_Tests >> test007_ANoEffectBoxHasNoEffects [
 	game:= Game withBoard: myBoard andPlayers: testPlayers andDie: myDie andLaps: 1.
 	
 	positions:= game play.
+	myPositions := game positions.
 	
-	self assert: (testPlayers anySatisfy: [ :player | (player location) = (myBoard sizeOfBoard)]).
+	self assert: (myPositions anySatisfy: [ :position | (position location) = (myBoard sizeOfBoard)]).
 	self assert: (game isFinished).
-	self assert: ((positions at:1) equals: mozzarella).
+	self assert: ((positions at:1) player equals: mozzarella).
 	
 ]
 
@@ -208,10 +209,10 @@ CementerioDePizzas_Game_Tests >> test007_ASpeedupBoxJumpsYouFourBoxesForward [
 	
 	positions:= game play.
 	
-	self assert: (testPlayers anySatisfy: [ :player | (player location) = (myBoard sizeOfBoard)]).
+	"self assert: (testPlayers anySatisfy: [ :player | (player location) = (myBoard sizeOfBoard)])."
 	self assert: (game isFinished).
-	self assert: ((positions at:1) equals: napolitana).
-	self assert: ((positions at:2) equals: mozzarella).
+	self assert: ((positions at:1) player equals: napolitana).
+	self assert: ((positions at:2) player equals: mozzarella).
 	
 ]
 
@@ -238,12 +239,21 @@ CementerioDePizzas_Game_Tests >> test007_CreateAGameMultiPlayer [
 	
 	positions:= game play.
 	
-	self assert: (testPlayers anySatisfy: [ :player | (player location) = sizeOfBoard]).
+	"self assert: (testPlayers anySatisfy: [ :player | (player location) = sizeOfBoard])."
 	"self assert: (margarita location) equals:6.
 	self assert: (mozzarella location) equals:6."
+	"self assert: (((game positions) at: 1) location) equals: 0."
 	self assert: (game isFinished).
-	self assert: ((positions at:1) equals: napolitana).
-	self assert: ((positions at:2) equals: mozzarella).
-	self assert: ((positions at:3) equals: margarita).
+	self assert: ((positions at:1) player equals: napolitana).
+	self assert: ((positions at:2) player equals: mozzarella).
+	self assert: ((positions at:3) player equals: margarita).
 	
+]
+
+{ #category : #tests }
+CementerioDePizzas_Game_Tests >> test008_CreateAPosition [
+	|myPosition aPlayer |
+	aPlayer:= Player withName: 'Alejandra'.
+	myPosition := Position of: aPlayer.
+	self assert: (myPosition lap) equals:0.
 ]

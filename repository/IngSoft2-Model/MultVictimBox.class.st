@@ -1,6 +1,6 @@
 Class {
 	#name : #MultVictimBox,
-	#superclass : #Box,
+	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }
 

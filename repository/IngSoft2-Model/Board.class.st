@@ -32,6 +32,24 @@ Board >> boxes [
 ]
 
 { #category : #'as yet unclassified' }
+Board >> change: aPosition rolling: myDie [
+	| distance |
+	distance := 0.
+	myDie do: [ :dice | distance := distance + dice spin ].	
+	(aPosition  location + distance <= mySize)
+		ifTrue: [ 
+			aPosition changeLocation: aPosition location + distance.]
+		ifFalse: [
+			aPosition
+			changeLocation: distance - (mySize - aPosition location).
+			aPosition changeLap.
+			].
+		
+	
+		
+]
+
+{ #category : #'as yet unclassified' }
 Board >> initialize [
 	mySize :=0.
 	myBoxes := OrderedCollection new.
@@ -51,6 +69,7 @@ Board >> initializeWithSize: aSize [
 			(myBoxes size) to: (mySize) do: [:emptyBox | myBoxes add: (NoEffectBox new) ].
 		].
 	myBoxes := myBoxes shuffled.
+	myBoxes addFirst: (NoEffectBox new).
 	
 ]
 

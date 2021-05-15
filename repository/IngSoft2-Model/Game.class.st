@@ -5,7 +5,8 @@ Class {
 		'myPlayers',
 		'myDie',
 		'myBoard',
-		'myLaps'
+		'myLaps',
+		'myPositions'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -40,6 +41,18 @@ Game >> applyEffectFor: aPlayer [
 ]
 
 { #category : #'as yet unclassified' }
+Game >> change: aPosition [
+	| aPlayer |
+	myBoard change: aPosition rolling: myDie.
+	aPlayer:= aPosition player.	
+	(self isFinished)
+			ifTrue: [ aPosition changeLocation: (myBoard sizeOfBoard) ]
+			ifFalse: [self applyEffectFor: aPlayer.].
+	(self isFinished)
+			ifTrue: [ aPosition changeLocation: (myBoard sizeOfBoard) ]
+]
+
+{ #category : #'as yet unclassified' }
 Game >> die [
 	^myDie.
 ]
@@ -54,21 +67,23 @@ Game >> initialize [
 Game >> initializeWithBoard: aBoard andPlayers: somePlayers andDie: someDie andLaps: someLaps [
 	myBoard:=aBoard.
 	myPlayers:=somePlayers.
+	myPositions:= OrderedCollection new.
+	myPlayers do: [ :player | myPositions add: (Position of: player)].
 	myDie:=someDie.
 	myLaps:=someLaps.
 ]
 
 { #category : #'as yet unclassified' }
 Game >> isFinished [
-	^myPlayers anySatisfy: [ :player | (player laps) >= myLaps].
+	^myPositions  anySatisfy: [ :position | (position lap) >= myLaps].
 ]
 
 { #category : #'as yet unclassified' }
 Game >> play [
-	myPlayers do: [ :player |
+	myPositions do: [ :position |
 		(self isFinished) 
 		ifFalse: [
-			 self runTurnFor: player.
+			 self change: position.
 			].
 		].
 	(self isFinished )
@@ -82,33 +97,16 @@ Game >> players [
 ]
 
 { #category : #'as yet unclassified' }
-Game >> runTurnFor: aPlayer [
-	| distance |
-	distance := 0.
-	myDie do: [ :dice | distance := distance + dice spin ].
-	
-	(aPlayer location + distance <= myBoard sizeOfBoard)
-		ifTrue: [ 
-			aPlayer setLocation: aPlayer location + distance.]
-		ifFalse: [
-			aPlayer
-			setLocation: distance - (myBoard sizeOfBoard - aPlayer location).
-			aPlayer increaseLaps.
-			].
-		
-	(self isFinished)
-			ifTrue: [ aPlayer setLocation: (myBoard sizeOfBoard) ]
-			ifFalse: [self applyEffectFor: aPlayer.].
-	(self isFinished)
-			ifTrue: [ aPlayer setLocation: (myBoard sizeOfBoard) ]
+Game >> positions [
+	^myPositions.
 ]
 
 { #category : #'as yet unclassified' }
 Game >> showPositions [
-	myPlayers sort: [:a :c | 
-		(a laps = (c laps))
+	myPositions sort: [:a :c | 
+		(a lap = (c lap))
 			ifTrue: [ (a location) > (c location)]
-			ifFalse:[ (a laps) > (c laps)].
+			ifFalse:[ (a lap) > (c lap)].
 		].
-	^myPlayers.
+	^myPositions.
 ]
