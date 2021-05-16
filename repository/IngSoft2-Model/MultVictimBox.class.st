@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+MultVictimBox >> affect: somePLayers [
+	^[].
+]
+
+{ #category : #'as yet unclassified' }
 MultVictimBox >> affect: somePLayers and: aBoard [
 	^[].
 ]

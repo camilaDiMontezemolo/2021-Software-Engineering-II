@@ -14,24 +14,47 @@ LoadedBoard class >> withBoxes: someBoxes [
 ]
 
 { #category : #'as yet unclassified' }
-LoadedBoard >> applyEffectFor: aPlayer and: otherPlayers [
-	| box affectedPlayers |
+LoadedBoard >> applyEffectFor: aPlayer [
+	| box affectedPlayers myPlayers myBoard |
 	box := myBoxes at: (aPlayer location+1).
 	(box isKindOf: MultVictimBox)
 		ifTrue: [ 
-			affectedPlayers:= otherPlayers.
+			affectedPlayers:= myPlayers.
 			(box isKindOf: MoonWalkBox) 
 				ifTrue: [ 
 					affectedPlayers:= 
-						(otherPlayers  select: 
+						(myPlayers select: 
 							[:player| 
 								(player equals: aPlayer) not
 							]
 						)
 				].
-			box affect: affectedPlayers and: self
+			box affect: affectedPlayers and: myBoard
 			]
-		ifFalse: [ box affect: aPlayer and: self].
+		ifFalse: [ box affect: aPlayer and: myBoard ].
+	
+		
+]
+
+{ #category : #'as yet unclassified' }
+LoadedBoard >> applyEffectFor: aPosition and: otherPositions [
+	| box affectedPositions |
+	box := myBoxes at: (aPosition location+1).
+	(box isKindOf: MultVictimBox)
+		ifTrue: [ 
+			affectedPositions:= otherPositions .
+			(box isKindOf: MoonWalkBox) 
+				ifTrue: [ 
+					affectedPositions:= 
+						(otherPositions  select: 
+							[:position| 
+								(position equals: aPosition) not
+							]
+						)
+				].
+			box affect: affectedPositions and: self
+			]
+		ifFalse: [ box affect: aPosition and: self ].
 	
 		
 ]

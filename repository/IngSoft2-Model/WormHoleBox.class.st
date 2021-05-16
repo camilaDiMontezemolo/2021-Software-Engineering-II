@@ -8,10 +8,10 @@ Class {
 WormHoleBox >> affect: aPlayer and: aBoard [
 	(aPlayer location - 4  > 0)
 	ifTrue: [
-		aPlayer setLocation:(aPlayer location - 4).
+		aPlayer changeLocation:(aPlayer location - 4).
 	]
 	ifFalse: [ 
-		aPlayer setLocation: (aBoard sizeOfBoard - (aPlayer location - 4)).
-		aPlayer increaseLaps.
+		aPlayer changeLocation: (aBoard sizeOfBoard - (aPlayer location - 4)).
+		aPlayer changeLap.
 	].
 ]

@@ -8,6 +8,11 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+MoonWalkBox >> affect: somePlayers [
+	somePlayers do: [ :player | player setLocation: (player location - n) ].
+]
+
+{ #category : #'as yet unclassified' }
 MoonWalkBox >> affect: somePlayers and: aBoard [
 	somePlayers do: [ :player | player setLocation: (player location - n) ].
 ]

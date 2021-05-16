@@ -27,6 +27,27 @@ Board >> add: aPercentage of: aBoxType [
 ]
 
 { #category : #'as yet unclassified' }
+Board >> applyEffectFor: aPosition and: otherPositions [
+	| box affectedPositions |
+	box := myBoxes at: (aPosition location+1).
+	(box isKindOf: MultVictimBox)
+		ifTrue: [ 
+			affectedPositions:= otherPositions .
+			(box isKindOf: MoonWalkBox) 
+				ifTrue: [ 
+					affectedPositions:= 
+						(otherPositions  select: 
+							[:position| 
+								(position equals: aPosition) not
+							]
+						)
+				].
+			box affect: affectedPositions and: self
+			]
+		ifFalse: [ box affect: aPosition and: self ].
+]
+
+{ #category : #'as yet unclassified' }
 Board >> boxes [
 	^myBoxes.
 ]

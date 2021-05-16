@@ -11,7 +11,7 @@ SpeedupBox >> affect: aPlayer and: aBoard [
 		aPlayer setLocation:(aPlayer location + 4).
 	]
 	ifFalse: [ 
-		aPlayer setLocation: (4 - (aBoard sizeOfBoard - aPlayer location)).
-		aPlayer increaseLaps.
+		aPlayer changeLocation: (4 - (aBoard sizeOfBoard - aPlayer location)).
+		aPlayer changeLap.
 	].
 ]

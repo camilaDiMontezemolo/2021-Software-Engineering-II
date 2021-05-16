@@ -20,34 +20,11 @@ Game class >> withBoard: aBoard andPlayers: somePlayers andDie: someDie andLaps:
 ]
 
 { #category : #'as yet unclassified' }
-Game >> applyEffectFor: aPlayer [
-	| box affectedPlayers |
-	box := myBoard boxes at: (aPlayer location+1).
-	(box isKindOf: MultVictimBox)
-		ifTrue: [ 
-			affectedPlayers:= myPlayers.
-			(box isKindOf: MoonWalkBox) 
-				ifTrue: [ 
-					affectedPlayers:= 
-						(myPlayers select: 
-							[:player| 
-								(player equals: aPlayer) not
-							]
-						)
-				].
-			box affect: affectedPlayers and: myBoard
-			]
-		ifFalse: [ box affect: aPlayer and: myBoard ].
-]
-
-{ #category : #'as yet unclassified' }
 Game >> change: aPosition [
-	| aPlayer |
 	myBoard change: aPosition rolling: myDie.
-	aPlayer:= aPosition player.	
 	(self isFinished)
 			ifTrue: [ aPosition changeLocation: (myBoard sizeOfBoard) ]
-			ifFalse: [self applyEffectFor: aPlayer.].
+			ifFalse: [myBoard applyEffectFor: aPosition and: myPositions.].
 	(self isFinished)
 			ifTrue: [ aPosition changeLocation: (myBoard sizeOfBoard) ]
 ]
@@ -68,7 +45,7 @@ Game >> initializeWithBoard: aBoard andPlayers: somePlayers andDie: someDie andL
 	myBoard:=aBoard.
 	myPlayers:=somePlayers.
 	myPositions:= OrderedCollection new.
-	myPlayers do: [ :player | myPositions add: (Position of: player)].
+	myPlayers collect: [ :player | myPositions add: (Position of: player)].
 	myDie:=someDie.
 	myLaps:=someLaps.
 ]
