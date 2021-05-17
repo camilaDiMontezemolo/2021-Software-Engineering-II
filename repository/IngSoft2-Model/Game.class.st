@@ -45,7 +45,7 @@ Game >> initializeWithBoard: aBoard andPlayers: somePlayers andDie: someDie andL
 	myBoard:=aBoard.
 	myPlayers:=somePlayers.
 	myPositions:= OrderedCollection new.
-	myPlayers collect: [ :player | myPositions add: (Position of: player)].
+	myPositions := myPlayers collect: [ :player | (Position of: player)].
 	myDie:=someDie.
 	myLaps:=someLaps.
 ]
@@ -57,15 +57,14 @@ Game >> isFinished [
 
 { #category : #'as yet unclassified' }
 Game >> play [
+	[self isFinished] whileFalse:[ 
 	myPositions do: [ :position |
 		(self isFinished) 
 		ifFalse: [
 			 self change: position.
 			].
 		].
-	(self isFinished )
-	ifFalse: [^(self play)]
-	ifTrue:[^(self showPositions)].
+	].
 ]
 
 { #category : #'as yet unclassified' }
@@ -74,12 +73,7 @@ Game >> players [
 ]
 
 { #category : #'as yet unclassified' }
-Game >> positions [
-	^myPositions.
-]
-
-{ #category : #'as yet unclassified' }
-Game >> showPositions [
+Game >> ranking [
 	myPositions sort: [:a :c | 
 		(a lap = (c lap))
 			ifTrue: [ (a location) > (c location)]

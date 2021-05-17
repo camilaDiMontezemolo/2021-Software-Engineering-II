@@ -1,10 +1,10 @@
 Class {
-	#name : #NoEffectBox,
-	#superclass : #SingleVictimBox,
+	#name : #BoxNoEffect,
+	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'as yet unclassified' }
-NoEffectBox >> affect: aPlayer and: aBoard [
+BoxNoEffect >> affect: positions triggeredOn: aPosition with: sizeOfBoard [
 	^[:a | Transcript show: 'No hubo efecto'.].
 ]

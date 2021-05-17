@@ -13,3 +13,8 @@ MultVictimBox >> affect: somePLayers [
 MultVictimBox >> affect: somePLayers and: aBoard [
 	^[].
 ]
+
+{ #category : #'as yet unclassified' }
+MultVictimBox >> applyOver: positions triggeredOn: aPosition with: sizeOfBoard [
+	^[].
+]

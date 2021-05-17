@@ -1,6 +1,6 @@
 Class {
 	#name : #LoadedMoonWalkBox,
-	#superclass : #MoonWalkBox,
+	#superclass : #BoxMoonWalk,
 	#category : #'IngSoft2-Model'
 }
 

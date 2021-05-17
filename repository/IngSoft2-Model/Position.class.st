@@ -22,8 +22,7 @@ Position >> changeLap [
 { #category : #initialize }
 Position >> changeLocation: newLocation [
 	location:= newLocation.
-	"location := newLocation
-	lap:= newLocation//sizeOfBoard"
+
 ]
 
 { #category : #initialize }
