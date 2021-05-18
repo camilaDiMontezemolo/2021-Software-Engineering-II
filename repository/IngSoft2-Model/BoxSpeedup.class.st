@@ -8,10 +8,10 @@ Class {
 BoxSpeedup >> affect: positions triggeredOn: aPosition with: sizeOfBoard [ 
 	(aPosition location + 4  < (sizeOfBoard))
 	ifTrue: [
-		aPosition setLocation:(aPosition location + 4).
+		aPosition changeLocation:(aPosition location + 4).
 	]
 	ifFalse: [ 
 		aPosition changeLocation: (4 - (sizeOfBoard - aPosition location)).
-		aPosition changeLap.
+		aPosition increaseLap.
 	].
 ]

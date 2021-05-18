@@ -11,7 +11,9 @@ BoxWormHole >> affect: positions triggeredOn: aPosition with: sizeOfBoard [
 		aPosition changeLocation:(aPosition location - 4).
 	]
 	ifFalse: [ 
-		aPosition changeLocation: (sizeOfBoard - (aPosition location - 4)).
-		aPosition changeLap.
+		(aPosition lap > 0)
+		ifTrue: [aPosition changeLocation: (sizeOfBoard - (aPosition location - 4)).
+		aPosition decreaseLap.]
+		ifFalse: [ aPosition changeLocation: 0]
 	].
 ]

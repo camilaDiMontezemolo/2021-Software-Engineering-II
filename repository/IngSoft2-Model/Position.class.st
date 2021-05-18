@@ -15,19 +15,26 @@ Position class >> of: aPlayer [
 ]
 
 { #category : #initialize }
-Position >> changeLap [
-	lap:= lap+1.
-]
-
-{ #category : #initialize }
 Position >> changeLocation: newLocation [
 	location:= newLocation.
 
 ]
 
 { #category : #initialize }
+Position >> decreaseLap [
+(lap > 0)
+	ifTrue: [lap:= lap-1.]
+
+]
+
+{ #category : #initialize }
 Position >> equals: anotherPosition [
 	^((myPlayer name) = ((anotherPosition player)name))
+]
+
+{ #category : #initialize }
+Position >> increaseLap [
+	lap:= lap+1.
 ]
 
 { #category : #initialize }

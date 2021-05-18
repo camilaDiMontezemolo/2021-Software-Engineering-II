@@ -40,7 +40,7 @@ LoadedBoard >> change: aPosition rolling: myDie [
 		ifFalse: [
 			aPosition
 			changeLocation: distance - (mySize - aPosition location).
-			aPosition changeLap.
+			aPosition increaseLap.
 			].
 	
 		

@@ -11,7 +11,19 @@ Class {
 BoxMoonWalk >> affect: positions triggeredOn: aPosition with: sizeOfBoard [
 	| affectedPositions |
 	affectedPositions :=(positions  select: [:position| (position equals: aPosition) not]).
-	affectedPositions  do: [ :position | position setLocation: (position location - n) ].
+	
+	
+	((aPosition location - n)  > 0)
+	ifTrue: [
+		affectedPositions  do: [ :position | position changeLocation: (position location - n) ].
+	]
+	ifFalse: [affectedPositions  do: [ :position | 
+			(aPosition lap > 0)
+				ifTrue: [position changeLocation: (sizeOfBoard - (aPosition location - n)).
+							aPosition decreaseLap.]
+				ifFalse: [ position changeLocation: 0 .].
+				].
+	].
 ]
 
 { #category : #'as yet unclassified' }

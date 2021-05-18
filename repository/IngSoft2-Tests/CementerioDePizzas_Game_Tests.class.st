@@ -35,7 +35,6 @@ CementerioDePizzas_Game_Tests >> test000_CreateAGame [
 	| myBoard myDie laQueHablaRaro myPlayers myGame block |
 	
 	laQueHablaRaro:= Player withName: 'laQueHablaRaro'.
-	"self assert: (laQueHablaRaro location) equals:0."
 	
 	myDie := OrderedCollection with: (Dice withSides: 1).
 	
@@ -60,23 +59,11 @@ CementerioDePizzas_Game_Tests >> test000_CreateAGame [
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> test001_invalidBoardValuesRaiseError [
 
-	| myBoard myDie laQueHablaRaro boardWithoutPlayers boardWithoutDie block kindOfError errorMessage block2 block3 |
-	
+	|  myDie laQueHablaRaro block2 block3 boardWithoutPlayers boardWithoutDie |
+
 	laQueHablaRaro := Player withName: 'laQueHablaRaro'.
-	"self assert: laQueHablaRaro location equals: 0."
 	
 	myDie := OrderedCollection with: (Dice withSides: 1).
-		
-	"block := [ 
-		myBoard := Game
-		withSize: 0
-		andPlayers: (OrderedCollection with: laQueHablaRaro)
-		andDie: myDie. 
-		].
-	kindOfError := Error.
-	errorMessage := 'Un tablero no puede tener menos de 1 casilla.'.
-	
-	self should: block raise: kindOfError withMessage: errorMessage."
 
 	block2:= [
 		boardWithoutPlayers :=Game
@@ -102,7 +89,7 @@ CementerioDePizzas_Game_Tests >> test001_invalidBoardValuesRaiseError [
 CementerioDePizzas_Game_Tests >> test002_CreateAPlayer [
 	| myPlayer block |
 	myPlayer := Player withName: 'Push-Pop :)'.
-	"self assert: (myPlayer location) equals:0."
+	
 	self assert: (myPlayer name) equals: 'Push-Pop :)'.
 	
 	block:= [Player withName: ''.].
@@ -125,6 +112,7 @@ CementerioDePizzas_Game_Tests >> test005_CreateAPosition [
 	aPlayer:= Player withName: 'Alejandra'.
 	myPosition := Position of: aPlayer.
 	self assert: (myPosition lap) equals:0.
+	self assert: (myPosition location) equals:0.
 ]
 
 { #category : #tests }
@@ -145,8 +133,7 @@ CementerioDePizzas_Game_Tests >> test006_AMoonWalkBoxJumpsAPlayerBoxesBack [
 	game play.
 	positions := game ranking.
 	
-	"self assert: (testPlayers anySatisfy: [ :player | (player location) = (myBoard sizeOfBoard)]).
-	self assert: (game isFinished)."
+	self assert: (game isFinished).
 	self assert: (((positions at:1) player) equals: mozzarella).
 	
 ]
@@ -154,13 +141,11 @@ CementerioDePizzas_Game_Tests >> test006_AMoonWalkBoxJumpsAPlayerBoxesBack [
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> test007_CreateAGameMultiPlayer [
 	
-	| game myBoard myDie napolitana positions margarita testPlayers mozzarella sizeOfBoard myBoxes |
+	| game myBoard myDie napolitana ranking margarita testPlayers mozzarella myBoxes |
 	
 	napolitana:= Player withName: 'napolitana'.	
 	margarita:= Player withName: 'margarita'.
 	mozzarella:= Player withName: 'mozzarella'.
-	
-	sizeOfBoard:=6.
 	
 	myBoxes := OrderedCollection with: (BoxNoEffect new) with: (BoxNoEffect new) with: (BoxWormHole new) with: (BoxAtomicBomb new) with: (LoadedMoonWalkBox new) with: (BoxSpeedup new).
 	
@@ -168,21 +153,17 @@ CementerioDePizzas_Game_Tests >> test007_CreateAGameMultiPlayer [
 	
 	testPlayers:= OrderedCollection with: napolitana with: margarita with: mozzarella.
 	
-	myDie := OrderedCollection with: (LoadedDice withTosses: #(3 3 3 2 2 2 2 2 2 1 1 1 2 2 2)).
+	myDie := OrderedCollection with: (LoadedDice withTosses: #(4 4 4 2 2 2 2 2 2 6 6 6 2 2 2)).
 	
 	game:= Game withBoard: myBoard andPlayers: testPlayers andDie: myDie andLaps: 1.
 	
 	game play.
-	positions := game ranking.
+	ranking := game ranking.
 	
-	"self assert: (testPlayers anySatisfy: [ :player | (player location) = sizeOfBoard])."
-	"self assert: (margarita location) equals:6.
-	self assert: (mozzarella location) equals:6."
-	"self assert: (((game positions) at: 1) location) equals: 0."
 	self assert: (game isFinished).
-	self assert: ((positions at:1) player equals: napolitana).
-	self assert: ((positions at:2) player equals: mozzarella).
-	self assert: ((positions at:3) player equals: margarita).
+	self assert: ((ranking at:1) player equals: napolitana).
+	self assert: ((ranking at:2) player equals: mozzarella).
+	self assert: ((ranking at:3) player equals: margarita).
 	
 ]
 
@@ -279,5 +260,29 @@ CementerioDePizzas_Game_Tests >> test011_CreateAGameSinglePlayer [
 	positions := game ranking.
 	self assert: (game isFinished).
 	self assert: ((positions at:1) player equals: laQueHablaRaro).
+	
+]
+
+{ #category : #tests }
+CementerioDePizzas_Game_Tests >> test012_CreateARandomMultiPlayerGame [
+	
+	| game myBoard myDie napolitana margarita testPlayers mozzarella |
+	
+	napolitana:= Player withName: 'napolitana'.	
+	margarita:= Player withName: 'margarita'.
+	mozzarella:= Player withName: 'mozzarella'.
+	
+	
+	myBoard := Board withSize: 40.
+	
+	testPlayers:= OrderedCollection with: napolitana with: margarita with: mozzarella.
+	
+	myDie := OrderedCollection with: (Dice withSides: 5) with: (Dice withSides: 4).
+	
+	game:= Game withBoard: myBoard andPlayers: testPlayers andDie: myDie andLaps: 1.
+	
+	game play.
+	
+	self assert: (game isFinished).
 	
 ]
