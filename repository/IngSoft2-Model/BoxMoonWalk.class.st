@@ -9,9 +9,14 @@ Class {
 
 { #category : #'as yet unclassified' }
 BoxMoonWalk >> affect: positions triggeredOn: aPosition with: sizeOfBoard [
-	| affectedPositions |
+	| affectedPositions newLocations|
 	affectedPositions :=(positions  reject: [:position| position equals: aPosition]).
-	
+	newLocations:= Dictionary new.
+	affectedPositions do: 
+	[:position |newLocations add: position ->(((position absoluteLocation)-n))].
+	^newLocations.
+	"
+	(oldPosition, newLocation)
 	affectedPositions  do: [ :position | 
 	((position location - n)  > 0)
 		ifTrue: [position changeLocation: (position location - n) .]
@@ -22,7 +27,7 @@ BoxMoonWalk >> affect: positions triggeredOn: aPosition with: sizeOfBoard [
 							position decreaseLap.]
 				ifFalse: [ position changeLocation: 0 .].
 				].
-			]
+			]"
 
 ]
 

@@ -20,16 +20,6 @@ Game class >> withBoard: aBoard andPlayers: somePlayers andDie: someDie andLaps:
 ]
 
 { #category : #'as yet unclassified' }
-Game >> change: aPosition [
-	myBoard change: aPosition rolling: myDie.
-	(self isFinished)
-			ifTrue: [ aPosition changeLocation: (myBoard sizeOfBoard) ]
-			ifFalse: [myBoard applyEffectFor: aPosition and: myPositions.].
-	(self isFinished)
-			ifTrue: [ aPosition changeLocation: (myBoard sizeOfBoard) ]
-]
-
-{ #category : #'as yet unclassified' }
 Game >> die [
 	^myDie.
 ]
@@ -45,23 +35,23 @@ Game >> initializeWithBoard: aBoard andPlayers: somePlayers andDie: someDie andL
 	myBoard:=aBoard.
 	myPlayers:=somePlayers.
 	myPositions:= OrderedCollection new.
-	myPositions := myPlayers collect: [ :player | (Position of: player)].
+	myBoard createPositionsFor: myPlayers.
 	myDie:=someDie.
 	myLaps:=someLaps.
 ]
 
 { #category : #'as yet unclassified' }
 Game >> isFinished [
-	^myPositions  anySatisfy: [ :position | (position lap) >= myLaps].
+	^(myBoard positions) anySatisfy: [ :position | (position lap) >= myLaps].
 ]
 
 { #category : #'as yet unclassified' }
 Game >> play [
 	[self isFinished] whileFalse:[ 
-	myPositions do: [ :position |
+	(myBoard positions) do: [ :position |
 		(self isFinished) 
 		ifFalse: [
-			 self change: position.
+			 myBoard change: position using: myDie playing: self.
 			].
 		].
 	].
@@ -74,10 +64,10 @@ Game >> players [
 
 { #category : #'as yet unclassified' }
 Game >> ranking [
-	myPositions sort: [:a :c | 
+	(myBoard positions) sort: [:a :c | 
 		(a lap = (c lap))
 			ifTrue: [ (a location) > (c location)]
 			ifFalse:[ (a lap) > (c lap)].
 		].
-	^myPositions.
+	^(myBoard positions).
 ]

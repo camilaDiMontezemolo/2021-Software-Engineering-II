@@ -14,39 +14,38 @@ CementerioDePizzas_Game_Tests >> should: block raise: kindOfError withMessage: e
 ]
 
 { #category : #tests }
-CementerioDePizzas_Game_Tests >> test000_CreateABoard [
+CementerioDePizzas_Game_Tests >> test000_AGameShouldHaveAtLeastOneLap [
 	"a dummy test comment"
 	"un dia en un cementerio de pizzas habian 2 pizzas"
-	| block kindOfError errorMessage |
+	| myBoard myDie hawaiana myPlayers myGame block |
 	
-	block := [ 
-		Board withSize:0. 
-		].
-	kindOfError := Error.
-	errorMessage := 'Un tablero no puede tener menos de 1 casillero.'.
-	
-	self should: block raise: kindOfError withMessage: errorMessage.
-]
-
-{ #category : #tests }
-CementerioDePizzas_Game_Tests >> test000_CreateAGame [
-	"a dummy test comment"
-	"un dia en un cementerio de pizzas habian 2 pizzas"
-	| myBoard myDie laQueHablaRaro myPlayers myGame block |
-	
-	laQueHablaRaro:= Player withName: 'laQueHablaRaro'.
+	hawaiana := Player withName: 'hawaiana'.
 	
 	myDie := OrderedCollection with: (Dice withSides: 1).
 	
-	myPlayers:= (OrderedCollection with: laQueHablaRaro).
-	
-	myBoard:= Board withSize: 10.
-	
-	myGame:= Game withBoard:myBoard andPlayers: myPlayers andDie: myDie andLaps: 1.
+	myPlayers:= (OrderedCollection with: hawaiana).
 	
 	block:=[Game withBoard:myBoard andPlayers: myPlayers andDie: myDie andLaps: 0].
 	
 	self should: block raise: Error withMessage: 'Un juego no puede tener menos de 1 vuelta.'.
+	
+]
+
+{ #category : #tests }
+CementerioDePizzas_Game_Tests >> test000_CreateAGameWithOnePlayerAnd10Boxes [
+	"a dummy test comment"
+	"un dia en un cementerio de pizzas habian 2 pizzas"
+	| myBoard myDie hawaiana myPlayers myGame |
+	
+	hawaiana := Player withName: 'hawaiana'.
+	
+	myDie := OrderedCollection with: (Dice withSides: 1).
+	
+	myPlayers:= (OrderedCollection with: hawaiana).
+	
+	myBoard:= Board withSize: 10.
+	
+	myGame:= Game withBoard:myBoard andPlayers: myPlayers andDie: myDie andLaps: 1.
 	
 	self assert: (myBoard sizeOfBoard) equals: 10.
 
@@ -57,7 +56,7 @@ CementerioDePizzas_Game_Tests >> test000_CreateAGame [
 ]
 
 { #category : #tests }
-CementerioDePizzas_Game_Tests >> test001_invalidBoardValuesRaiseError [
+CementerioDePizzas_Game_Tests >> test001_aBoardShouldHaveMoreThanCeroPlayeresAndDie [
 
 	|  myDie laQueHablaRaro block2 block3 boardWithoutPlayers boardWithoutDie |
 
@@ -86,7 +85,43 @@ CementerioDePizzas_Game_Tests >> test001_invalidBoardValuesRaiseError [
 ]
 
 { #category : #tests }
-CementerioDePizzas_Game_Tests >> test002_CreateAPlayer [
+CementerioDePizzas_Game_Tests >> test001_aBoardShouldHaveMoreThanCeroPlayeresBoxesAndDie [
+
+	|  myDie block kindOfError errorMessage hawaiana block2 block3 boardWithoutPlayers 	boardWithoutDie |
+	
+	hawaiana := Player withName: 'hawaiana'.
+	
+	myDie := OrderedCollection with: (Dice withSides: 1).
+	block := [ 
+		Board withSize:0. 
+		].
+	kindOfError := Error.
+	errorMessage := 'Un tablero no puede tener menos de 1 casillero.'.
+	
+	self should: block raise: kindOfError withMessage: errorMessage.
+
+	block2:= [
+		boardWithoutPlayers :=Game
+		withBoard: (Board withSize: 1)
+		andPlayers: OrderedCollection new
+		andDie: myDie
+		andLaps: 1.
+		].
+	
+	self should: block2 raise: Error withMessage: 'Un juego no puede tener menos de 1 jugador.'.
+		
+	block3:=[boardWithoutDie := Game
+		withBoard: (Board withSize: 20)
+		andPlayers: (OrderedCollection with: hawaiana)
+		andDie: OrderedCollection new
+		andLaps: 1
+		].
+		
+	self should: block3 raise: Error withMessage: 'Un juego no puede tener menos de 1 dado.'.
+]
+
+{ #category : #tests }
+CementerioDePizzas_Game_Tests >> test002_aPlayerMustHaveAName [
 	| myPlayer block |
 	myPlayer := Player withName: 'Push-Pop :)'.
 	
@@ -107,12 +142,39 @@ CementerioDePizzas_Game_Tests >> test004_CreateADiceWithNSides [
 ]
 
 { #category : #tests }
+CementerioDePizzas_Game_Tests >> test005_CreateABoardWithPositionsAndReplaceOneOfThem [
+	| myBoard napolitana margarita testPlayers mozzarella hawaiana positions|
+	
+	napolitana:= Player withName: 'napolitana'.	
+	margarita:= Player withName: 'margarita'.
+	mozzarella:= Player withName: 'mozzarella'.
+	hawaiana := Player withName: 'hawaiana'.
+	
+	myBoard := Board withSize: 40.
+	testPlayers:= OrderedCollection with: napolitana with: margarita with: mozzarella.
+
+	myBoard createPositionsFor: testPlayers.
+	positions:=myBoard positions.
+	myBoard replacePosition: (positions at: 1) with: (Position of: hawaiana at: 0 whithNumberOfLaps: 0 location: 0).
+	
+	self assert: ((myBoard positions) at: 1) player equals: hawaiana.
+	self assert: ((myBoard positions) at: 2) player equals: margarita.
+	
+	
+
+
+
+
+]
+
+{ #category : #tests }
 CementerioDePizzas_Game_Tests >> test005_CreateAPosition [
-	|myPosition aPlayer |
+	|myPosition aPlayer anAbsoluteLocation laps |
 	aPlayer:= Player withName: 'Alejandra'.
-	myPosition := Position of: aPlayer.
-	self assert: (myPosition lap) equals:0.
-	self assert: (myPosition location) equals:0.
+	anAbsoluteLocation := 20.
+	laps :=6.
+	myPosition := Position of: aPlayer at: anAbsoluteLocation whithNumberOfLaps: laps.
+	self assert: (myPosition location) equals: 2.
 ]
 
 { #category : #tests }
@@ -122,7 +184,7 @@ CementerioDePizzas_Game_Tests >> test006_AMoonWalkBoxJumpsAPlayerBoxesBack [
 	
 	mozzarella:= Player withName: 'mozzarella'.
 	myBoxes := OrderedCollection with: (LoadedMoonWalkBox new) with: (LoadedMoonWalkBox new) with: (BoxNoEffect new) with: (BoxNoEffect new) with: (LoadedMoonWalkBox new) with: (BoxNoEffect new).
-	myBoard := LoadedBoard withBoxes: myBoxes.
+	myBoard := Board withBoxes: myBoxes.
 
 	testPlayers:= OrderedCollection with: mozzarella.
 	
@@ -149,7 +211,7 @@ CementerioDePizzas_Game_Tests >> test007_CreateAGameMultiPlayer [
 	
 	myBoxes := OrderedCollection with: (BoxNoEffect new) with: (BoxNoEffect new) with: (BoxWormHole new) with: (BoxAtomicBomb new) with: (LoadedMoonWalkBox new) with: (BoxSpeedup new).
 	
-	myBoard := LoadedBoard withBoxes: myBoxes.
+	myBoard := Board withBoxes: myBoxes.
 	
 	testPlayers:= OrderedCollection with: napolitana with: margarita with: mozzarella.
 	
@@ -174,7 +236,7 @@ CementerioDePizzas_Game_Tests >> test008_ANoEffectBoxHasNoEffects [
 	
 	mozzarella:= Player withName: 'mozzarella'.
 	myBoxes := OrderedCollection with: (BoxNoEffect new) with: (BoxNoEffect  new) with: (BoxNoEffect new) with: (BoxNoEffect new) with: (BoxNoEffect new).
-	myBoard := LoadedBoard withBoxes: myBoxes.
+	myBoard := Board withBoxes: myBoxes.
 
 	testPlayers:= OrderedCollection with: mozzarella.
 	
@@ -201,7 +263,7 @@ CementerioDePizzas_Game_Tests >> test009_ASpeedupBoxJumpsYouFourBoxesForward [
 	
 	myBoxes := OrderedCollection with: (BoxSpeedup  new) with: (BoxSpeedup new) with: (BoxSpeedup new) with: (BoxSpeedup new) with: (BoxSpeedup new) with: (BoxSpeedup new).
 	
-	myBoard := LoadedBoard withBoxes: myBoxes.
+	myBoard := Board withBoxes: myBoxes.
 	
 	testPlayers:= OrderedCollection with: napolitana with: mozzarella.
 	
@@ -226,7 +288,7 @@ CementerioDePizzas_Game_Tests >> test010_AnAtomicBombBoxSendsEveryoneBackTo1 [
 	
 	mozzarella:= Player withName: 'mozzarella'.
 	myBoxes := OrderedCollection with: (BoxNoEffect new) with: (BoxAtomicBomb new) with: (BoxNoEffect new) with: (BoxNoEffect new) with: (BoxNoEffect new).
-	myBoard := LoadedBoard withBoxes: myBoxes.
+	myBoard := Board withBoxes: myBoxes.
 
 	testPlayers:= OrderedCollection with: mozzarella.
 	

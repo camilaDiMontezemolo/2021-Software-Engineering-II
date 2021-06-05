@@ -6,7 +6,11 @@ Class {
 
 { #category : #'as yet unclassified' }
 BoxWormHole >> affect: positions triggeredOn: aPosition with: sizeOfBoard [
-	(aPosition location - 4  > 0)
+	|newLocations|
+	newLocations:= Dictionary new.
+	newLocations at: aPosition put:((aPosition absoluteLocation)-4).
+	^newLocations.
+	"(aPosition location - 4  > 0)
 	ifTrue: [
 		aPosition changeLocation:(aPosition location - 4).
 	]
@@ -15,5 +19,5 @@ BoxWormHole >> affect: positions triggeredOn: aPosition with: sizeOfBoard [
 		ifTrue: [aPosition changeLocation: (sizeOfBoard - (aPosition location - 4)).
 		aPosition decreaseLap.]
 		ifFalse: [ aPosition changeLocation: 0]
-	].
+	]."
 ]

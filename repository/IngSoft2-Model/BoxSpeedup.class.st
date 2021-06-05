@@ -6,12 +6,16 @@ Class {
 
 { #category : #'as yet unclassified' }
 BoxSpeedup >> affect: positions triggeredOn: aPosition with: sizeOfBoard [ 
-	(aPosition location + 4  < (sizeOfBoard))
+	|newLocations|
+	newLocations:= Dictionary new.
+	newLocations at: aPosition put:((aPosition absoluteLocation)+4).
+	^newLocations.
+	"(aPosition location + 4  < (sizeOfBoard))
 	ifTrue: [
 		aPosition changeLocation:(aPosition location + 4).
 	]
 	ifFalse: [ 
 		aPosition changeLocation: (4 - (sizeOfBoard - aPosition location)).
 		aPosition increaseLap.
-	].
+	]."
 ]

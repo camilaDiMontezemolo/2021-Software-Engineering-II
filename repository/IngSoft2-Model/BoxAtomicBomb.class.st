@@ -6,5 +6,9 @@ Class {
 
 { #category : #'as yet unclassified' }
 BoxAtomicBomb >> affect: positions triggeredOn: aPosition with: sizeOfBoard [
-	positions do: [:position | position changeLocation: 0].
+	|newLocations|
+	newLocations:= Dictionary new.
+	positions do: 
+	[:position |newLocations at: position put:(sizeOfBoard*((position absoluteLocation)//sizeOfBoard))].
+	^newLocations.
 ]
