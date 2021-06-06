@@ -30,13 +30,6 @@ Position >> equals: anotherPosition [
 	^((myPlayer name) = ((anotherPosition player)name))
 ]
 
-{ #category : #initialize }
-Position >> initializeUsing: aPlayer [ 
-	myPlayer := aPlayer.
-	location:=0.
-	lap:=0.
-]
-
 { #category : #initialization }
 Position >> initializeWith: aPlayer at: anAbsoluteLocation [
 	myPlayer := aPlayer.
