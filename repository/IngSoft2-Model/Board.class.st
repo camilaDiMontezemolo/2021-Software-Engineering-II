@@ -47,10 +47,8 @@ Board >> boxes [
 ]
 
 { #category : #'as yet unclassified' }
-Board >> change: aPosition rolling: myDie [
-	| distance pos |
-	distance := 0.
-	myDie do: [ :dice | distance := distance + dice spin ].
+Board >> change: aPosition for: distance [
+	| pos |
 	pos:= (aPosition absoluteLocation) +distance.
 	^(self generatePositionFor: aPosition at: pos).
 		
@@ -59,9 +57,9 @@ Board >> change: aPosition rolling: myDie [
 ]
 
 { #category : #'as yet unclassified' }
-Board >> change: aPosition using: myDie playing: game [
+Board >> change: aPosition using: distance playing: game [
 	|newPosition|
-	newPosition := self change: aPosition rolling: myDie.
+	newPosition := self change: aPosition for: distance.
 	self replacePosition: aPosition  with: newPosition.
 	(game isFinished)
 			ifFalse: [self applyEffectFor: aPosition and: positions.].
@@ -85,16 +83,11 @@ Board >> generatePositionFor: aPosition at: absoluteLocation [
 	^(Position of: (aPosition player) at: absoluteLocation).
 ]
 
-{ #category : #'as yet unclassified' }
-Board >> initialize [
-	mySize :=0.
-	myBoxes := OrderedCollection new.
-]
-
 { #category : #initialize }
 Board >> initializeWithBoxes: aCollectionOfBoxes [ 
+	myBoxes := OrderedCollection new.
 	myBoxes := aCollectionOfBoxes.
-	myBoxes addFirst: (BoxNoEffect new).
+	myBoxes addFirst: (NoEffectBox new).
 	mySize := ( (myBoxes size)-1 ).
 ]
 
@@ -102,17 +95,17 @@ Board >> initializeWithBoxes: aCollectionOfBoxes [
 Board >> initializeWithSize: aSize [
 	mySize := aSize.
 	myBoxes := OrderedCollection new.
-	self add: 0.48 of: BoxNoEffect.
-	self add: 0.2 of: BoxSpeedup.
-	self add: 0.2 of: BoxWormHole.
-	self add: 0.1 of: BoxMoonWalk.
-	self add: 0.02 of: BoxAtomicBomb.
+	self add: 0.48 of: NoEffectBox.
+	self add: 0.2 of: SpeedupBox.
+	self add: 0.2 of: WormHoleBox.
+	self add: 0.1 of: MoonWalkBox.
+	self add: 0.02 of: AtomicBombBox.
 	(myBoxes size < mySize)
 		ifTrue: [ 
-			(myBoxes size) to: (mySize) do: [:emptyBox | myBoxes add: (BoxNoEffect new) ].
+			(myBoxes size) to: (mySize) do: [:emptyBox | myBoxes add: (NoEffectBox new) ].
 		].
 	myBoxes := myBoxes shuffled.
-	myBoxes addFirst: (BoxNoEffect new).
+	myBoxes addFirst: (NoEffectBox new).
 	
 ]
 

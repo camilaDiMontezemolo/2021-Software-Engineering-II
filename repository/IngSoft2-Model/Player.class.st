@@ -14,20 +14,13 @@ Class {
 
 { #category : #'as yet unclassified' }
 Player class >> withName: aName [
-	(aName = '') ifTrue: [ Error signal: 'Todo jugador debe tener un nombre.' ].
+	(aName isEmpty) ifTrue: [ Error signal: 'Todo jugador debe tener un nombre.' ].
 	^self new initializeWithName: aName.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 Player >> equals: anotherPlayer [
 	^(myName = anotherPlayer name).
-]
-
-{ #category : #initialization }
-Player >> initialize [ 
-	location:=0.
-	myLaps:=0.
-	myName:=''.
 ]
 
 { #category : #initialization }

@@ -34,8 +34,6 @@ Position >> equals: anotherPosition [
 Position >> initializeWith: aPlayer at: anAbsoluteLocation [
 	myPlayer := aPlayer.
 	absoluteLocation := anAbsoluteLocation.
-	lap := 0.
-	location:= 0.
 ]
 
 { #category : #initialize }

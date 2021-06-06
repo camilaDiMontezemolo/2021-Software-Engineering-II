@@ -1,11 +1,11 @@
 Class {
-	#name : #BoxWormHole,
-	#superclass : #Object,
+	#name : #WormHoleBox,
+	#superclass : #Box,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'as yet unclassified' }
-BoxWormHole >> affect: positions triggeredOn: aPosition with: sizeOfBoard [
+WormHoleBox >> affect: positions triggeredOn: aPosition with: sizeOfBoard [
 	|newLocations|
 	newLocations:= Dictionary new.
 	newLocations at: aPosition put:((aPosition absoluteLocation)-4).

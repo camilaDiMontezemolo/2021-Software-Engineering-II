@@ -1,18 +1,18 @@
 Class {
-	#name : #Game,
+	#name : #PizzaGame,
 	#superclass : #Object,
 	#instVars : [
 		'myPlayers',
-		'myDie',
 		'myBoard',
 		'myLaps',
-		'myPositions'
+		'myPositions',
+		'myDice'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
-Game class >> withBoard: aBoard andPlayers: somePlayers andDie: someDie andLaps: someLaps [.
+PizzaGame class >> withBoard: aBoard andPlayers: somePlayers andDie: someDie andLaps: someLaps [.
 	(somePlayers isEmpty ) ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 jugador.' ].
 	(someDie isEmpty ) ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 dado.' 	].
 	(someLaps <1 ) ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 vuelta.' 	].
@@ -20,51 +20,58 @@ Game class >> withBoard: aBoard andPlayers: somePlayers andDie: someDie andLaps:
 ]
 
 { #category : #'as yet unclassified' }
-Game >> die [
-	^myDie.
+PizzaGame >> dice [
+	^myDice.
+]
+
+{ #category : #'as yet unclassified' }
+PizzaGame >> firstPlace [
+	^self ranking at: 1.
 ]
 
 { #category : #initialize }
-Game >> initialize [
-	myPlayers := OrderedCollection new.
-	myDie:= OrderedCollection new.
-]
-
-{ #category : #initialize }
-Game >> initializeWithBoard: aBoard andPlayers: somePlayers andDie: someDie andLaps: someLaps [
+PizzaGame >> initializeWithBoard: aBoard andPlayers: somePlayers andDie: someDie andLaps: someLaps [
 	myBoard:=aBoard.
 	myPlayers:=somePlayers.
 	myPositions:= OrderedCollection new.
 	myBoard createPositionsFor: myPlayers.
-	myDie:=someDie.
+	myDice:=someDie.
 	myLaps:=someLaps.
 ]
 
 { #category : #'as yet unclassified' }
-Game >> isFinished [
+PizzaGame >> isFinished [
 	^(myBoard positions) anySatisfy: [ :position | ((position absoluteLocation)//(myBoard sizeOfBoard)) >= myLaps].
 ]
 
 { #category : #'as yet unclassified' }
-Game >> play [
+PizzaGame >> play [
 	[self isFinished] whileFalse:[ 
 	(myBoard positions) do: [ :position |
 		(self isFinished) 
 		ifFalse: [
-			 myBoard change: position using: myDie playing: self.
+			 self rollFor: position.
 			].
 		].
 	].
 ]
 
 { #category : #'as yet unclassified' }
-Game >> players [
+PizzaGame >> players [
 	^myPlayers.
 ]
 
 { #category : #'as yet unclassified' }
-Game >> ranking [
+PizzaGame >> ranking [
 	(myBoard positions) sort: [:a :c | 
 		a absoluteLocation > c absoluteLocation].
 	^(myBoard positions).
+]
+
+{ #category : #'as yet unclassified' }
+PizzaGame >> rollFor: aPosition [
+	| distance |
+	distance := 0.
+	myDice do: [ :dice | distance := distance + dice spin ].
+	myBoard change: aPosition using: distance playing: self.
 ]

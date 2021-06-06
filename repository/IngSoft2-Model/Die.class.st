@@ -1,5 +1,5 @@
 Class {
-	#name : #Dice,
+	#name : #Die,
 	#superclass : #Object,
 	#instVars : [
 		'sides'
@@ -8,27 +8,22 @@ Class {
 }
 
 { #category : #'instance creation' }
-Dice class >> withSides: numberOfSides [
-	numberOfSides < 1 ifTrue: [ Error signal: 'Un dado no puede tener menos de 1 cara(s).' ].
+Die class >> withSides: numberOfSides [
+	numberOfSides < 3 ifTrue: [ Error signal: 'Un dado no puede tener menos de 3 cara(s).' ].
 	^self new initializeWithSides: numberOfSides.
 ]
 
 { #category : #initialize }
-Dice >> initialize [ 
-	sides:= 0.
-]
-
-{ #category : #initialize }
-Dice >> initializeWithSides: aNumberOfSides [ 
+Die >> initializeWithSides: aNumberOfSides [ 
 	sides:= aNumberOfSides.
 ]
 
 { #category : #'as yet unclassified' }
-Dice >> sides [
+Die >> sides [
 	^sides.
 ]
 
 { #category : #'as yet unclassified' }
-Dice >> spin [
+Die >> spin [
 	^(sides atRandom).
 ]

@@ -1,11 +1,11 @@
 Class {
-	#name : #BoxAtomicBomb,
-	#superclass : #Object,
+	#name : #AtomicBombBox,
+	#superclass : #Box,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'as yet unclassified' }
-BoxAtomicBomb >> affect: positions triggeredOn: aPosition with: sizeOfBoard [
+AtomicBombBox >> affect: positions triggeredOn: aPosition with: sizeOfBoard [
 	|newLocations|
 	newLocations:= Dictionary new.
 	positions do: 
