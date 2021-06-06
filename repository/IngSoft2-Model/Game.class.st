@@ -42,7 +42,7 @@ Game >> initializeWithBoard: aBoard andPlayers: somePlayers andDie: someDie andL
 
 { #category : #'as yet unclassified' }
 Game >> isFinished [
-	^(myBoard positions) anySatisfy: [ :position | (position lap) >= myLaps].
+	^(myBoard positions) anySatisfy: [ :position | ((position absoluteLocation)//(myBoard sizeOfBoard)) >= myLaps].
 ]
 
 { #category : #'as yet unclassified' }
@@ -65,9 +65,6 @@ Game >> players [
 { #category : #'as yet unclassified' }
 Game >> ranking [
 	(myBoard positions) sort: [:a :c | 
-		(a lap = (c lap))
-			ifTrue: [ (a location) > (c location)]
-			ifFalse:[ (a lap) > (c lap)].
-		].
+		a absoluteLocation > c absoluteLocation].
 	^(myBoard positions).
 ]

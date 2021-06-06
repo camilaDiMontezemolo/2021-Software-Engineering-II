@@ -15,19 +15,6 @@ BoxMoonWalk >> affect: positions triggeredOn: aPosition with: sizeOfBoard [
 	affectedPositions do: 
 	[:position |newLocations add: position ->(((position absoluteLocation)-n))].
 	^newLocations.
-	"
-	(oldPosition, newLocation)
-	affectedPositions  do: [ :position | 
-	((position location - n)  > 0)
-		ifTrue: [position changeLocation: (position location - n) .]
-	
-		ifFalse: [
-			(position lap > 0)
-				ifTrue: [position changeLocation: (sizeOfBoard - (position location - n)).
-							position decreaseLap.]
-				ifFalse: [ position changeLocation: 0 .].
-				].
-			]"
 
 ]
 

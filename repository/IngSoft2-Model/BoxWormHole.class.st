@@ -10,14 +10,4 @@ BoxWormHole >> affect: positions triggeredOn: aPosition with: sizeOfBoard [
 	newLocations:= Dictionary new.
 	newLocations at: aPosition put:((aPosition absoluteLocation)-4).
 	^newLocations.
-	"(aPosition location - 4  > 0)
-	ifTrue: [
-		aPosition changeLocation:(aPosition location - 4).
-	]
-	ifFalse: [ 
-		(aPosition lap > 0)
-		ifTrue: [aPosition changeLocation: (sizeOfBoard - (aPosition location - 4)).
-		aPosition decreaseLap.]
-		ifFalse: [ aPosition changeLocation: 0]
-	]."
 ]
