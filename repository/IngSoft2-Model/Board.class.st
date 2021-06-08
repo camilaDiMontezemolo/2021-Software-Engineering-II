@@ -22,18 +22,6 @@ Board class >> withSize: aSize [
 ]
 
 { #category : #'as yet unclassified' }
-Board >> add: aPercentage of: aBoxType [
-	| indice |
-	indice := 1.
-	[(indice <= (mySize *aPercentage)) & (myBoxes size < mySize)]
-		whileTrue:[
-			myBoxes add: (aBoxType new).
-			indice := (indice +1).
-			].
-		
-]
-
-{ #category : #'as yet unclassified' }
 Board >> applyEffectFor: aPosition and: gamePositions [
 	| box newLocations |
 	box := self findBoxFor: aPosition.
@@ -104,24 +92,6 @@ Board >> initializeWithBoxes: aCollectionOfBoxes [
 	myBoxes := aCollectionOfBoxes.
 	myBoxes addFirst: (NoEffectBox new).
 	mySize := ( (myBoxes size)-1 ).
-]
-
-{ #category : #'as yet unclassified' }
-Board >> initializeWithSize: aSize [
-	mySize := aSize.
-	myBoxes := OrderedCollection new.
-	self add: 0.48 of: NoEffectBox.
-	self add: 0.2 of: SpeedupBox.
-	self add: 0.2 of: WormHoleBox.
-	self add: 0.1 of: MoonWalkBox.
-	self add: 0.02 of: AtomicBombBox.
-	(myBoxes size < mySize)
-		ifTrue: [ 
-			(myBoxes size) to: (mySize) do: [:emptyBox | myBoxes add: (NoEffectBox new) ].
-		].
-	myBoxes := myBoxes shuffled.
-	myBoxes addFirst: (NoEffectBox new).
-	
 ]
 
 { #category : #'as yet unclassified' }
