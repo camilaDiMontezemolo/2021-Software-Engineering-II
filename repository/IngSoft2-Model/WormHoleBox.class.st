@@ -6,8 +6,6 @@ Class {
 
 { #category : #'as yet unclassified' }
 WormHoleBox >> affect: positions triggeredOn: aPosition with: board [
-	|newLocations|
-	newLocations:= Dictionary new.
-	newLocations at: aPosition put:((aPosition absoluteLocation)-4).
-	^newLocations.
+	board replacePosition: aPosition 
+					with: (board generatePositionFor: aPosition at:(aPosition absoluteLocation)-4).
 ]

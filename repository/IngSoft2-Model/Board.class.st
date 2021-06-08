@@ -23,29 +23,19 @@ Board class >> withSize: aSize [
 
 { #category : #'as yet unclassified' }
 Board >> applyEffectFor: aPosition and: gamePositions [
-	| box newLocations |
+	| box |
 	box := self findBoxFor: aPosition.
-	newLocations := box affect: gamePositions triggeredOn: aPosition with: self.
-	self replacePositionsUsing: newLocations
-]
-
-{ #category : #'as yet unclassified' }
-Board >> boxes [
-	^myBoxes.
+	box affect: gamePositions triggeredOn: aPosition with: self.
 ]
 
 { #category : #'as yet unclassified' }
 Board >> calculateNewLocationFor: position [
 	|laps|
-	
 	laps:= ((position absoluteLocation)//(mySize)).
+	
 	(laps ==0)
-	ifTrue:[
-		^0.		
-	]
-	ifFalse:[
-		^(mySize*laps)+1.
-	].
+	ifTrue:[^0.]
+	ifFalse:[^(mySize*laps)+1.].
 ]
 
 { #category : #'as yet unclassified' }
@@ -78,7 +68,6 @@ Board >> createPositionsFor: players [
 Board >> findBoxFor: aPosition [
 	^ myBoxes at:
 			((aPosition absoluteLocation) - (mySize*((aPosition absoluteLocation)//mySize)))+1.
-			"((aPosition absoluteLocation- mySize *(aPosition absoluteLocation//mySize))+1)".
 ]
 
 { #category : #'as yet unclassified' }
@@ -102,15 +91,6 @@ Board >> positions [
 { #category : #'as yet unclassified' }
 Board >> replacePosition: position with: newPosition [
 	positions at:(positions indexOf: position) put: newPosition.
-]
-
-{ #category : #'as yet unclassified' }
-Board >> replacePositionsUsing: newLocations [
-	positions do: [:position | self replacePosition: position with:
-		(Position of: (position player) at: 
-		(newLocations at: position ifAbsent: [position absoluteLocation]))].
-	
-		
 ]
 
 { #category : #'as yet unclassified' }

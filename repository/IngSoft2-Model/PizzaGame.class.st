@@ -20,11 +20,6 @@ PizzaGame class >> withBoard: aBoard andPlayers: somePlayers andDie: someDie and
 ]
 
 { #category : #'as yet unclassified' }
-PizzaGame >> dice [
-	^myDice.
-]
-
-{ #category : #'as yet unclassified' }
 PizzaGame >> firstPlace [
 	^self ranking at: 1.
 ]
@@ -54,11 +49,6 @@ PizzaGame >> oneRound [
 PizzaGame >> play [
 	[ self isFinished ] whileFalse:
 		[ self oneRound ]
-]
-
-{ #category : #'as yet unclassified' }
-PizzaGame >> players [
-	^myPlayers.
 ]
 
 { #category : #'as yet unclassified' }

@@ -6,10 +6,8 @@ Class {
 
 { #category : #'as yet unclassified' }
 AtomicBombBox >> affect: positions triggeredOn: aPosition with: board [
-	|newLocations|
-	newLocations:= Dictionary new.
 	positions do: 
-	[:position |newLocations at: position put: (board calculateNewLocationFor: position)].
-	^newLocations.
-	"board changeLocation: aPosition with: (board generatePosition)"
+	[:position |board replacePosition: position with:
+		( board generatePositionFor: position at: 
+			(board calculateNewLocationFor: position))].
 ]

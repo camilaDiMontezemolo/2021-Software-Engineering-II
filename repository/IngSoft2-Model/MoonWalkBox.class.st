@@ -15,12 +15,11 @@ MoonWalkBox class >> loadedWith: aNumber [
 
 { #category : #'as yet unclassified' }
 MoonWalkBox >> affect: positions triggeredOn: aPosition with: board [
-	| affectedPositions newLocations|
+	| affectedPositions|
 	affectedPositions :=(positions  reject: [:position| position equals: aPosition]).
-	newLocations:= Dictionary new.
 	affectedPositions do: 
-	[:position |newLocations add: position ->(((position absoluteLocation)-n))].
-	^newLocations.
+	[:position |board replacePosition: position 
+					with: (board generatePositionFor: position at:(position absoluteLocation)-n)].
 
 ]
 

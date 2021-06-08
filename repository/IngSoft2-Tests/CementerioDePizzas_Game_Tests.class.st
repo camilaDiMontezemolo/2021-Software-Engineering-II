@@ -17,9 +17,9 @@ CementerioDePizzas_Game_Tests >> should: block raise: kindOfError withMessage: e
 CementerioDePizzas_Game_Tests >> test000_AGameShouldHaveAtLeastOneLap [
 	"a dummy test comment"
 	"un dia en un cementerio de pizzas habian 2 pizzas"
-	| myDie hawaiana myPlayers  block myBoard |
+	| myDie myPlayers  block myBoard |
 	
-	myDie := OrderedCollection with: (Die withSides: 3).
+	myDie := OrderedCollection with: (Dice withSides: 3).
 	
 	myPlayers:= (OrderedCollection with: #hawaiana).
 	
@@ -35,7 +35,7 @@ CementerioDePizzas_Game_Tests >> test000_CreateAGameWithOnePlayerAnd10Boxes [
 	"un dia en un cementerio de pizzas habian 2 pizzas"
 	| myBoard myDie myPlayers myGame myBoxes|
 	
-	myDie := OrderedCollection with: (Die withSides: 3).
+	myDie := OrderedCollection with: (Dice withSides: 3).
 	
 	myPlayers:= (OrderedCollection with: #hawaiana).
 	
@@ -46,10 +46,6 @@ CementerioDePizzas_Game_Tests >> test000_CreateAGameWithOnePlayerAnd10Boxes [
 	myGame:= PizzaGame withBoard:myBoard andPlayers: myPlayers andDie: myDie andLaps: 1.
 	
 	self assert: (myBoard sizeOfBoard) equals: 10.
-
-	"self assert: (myGame players) = myPlayers."
-	
-	self assert: (myGame dice) equals: myDie.
 	
 ]
 
@@ -70,7 +66,7 @@ CementerioDePizzas_Game_Tests >> test001_aBoardShouldHaveMoreThanCeroBoxes [
 CementerioDePizzas_Game_Tests >> test001_aBoardShouldHaveMoreThanCeroDie [
 
 	|  myDie block boardWithoutDie someBoxes myBoard|
-	myDie := OrderedCollection with: (Die withSides: 3).
+	myDie := OrderedCollection with: (Dice withSides: 3).
 	someBoxes := OrderedCollection new.
 	someBoxes:= BoxGenerator give: 20.
 	myBoard:= Board withBoxes: someBoxes.
@@ -89,7 +85,7 @@ CementerioDePizzas_Game_Tests >> test001_aBoardShouldHaveMoreThanCeroPlayers [
 
 	|  myDie block2 boardWithoutPlayers myBoxes|
 	
-	myDie := OrderedCollection with: (Die withSides: 3).
+	myDie := OrderedCollection with: (Dice withSides: 3).
 	myBoxes := OrderedCollection with: (BoxGenerator give: 10).
 
 	block2:= [
@@ -107,10 +103,10 @@ CementerioDePizzas_Game_Tests >> test001_aBoardShouldHaveMoreThanCeroPlayers [
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> test004_aDiceShouldHaveAtLeastOneSide [
 	| myDice block |
-	myDice := Die withSides: 6.
+	myDice := Dice withSides: 6.
 	self assert: (myDice sides) equals:6.
 	
-	block:= [Die withSides: 0.].
+	block:= [Dice withSides: 0.].
 	self should: block raise: Error withMessage: 'Un dado no puede tener menos de 3 cara(s).'.
 ]
 
@@ -256,7 +252,7 @@ CementerioDePizzas_Game_Tests >> test011_CreateAGameSinglePlayer [
 	
 	napolitana:= #napolitana.
 	
-	myDie := OrderedCollection with: (Die withSides: 5).
+	myDie := OrderedCollection with: (Dice withSides: 5).
 	myBoxes := OrderedCollection new.
 	myBoxes:= BoxGenerator give: 5.
 	myBoard:= Board withBoxes: myBoxes.
@@ -285,7 +281,7 @@ CementerioDePizzas_Game_Tests >> test012_CreateARandomMultiPlayerGame [
 	
 	testPlayers:= OrderedCollection with: napolitana with: margarita with: mozzarella.
 	
-	myDie := OrderedCollection with: (Die withSides: 5) with: (Die withSides: 4).
+	myDie := OrderedCollection with: (Dice withSides: 5) with: (Dice withSides: 4).
 	
 	game:= PizzaGame withBoard: myBoard andPlayers: testPlayers andDie: myDie andLaps: 1.
 	
