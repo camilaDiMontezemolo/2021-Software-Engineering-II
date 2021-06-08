@@ -27,7 +27,7 @@ Position >> absoluteLocation [
 
 { #category : #initialize }
 Position >> equals: anotherPosition [
-	^((myPlayer name) = ((anotherPosition player)name))
+	^(myPlayer = (anotherPosition player))
 ]
 
 { #category : #initialization }

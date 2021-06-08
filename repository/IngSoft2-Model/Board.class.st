@@ -37,13 +37,27 @@ Board >> add: aPercentage of: aBoxType [
 Board >> applyEffectFor: aPosition and: gamePositions [
 	| box newLocations |
 	box := self findBoxFor: aPosition.
-	newLocations := box affect: gamePositions triggeredOn: aPosition with: mySize.
+	newLocations := box affect: gamePositions triggeredOn: aPosition with: self.
 	self replacePositionsUsing: newLocations
 ]
 
 { #category : #'as yet unclassified' }
 Board >> boxes [
 	^myBoxes.
+]
+
+{ #category : #'as yet unclassified' }
+Board >> calculateNewLocationFor: position [
+	|laps|
+	
+	laps:= ((position absoluteLocation)//(mySize)).
+	(laps ==0)
+	ifTrue:[
+		^0.		
+	]
+	ifFalse:[
+		^(mySize*laps)+1.
+	].
 ]
 
 { #category : #'as yet unclassified' }
@@ -62,7 +76,7 @@ Board >> change: aPosition using: distance playing: game [
 	newPosition := self change: aPosition for: distance.
 	self replacePosition: aPosition  with: newPosition.
 	(game isFinished)
-			ifFalse: [self applyEffectFor: aPosition and: positions.].
+			ifFalse: [self applyEffectFor: newPosition and: positions.].
 	"(game isFinished)
 			ifTrue: [ self replacePosition: aPosition  with:  ]"
 ]
@@ -75,7 +89,8 @@ Board >> createPositionsFor: players [
 { #category : #'as yet unclassified' }
 Board >> findBoxFor: aPosition [
 	^ myBoxes at:
-			(aPosition absoluteLocation- (mySize * (aPosition absoluteLocation // mySize))+1)
+			((aPosition absoluteLocation) - (mySize*((aPosition absoluteLocation)//mySize)))+1.
+			"((aPosition absoluteLocation- mySize *(aPosition absoluteLocation//mySize))+1)".
 ]
 
 { #category : #'as yet unclassified' }

@@ -5,6 +5,6 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-NoEffectBox >> affect: positions triggeredOn: aPosition with: sizeOfBoard [
+NoEffectBox >> affect: positions triggeredOn: aPosition with: board [
 	^Dictionary new.
 ]

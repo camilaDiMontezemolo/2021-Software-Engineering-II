@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-WormHoleBox >> affect: positions triggeredOn: aPosition with: sizeOfBoard [
+WormHoleBox >> affect: positions triggeredOn: aPosition with: board [
 	|newLocations|
 	newLocations:= Dictionary new.
 	newLocations at: aPosition put:((aPosition absoluteLocation)-4).

@@ -14,7 +14,7 @@ MoonWalkBox class >> loadedWith: aNumber [
 ]
 
 { #category : #'as yet unclassified' }
-MoonWalkBox >> affect: positions triggeredOn: aPosition with: sizeOfBoard [
+MoonWalkBox >> affect: positions triggeredOn: aPosition with: board [
 	| affectedPositions newLocations|
 	affectedPositions :=(positions  reject: [:position| position equals: aPosition]).
 	newLocations:= Dictionary new.

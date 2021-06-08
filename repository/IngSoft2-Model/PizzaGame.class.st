@@ -45,15 +45,15 @@ PizzaGame >> isFinished [
 ]
 
 { #category : #'as yet unclassified' }
+PizzaGame >> oneRound [
+	myBoard positions do:
+		[ :position | self runTurnFor: position ]
+]
+
+{ #category : #'as yet unclassified' }
 PizzaGame >> play [
-	[self isFinished] whileFalse:[ 
-	(myBoard positions) do: [ :position |
-		(self isFinished) 
-		ifFalse: [
-			 self rollFor: position.
-			].
-		].
-	].
+	[ self isFinished ] whileFalse:
+		[ self oneRound ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -74,4 +74,11 @@ PizzaGame >> rollFor: aPosition [
 	distance := 0.
 	myDice do: [ :dice | distance := distance + dice spin ].
 	myBoard change: aPosition using: distance playing: self.
+]
+
+{ #category : #'as yet unclassified' }
+PizzaGame >> runTurnFor: position [
+	^ self isFinished
+		ifFalse: [ self rollFor: position ]
+		ifTrue: [ ].
 ]
