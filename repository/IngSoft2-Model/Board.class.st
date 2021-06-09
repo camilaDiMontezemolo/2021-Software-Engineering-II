@@ -5,7 +5,9 @@ Class {
 		'mySize',
 		'myBoxes',
 		'positions',
-		'mylaps'
+		'mylaps',
+		'lastBoxUsedbox',
+		'lastUsedbox'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -26,6 +28,7 @@ Board >> applyEffectFor: aPosition and: gamePositions [
 	| box |
 	box := self findBoxFor: aPosition.
 	box affect: gamePositions triggeredOn: aPosition with: self.
+	lastUsedbox:=box.
 ]
 
 { #category : #'as yet unclassified' }

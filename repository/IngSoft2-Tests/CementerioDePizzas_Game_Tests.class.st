@@ -292,7 +292,60 @@ CementerioDePizzas_Game_Tests >> test012_CreateARandomMultiPlayerGame [
 ]
 
 { #category : #tests }
-CementerioDePizzas_Game_Tests >> test012_CreateAnOverloadCard [
+CementerioDePizzas_Game_Tests >> test012_UseARedoCard [
+	
+	| myBoxes myBoard testPlayers myDie game cards|
+	
+	myBoxes := OrderedCollection 
+		with: NoEffectBox new 
+		with: NoEffectBox new
+		with: NoEffectBox new 
+		with: NoEffectBox new.
+		
+	cards := OrderedCollection
+		with: (SpeedUpCard of: #margarita)
+		with: (RedoCard of: #napolitana).
+		
+	myBoard := Board withBoxes: myBoxes.
+	testPlayers := OrderedCollection with:#margarita with: #napolitana.
+	myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
+	game := PizzaGame withBoard: myBoard players: testPlayers dice: myDie laps: 1 andCards: cards.
+	game oneRound.
+	
+	self assert: ((game ranking) second) absoluteLocation equals: 3.
+	 
+	
+	
+]
+
+{ #category : #tests }
+CementerioDePizzas_Game_Tests >> test012_UseASpeedUpCard [
+	
+	| myBoxes myBoard testPlayers myDie game cards|
+	
+	myBoxes := OrderedCollection 
+		with: NoEffectBox new 
+		with: NoEffectBox new
+		with: NoEffectBox new 
+		with: NoEffectBox new.
+		
+	cards := OrderedCollection
+		with: (SpeedUpCard of: #napolitana).
+		
+	myBoard := Board withBoxes: myBoxes.
+	testPlayers := OrderedCollection with: #napolitana.
+	myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
+	game := PizzaGame withBoard: myBoard players: testPlayers dice: myDie laps: 1 andCards: cards.
+	game oneRound.
+	
+	self assert: ((game ranking) first) absoluteLocation equals: 3.
+	 
+	
+	
+]
+
+{ #category : #tests }
+CementerioDePizzas_Game_Tests >> test012_UseAnOverloadCard [
 	
 	| myBoxes myBoard testPlayers myDie game cards|
 	

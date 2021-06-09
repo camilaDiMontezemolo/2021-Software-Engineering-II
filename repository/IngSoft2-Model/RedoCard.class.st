@@ -1,5 +1,5 @@
 Class {
-	#name : #OverloadCard,
+	#name : #RedoCard,
 	#superclass : #Card,
 	#instVars : [
 		'owner',
@@ -10,36 +10,35 @@ Class {
 }
 
 { #category : #'instance creation' }
-OverloadCard class >> of: player [
+RedoCard class >> of: player [
 	^self new initializeWithPlayer: player.
 ]
 
 { #category : #'as yet unclassified' }
-OverloadCard >> affected [
+RedoCard >> affected [
 	^affectedPlayer.
 ]
 
 { #category : #'as yet unclassified' }
-OverloadCard >> applyEffectFrom: aDeck [ 
+RedoCard >> applyEffectFrom: aDeck [ 
 	(active) 
-	ifTrue:[aDeck lastCardUsed: self.
-		^-2.]
+	ifTrue:[^(aDeck lastCardUsed applyEffectFrom: aDeck).]
 	ifFalse:[^0].
 ]
 
 { #category : #'as yet unclassified' }
-OverloadCard >> applyOver: aPlayer [ 
+RedoCard >> applyOver: aPlayer [ 
 	affectedPlayer:= aPlayer.
 ]
 
 { #category : #initialize }
-OverloadCard >> initializeWithPlayer: player [
+RedoCard >> initializeWithPlayer: player [
 	owner :=player.
 	affectedPlayer :=player.
 	active := true.
 ]
 
 { #category : #initialize }
-OverloadCard >> owner [
+RedoCard >> owner [
 	^owner.
 ]

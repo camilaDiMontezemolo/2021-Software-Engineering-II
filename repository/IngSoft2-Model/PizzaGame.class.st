@@ -105,10 +105,3 @@ PizzaGame >> runTurnFor [
 					  self changeTurn.]
 		ifTrue: [ ].
 ]
-
-{ #category : #'as yet unclassified' }
-PizzaGame >> runTurnFor: position [
-	^ self isFinished
-		ifFalse: [ self rollFor: position ]
-		ifTrue: [ ].
-]

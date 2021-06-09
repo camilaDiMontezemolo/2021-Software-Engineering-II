@@ -2,7 +2,9 @@ Class {
 	#name : #Deck,
 	#superclass : #Object,
 	#instVars : [
-		'cards'
+		'cards',
+		'lastCardUsed',
+		'cardRegister'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -10,12 +12,6 @@ Class {
 { #category : #'instance creation' }
 Deck class >> with: initialCards [
 	^self new initializeWithCards: initialCards.
-]
-
-{ #category : #'as yet unclassified' }
-Deck >> assignCard:card to: player [
-	card belongsTo: player.
-	card applyEffectTo: player.
 ]
 
 { #category : #'as yet unclassified' }
@@ -29,6 +25,17 @@ Deck >> findCardsOf: player [
 { #category : #initialize }
 Deck >> initializeWithCards: initialCards [
 	cards:= initialCards.
+	cardRegister := OrderedCollection new.
+]
+
+{ #category : #'as yet unclassified' }
+Deck >> lastCardUsed [
+	^lastCardUsed.
+]
+
+{ #category : #'as yet unclassified' }
+Deck >> lastCardUsed: newCard [
+	lastCardUsed:= newCard.
 ]
 
 { #category : #'as yet unclassified' }
@@ -36,6 +43,6 @@ Deck >> modifyDistanceOf: player [
 	| playerCards finalDistance|
 	finalDistance:=0.
 	playerCards := (self findCardsOf: player).
-	playerCards do: [:card| finalDistance:= finalDistance +(card applyEffect).].
+	playerCards do: [:card| finalDistance:= finalDistance +(card applyEffectFrom: self).].
 	^finalDistance.
 ]

@@ -1,5 +1,5 @@
 Class {
-	#name : #OverloadCard,
+	#name : #SpeedUpCard,
 	#superclass : #Card,
 	#instVars : [
 		'owner',
@@ -10,36 +10,36 @@ Class {
 }
 
 { #category : #'instance creation' }
-OverloadCard class >> of: player [
+SpeedUpCard class >> of: player [
 	^self new initializeWithPlayer: player.
 ]
 
 { #category : #'as yet unclassified' }
-OverloadCard >> affected [
+SpeedUpCard >> affected [
 	^affectedPlayer.
 ]
 
 { #category : #'as yet unclassified' }
-OverloadCard >> applyEffectFrom: aDeck [ 
+SpeedUpCard >> applyEffectFrom: aDeck [ 
 	(active) 
-	ifTrue:[aDeck lastCardUsed: self.
-		^-2.]
+	ifTrue:[aDeck lastCardUsed:self.
+		^1.]
 	ifFalse:[^0].
 ]
 
 { #category : #'as yet unclassified' }
-OverloadCard >> applyOver: aPlayer [ 
+SpeedUpCard >> applyOver: aPlayer [ 
 	affectedPlayer:= aPlayer.
 ]
 
 { #category : #initialize }
-OverloadCard >> initializeWithPlayer: player [
+SpeedUpCard >> initializeWithPlayer: player [
 	owner :=player.
 	affectedPlayer :=player.
 	active := true.
 ]
 
 { #category : #initialize }
-OverloadCard >> owner [
+SpeedUpCard >> owner [
 	^owner.
 ]
