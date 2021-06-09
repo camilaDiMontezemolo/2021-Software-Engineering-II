@@ -17,15 +17,13 @@ CementerioDePizzas_Game_Tests >> should: block raise: kindOfError withMessage: e
 CementerioDePizzas_Game_Tests >> test000_AGameShouldHaveAtLeastOneLap [
 	"a dummy test comment"
 	"un dia en un cementerio de pizzas habian 2 pizzas"
-	| myBoard myDie hawaiana myPlayers myGame block |
+	| myDie myPlayers  block myBoard |
 	
-	hawaiana := Player withName: 'hawaiana'.
+	myDie := OrderedCollection with: (Dice withSides: 3).
 	
-	myDie := OrderedCollection with: (Dice withSides: 1).
+	myPlayers:= (OrderedCollection with: #hawaiana).
 	
-	myPlayers:= (OrderedCollection with: hawaiana).
-	
-	block:=[Game withBoard:myBoard andPlayers: myPlayers andDie: myDie andLaps: 0].
+	block:=[PizzaGame withBoard:myBoard andPlayers: myPlayers andDie: myDie andLaps: 0].
 	
 	self should: block raise: Error withMessage: 'Un juego no puede tener menos de 1 vuelta.'.
 	
@@ -35,74 +33,64 @@ CementerioDePizzas_Game_Tests >> test000_AGameShouldHaveAtLeastOneLap [
 CementerioDePizzas_Game_Tests >> test000_CreateAGameWithOnePlayerAnd10Boxes [
 	"a dummy test comment"
 	"un dia en un cementerio de pizzas habian 2 pizzas"
-	| myBoard myDie hawaiana myPlayers myGame |
+	| myBoard myDie myPlayers myGame myBoxes|
 	
-	hawaiana := Player withName: 'hawaiana'.
+	myDie := OrderedCollection with: (Dice withSides: 3).
 	
-	myDie := OrderedCollection with: (Dice withSides: 1).
+	myPlayers:= (OrderedCollection with: #hawaiana).
 	
-	myPlayers:= (OrderedCollection with: hawaiana).
+	myBoxes := OrderedCollection new.
+	myBoxes:= BoxGenerator give: 10.
+	myBoard:= Board withBoxes: myBoxes.
 	
-	myBoard:= Board withSize: 10.
-	
-	myGame:= Game withBoard:myBoard andPlayers: myPlayers andDie: myDie andLaps: 1.
+	myGame:= PizzaGame withBoard:myBoard andPlayers: myPlayers andDie: myDie andLaps: 1.
 	
 	self assert: (myBoard sizeOfBoard) equals: 10.
-
-	self assert: (myGame players) equals: myPlayers.
-	
-	self assert: (myGame die) equals: myDie.
 	
 ]
 
 { #category : #tests }
-CementerioDePizzas_Game_Tests >> test001_aBoardShouldHaveMoreThanCeroPlayeresAndDie [
+CementerioDePizzas_Game_Tests >> test001_aBoardShouldHaveMoreThanCeroBoxes [
 
-	|  myDie laQueHablaRaro block2 block3 boardWithoutPlayers boardWithoutDie |
-
-	laQueHablaRaro := Player withName: 'laQueHablaRaro'.
+	| block kindOfError errorMessage|
 	
-	myDie := OrderedCollection with: (Dice withSides: 1).
-
-	block2:= [
-		boardWithoutPlayers :=Game
-		withBoard: (Board withSize: 1)
-		andPlayers: OrderedCollection new
-		andDie: myDie
-		andLaps: 1.
-		].
 	
-	self should: block2 raise: Error withMessage: 'Un juego no puede tener menos de 1 jugador.'.
-		
-	block3:=[boardWithoutDie := Game
-		withBoard: (Board withSize: 20)
-		andPlayers: (OrderedCollection with: laQueHablaRaro)
-		andDie: OrderedCollection new
-		andLaps: 1
-		].
-		
-	self should: block3 raise: Error withMessage: 'Un juego no puede tener menos de 1 dado.'.
-]
-
-{ #category : #tests }
-CementerioDePizzas_Game_Tests >> test001_aBoardShouldHaveMoreThanCeroPlayeresBoxesAndDie [
-
-	|  myDie block kindOfError errorMessage hawaiana block2 block3 boardWithoutPlayers 	boardWithoutDie |
-	
-	hawaiana := Player withName: 'hawaiana'.
-	
-	myDie := OrderedCollection with: (Dice withSides: 1).
-	block := [ 
-		Board withSize:0. 
-		].
+	block := [ Board withSize:0.].
 	kindOfError := Error.
 	errorMessage := 'Un tablero no puede tener menos de 1 casillero.'.
 	
 	self should: block raise: kindOfError withMessage: errorMessage.
+]
+
+{ #category : #tests }
+CementerioDePizzas_Game_Tests >> test001_aBoardShouldHaveMoreThanCeroDie [
+
+	|  myDie block boardWithoutDie someBoxes myBoard|
+	myDie := OrderedCollection with: (Dice withSides: 3).
+	someBoxes := OrderedCollection new.
+	someBoxes:= BoxGenerator give: 20.
+	myBoard:= Board withBoxes: someBoxes.
+	block:=[boardWithoutDie := PizzaGame
+		withBoard: myBoard
+		andPlayers: (OrderedCollection with: #hawaiana)
+		andDie: OrderedCollection new
+		andLaps: 1
+		].
+		
+	self should: block raise: Error withMessage: 'Un juego no puede tener menos de 1 dado.'.
+]
+
+{ #category : #tests }
+CementerioDePizzas_Game_Tests >> test001_aBoardShouldHaveMoreThanCeroPlayers [
+
+	|  myDie block2 boardWithoutPlayers myBoxes|
+	
+	myDie := OrderedCollection with: (Dice withSides: 3).
+	myBoxes := OrderedCollection with: (BoxGenerator give: 10).
 
 	block2:= [
-		boardWithoutPlayers :=Game
-		withBoard: (Board withSize: 1)
+		boardWithoutPlayers :=PizzaGame
+		withBoard: (Board withBoxes: myBoxes)
 		andPlayers: OrderedCollection new
 		andDie: myDie
 		andLaps: 1.
@@ -110,240 +98,221 @@ CementerioDePizzas_Game_Tests >> test001_aBoardShouldHaveMoreThanCeroPlayeresBox
 	
 	self should: block2 raise: Error withMessage: 'Un juego no puede tener menos de 1 jugador.'.
 		
-	block3:=[boardWithoutDie := Game
-		withBoard: (Board withSize: 20)
-		andPlayers: (OrderedCollection with: hawaiana)
-		andDie: OrderedCollection new
-		andLaps: 1
-		].
-		
-	self should: block3 raise: Error withMessage: 'Un juego no puede tener menos de 1 dado.'.
 ]
 
 { #category : #tests }
-CementerioDePizzas_Game_Tests >> test002_aPlayerMustHaveAName [
-	| myPlayer block |
-	myPlayer := Player withName: 'Push-Pop :)'.
-	
-	self assert: (myPlayer name) equals: 'Push-Pop :)'.
-	
-	block:= [Player withName: ''.].
-	self should: block raise: Error withMessage: 'Todo jugador debe tener un nombre.'.
-]
-
-{ #category : #tests }
-CementerioDePizzas_Game_Tests >> test004_CreateADiceWithNSides [
+CementerioDePizzas_Game_Tests >> test004_aDiceShouldHaveAtLeastOneSide [
 	| myDice block |
 	myDice := Dice withSides: 6.
 	self assert: (myDice sides) equals:6.
 	
 	block:= [Dice withSides: 0.].
-	self should: block raise: Error withMessage: 'Un dado no puede tener menos de 1 cara(s).'.
-]
-
-{ #category : #tests }
-CementerioDePizzas_Game_Tests >> test005_CreateABoardWithPositionsAndReplaceOneOfThem [
-	| myBoard napolitana margarita testPlayers mozzarella hawaiana positions|
-	
-	napolitana:= Player withName: 'napolitana'.	
-	margarita:= Player withName: 'margarita'.
-	mozzarella:= Player withName: 'mozzarella'.
-	hawaiana := Player withName: 'hawaiana'.
-	
-	myBoard := Board withSize: 40.
-	testPlayers:= OrderedCollection with: napolitana with: margarita with: mozzarella.
-
-	myBoard createPositionsFor: testPlayers.
-	positions:=myBoard positions.
-	myBoard replacePosition: (positions at: 1) with: (Position of: hawaiana at: 0).
-	
-	self assert: ((myBoard positions) at: 1) player equals: hawaiana.
-	self assert: ((myBoard positions) at: 2) player equals: margarita.
-	
-	
-
-
-
-
+	self should: block raise: Error withMessage: 'Un dado no puede tener menos de 3 cara(s).'.
 ]
 
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> test005_CreateAPosition [
-	|myPosition aPlayer anAbsoluteLocation |
-	aPlayer:= Player withName: 'Alejandra'.
+	|myPosition anAbsoluteLocation |
 	anAbsoluteLocation := 20.
-	myPosition := Position of: aPlayer at: anAbsoluteLocation.
+	myPosition := Position of: #napolitana at: anAbsoluteLocation.
 	self assert: (myPosition absoluteLocation) equals:20.
 ]
 
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> test006_AMoonWalkBoxJumpsAPlayerBoxesBack [
 	
-	| game myBoard myDie positions testPlayers mozzarella myBoxes |
+	| myBoxes myBoard testPlayers myDie game positions|
 	
-	mozzarella:= Player withName: 'mozzarella'.
-	myBoxes := OrderedCollection with: (LoadedMoonWalkBox new) with: (LoadedMoonWalkBox new) with: (BoxNoEffect new) with: (BoxNoEffect new) with: (LoadedMoonWalkBox new) with: (BoxNoEffect new).
+	myBoxes := OrderedCollection with: NoEffectBox new with: (MoonWalkBox loadedWith: 1) with: NoEffectBox with: NoEffectBox.
 	myBoard := Board withBoxes: myBoxes.
-
-	testPlayers:= OrderedCollection with: mozzarella.
-	
-	myDie := OrderedCollection with: (LoadedDice withTosses: #(1 3 4 5 6)).
-	
-	
-	game:= Game withBoard: myBoard andPlayers: testPlayers andDie: myDie andLaps: 1.
-	game play.
+	testPlayers := OrderedCollection with: #napolitana with: #hawaiana.
+	myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
+	game := PizzaGame withBoard: myBoard andPlayers: testPlayers andDie: myDie andLaps: 1.
+	game oneRound.
 	positions := game ranking.
-	
-	self assert: (game isFinished).
-	self assert: (((positions at:1) player) equals: mozzarella).
+
+	self assert: (myBoard positions at:2)absoluteLocation equals: 1.
 	
 ]
 
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> test007_CreateAGameMultiPlayer [
-	
 	| game myBoard myDie napolitana ranking margarita testPlayers mozzarella myBoxes |
-	
-	napolitana:= Player withName: 'napolitana'.	
-	margarita:= Player withName: 'margarita'.
-	mozzarella:= Player withName: 'mozzarella'.
-	
-	myBoxes := OrderedCollection with: (BoxNoEffect new) with: (BoxNoEffect new) with: (BoxWormHole new) with: (BoxAtomicBomb new) with: (LoadedMoonWalkBox new) with: (BoxSpeedup new).
-	
+	napolitana := #napolitana.
+	margarita := #margarita.
+	mozzarella := #mozzarella.
+	myBoxes := OrderedCollection
+		with: NoEffectBox new
+		with: NoEffectBox new
+		with: WormHoleBox new
+		with: AtomicBombBox new
+		with: (MoonWalkBox loadedWith: 1)
+		with: SpeedupBox new.
 	myBoard := Board withBoxes: myBoxes.
-	
-	testPlayers:= OrderedCollection with: napolitana with: margarita with: mozzarella.
-	
-	myDie := OrderedCollection with: (LoadedDice withTosses: #(4 4 4 2 2 2 2 2 2 6 6 6 2 2 2)).
-	
-	game:= Game withBoard: myBoard andPlayers: testPlayers andDie: myDie andLaps: 1.
-	
+	testPlayers := OrderedCollection
+		with: #napolitana
+		with: #margarita
+		with: #mozzarella.
+	myDie := OrderedCollection
+		with: (LoadedDice withTosses: #(4 4 4 2 2 2 2 2 2 6 6 6 2 2 2)).
+	game := PizzaGame
+		withBoard: myBoard
+		andPlayers: testPlayers
+		andDie: myDie
+		andLaps: 1.
 	game play.
 	ranking := game ranking.
-	
-	self assert: (game isFinished).
-	self assert: ((ranking at:1) player equals: napolitana).
-	self assert: ((ranking at:2) player equals: mozzarella).
-	self assert: ((ranking at:3) player equals: margarita).
-	
+	self assert: game isFinished.
+	self assert: game firstPlace player identicalTo: napolitana.
+	self assert: (ranking at: 1) player identicalTo: napolitana.
+	self assert: (ranking at: 2) player identicalTo: margarita.
+	self assert: (ranking at: 3) player identicalTo: mozzarella
 ]
 
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> test008_ANoEffectBoxHasNoEffects [
 	
-	| game myBoard myDie positions testPlayers mozzarella myBoxes |
+		| myBoxes myBoard testPlayers myDie game positions |
 	
-	mozzarella:= Player withName: 'mozzarella'.
-	myBoxes := OrderedCollection with: (BoxNoEffect new) with: (BoxNoEffect  new) with: (BoxNoEffect new) with: (BoxNoEffect new) with: (BoxNoEffect new).
+	myBoxes := OrderedCollection 
+		with: NoEffectBox new 
+		with: NoEffectBox new.
 	myBoard := Board withBoxes: myBoxes.
-
-	testPlayers:= OrderedCollection with: mozzarella.
-	
+	testPlayers := OrderedCollection with: #napolitana.
 	myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
-	
-	game:= Game withBoard: myBoard andPlayers: testPlayers andDie: myDie andLaps: 1.
-	
-	game play.
+	game := PizzaGame withBoard: myBoard andPlayers: testPlayers andDie: myDie andLaps: 1.
+	game oneRound.
 	positions := game ranking.
-	
-	"self assert: (positions anySatisfy: [ :position | (position location) = (myBoard sizeOfBoard)])."
-	self assert: (game isFinished).
-	self assert: ((positions at:1) player equals: mozzarella).
+
+	self assert: (positions at:1)absoluteLocation equals: 2.
 	
 ]
 
 { #category : #tests }
-CementerioDePizzas_Game_Tests >> test009_ASpeedupBoxJumpsYouFourBoxesForward [
+CementerioDePizzas_Game_Tests >> test009_ASpeedupBoxJumpsYouFourBoxes [
 	
-	| game myBoard myDie napolitana positions testPlayers mozzarella myBoxes |
-	
-	napolitana:= Player withName: 'napolitana'.	
-	mozzarella:= Player withName: 'mozzarella'.
-	
-	myBoxes := OrderedCollection with: (BoxSpeedup  new) with: (BoxSpeedup new) with: (BoxSpeedup new) with: (BoxSpeedup new) with: (BoxSpeedup new) with: (BoxSpeedup new).
-	
+	| game myBoard myDie ranking testPlayers myBoxes |
+	myBoxes := OrderedCollection
+		with: SpeedupBox new
+		with: NoEffectBox new
+		with: NoEffectBox new
+		with: NoEffectBox new
+		with: NoEffectBox new.
 	myBoard := Board withBoxes: myBoxes.
-	
-	testPlayers:= OrderedCollection with: napolitana with: mozzarella.
-	
-	myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
-	
-	game:= Game withBoard: myBoard andPlayers: testPlayers andDie: myDie andLaps: 1.
-	
-	game play.
-	positions := game ranking.
-	
-	"self assert: (testPlayers anySatisfy: [ :player | (player location) = (myBoard sizeOfBoard)])."
-	self assert: (game isFinished).
-	self assert: ((positions at:1) player equals: napolitana).
-	self assert: ((positions at:2) player equals: mozzarella).
-	
+	testPlayers := OrderedCollection
+		with: #napolitana.
+	myDie := OrderedCollection
+		with: (LoadedDice withTosses: #(1)).
+	game := PizzaGame
+		withBoard: myBoard
+		andPlayers: testPlayers
+		andDie: myDie
+		andLaps: 1.
+	game oneRound.
+	ranking := game ranking.
+	self assert: (ranking at: 1) absoluteLocation equals: 5.
+
 ]
 
 { #category : #tests }
-CementerioDePizzas_Game_Tests >> test010_AnAtomicBombBoxSendsEveryoneBackTo1 [
+CementerioDePizzas_Game_Tests >> test010_AnAtomicBombBoxSendsEveryoneBackToZero [
 	
-	| game myBoard myDie positions testPlayers mozzarella myBoxes |
-	
-	mozzarella:= Player withName: 'mozzarella'.
-	myBoxes := OrderedCollection with: (BoxNoEffect new) with: (BoxAtomicBomb new) with: (BoxNoEffect new) with: (BoxNoEffect new) with: (BoxNoEffect new).
+	| game myBoard myDie ranking testPlayers myBoxes |
+	myBoxes := OrderedCollection
+		with: NoEffectBox new
+		with: NoEffectBox new
+		with: AtomicBombBox new
+		with: NoEffectBox new
+		with: NoEffectBox new.
 	myBoard := Board withBoxes: myBoxes.
-
-	testPlayers:= OrderedCollection with: mozzarella.
-	
-	myDie := OrderedCollection with: (LoadedDice withTosses: #(2 3 3 4 5 6)).
-	
-	game:= Game withBoard: myBoard andPlayers: testPlayers andDie: myDie andLaps: 1.
-	
-	game play.
-	positions := game ranking.
-	
-	"self assert: (positions anySatisfy: [ :position | (position location) = (myBoard sizeOfBoard)])."
-	self assert: (game isFinished).
-	self assert: ((positions at:1) player equals: mozzarella).
+	testPlayers := OrderedCollection
+		with: #napolitana
+		with: #margarita
+		with: #hawaiana.
+	myDie := OrderedCollection
+		with: (LoadedDice withTosses: #(4)).
+	game := PizzaGame
+		withBoard: myBoard
+		andPlayers: testPlayers
+		andDie: myDie
+		andLaps: 2.
+	game oneRound.
+	game oneRound.
+	ranking := game ranking.
+	self assert: (ranking first) absoluteLocation equals: 6.
+	self assert: (ranking second) absoluteLocation equals: 4.
+	self assert: (ranking third) absoluteLocation equals: 4.
 	
 ]
 
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> test011_CreateAGameSinglePlayer [
 	
-	| myBoard game myDie laQueHablaRaro positions |
+	| myBoard game myDie positions napolitana myBoxes|
 	
-	laQueHablaRaro:= Player withName: 'laQueHablaRaro'.
+	napolitana:= #napolitana.
 	
 	myDie := OrderedCollection with: (Dice withSides: 5).
+	myBoxes := OrderedCollection new.
+	myBoxes:= BoxGenerator give: 5.
+	myBoard:= Board withBoxes: myBoxes.
 	
-	myBoard := Board withSize: 5.
-	
-	game:= Game withBoard: myBoard andPlayers: (OrderedCollection with: laQueHablaRaro) andDie: myDie andLaps: 1.
+	game:= PizzaGame withBoard: myBoard andPlayers: (OrderedCollection with: napolitana) andDie: myDie andLaps: 1.
 	
 	game play.
 	positions := game ranking.
 	self assert: (game isFinished).
-	self assert: ((positions at:1) player equals: laQueHablaRaro).
+	self assert: (positions at:1) player identicalTo: napolitana.
 	
 ]
 
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> test012_CreateARandomMultiPlayerGame [
 	
-	| game myBoard myDie napolitana margarita testPlayers mozzarella |
+	| game myBoard myDie napolitana margarita testPlayers mozzarella myBoxes|
 	
-	napolitana:= Player withName: 'napolitana'.	
-	margarita:= Player withName: 'margarita'.
-	mozzarella:= Player withName: 'mozzarella'.
+	napolitana:= #napolitana.	
+	margarita:= #margarita.
+	mozzarella:= #mozzarella.
 	
-	
-	myBoard := Board withSize: 40.
+	myBoxes := OrderedCollection new.
+	myBoxes:= BoxGenerator give: 40.
+	myBoard:= Board withBoxes: myBoxes.
 	
 	testPlayers:= OrderedCollection with: napolitana with: margarita with: mozzarella.
 	
 	myDie := OrderedCollection with: (Dice withSides: 5) with: (Dice withSides: 4).
 	
-	game:= Game withBoard: myBoard andPlayers: testPlayers andDie: myDie andLaps: 1.
+	game:= PizzaGame withBoard: myBoard andPlayers: testPlayers andDie: myDie andLaps: 1.
 	
 	game play.
 	
 	self assert: (game isFinished).
+	
+]
+
+{ #category : #tests }
+CementerioDePizzas_Game_Tests >> test012_CreateAnOverloadCard [
+	
+	| myBoxes myBoard testPlayers myDie game cards|
+	
+	myBoxes := OrderedCollection 
+		with: NoEffectBox new 
+		with: NoEffectBox new
+		with: NoEffectBox new 
+		with: NoEffectBox new.
+		
+	cards := OrderedCollection
+		with: (OverloadCard of: #napolitana).
+		
+	myBoard := Board withBoxes: myBoxes.
+	testPlayers := OrderedCollection with: #napolitana.
+	myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
+	game := PizzaGame withBoard: myBoard players: testPlayers dice: myDie laps: 1 andCards: cards.
+	game oneRound.
+	
+	self assert: ((game ranking) first) absoluteLocation equals: 0.
+	 
+	
 	
 ]

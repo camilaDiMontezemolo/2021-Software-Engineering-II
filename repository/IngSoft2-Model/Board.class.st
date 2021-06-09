@@ -22,35 +22,25 @@ Board class >> withSize: aSize [
 ]
 
 { #category : #'as yet unclassified' }
-Board >> add: aPercentage of: aBoxType [
-	| indice |
-	indice := 1.
-	[(indice <= (mySize *aPercentage)) & (myBoxes size < mySize)]
-		whileTrue:[
-			myBoxes add: (aBoxType new).
-			indice := (indice +1).
-			].
-		
-]
-
-{ #category : #'as yet unclassified' }
 Board >> applyEffectFor: aPosition and: gamePositions [
-	| box newLocations |
+	| box |
 	box := self findBoxFor: aPosition.
-	newLocations := box affect: gamePositions triggeredOn: aPosition with: mySize.
-	self replacePositionsUsing: newLocations
+	box affect: gamePositions triggeredOn: aPosition with: self.
 ]
 
 { #category : #'as yet unclassified' }
-Board >> boxes [
-	^myBoxes.
+Board >> calculateNewLocationFor: position [
+	|laps|
+	laps:= ((position absoluteLocation)//(mySize)).
+	
+	(laps ==0)
+	ifTrue:[^0.]
+	ifFalse:[^(mySize*laps)+1.].
 ]
 
 { #category : #'as yet unclassified' }
-Board >> change: aPosition rolling: myDie [
-	| distance pos |
-	distance := 0.
-	myDie do: [ :dice | distance := distance + dice spin ].
+Board >> change: aPosition for: distance [
+	| pos |
 	pos:= (aPosition absoluteLocation) +distance.
 	^(self generatePositionFor: aPosition at: pos).
 		
@@ -59,12 +49,12 @@ Board >> change: aPosition rolling: myDie [
 ]
 
 { #category : #'as yet unclassified' }
-Board >> change: aPosition using: myDie playing: game [
+Board >> change: aPosition using: distance playing: game [
 	|newPosition|
-	newPosition := self change: aPosition rolling: myDie.
+	newPosition := self change: aPosition for: distance.
 	self replacePosition: aPosition  with: newPosition.
 	(game isFinished)
-			ifFalse: [self applyEffectFor: aPosition and: positions.].
+			ifFalse: [self applyEffectFor: newPosition and: positions.].
 	"(game isFinished)
 			ifTrue: [ self replacePosition: aPosition  with:  ]"
 ]
@@ -77,7 +67,7 @@ Board >> createPositionsFor: players [
 { #category : #'as yet unclassified' }
 Board >> findBoxFor: aPosition [
 	^ myBoxes at:
-			(aPosition absoluteLocation- (mySize * (aPosition absoluteLocation // mySize))+1)
+			((aPosition absoluteLocation) - (mySize*((aPosition absoluteLocation)//mySize)))+1.
 ]
 
 { #category : #'as yet unclassified' }
@@ -85,35 +75,12 @@ Board >> generatePositionFor: aPosition at: absoluteLocation [
 	^(Position of: (aPosition player) at: absoluteLocation).
 ]
 
-{ #category : #'as yet unclassified' }
-Board >> initialize [
-	mySize :=0.
-	myBoxes := OrderedCollection new.
-]
-
 { #category : #initialize }
 Board >> initializeWithBoxes: aCollectionOfBoxes [ 
-	myBoxes := aCollectionOfBoxes.
-	myBoxes addFirst: (BoxNoEffect new).
-	mySize := ( (myBoxes size)-1 ).
-]
-
-{ #category : #'as yet unclassified' }
-Board >> initializeWithSize: aSize [
-	mySize := aSize.
 	myBoxes := OrderedCollection new.
-	self add: 0.48 of: BoxNoEffect.
-	self add: 0.2 of: BoxSpeedup.
-	self add: 0.2 of: BoxWormHole.
-	self add: 0.1 of: BoxMoonWalk.
-	self add: 0.02 of: BoxAtomicBomb.
-	(myBoxes size < mySize)
-		ifTrue: [ 
-			(myBoxes size) to: (mySize) do: [:emptyBox | myBoxes add: (BoxNoEffect new) ].
-		].
-	myBoxes := myBoxes shuffled.
-	myBoxes addFirst: (BoxNoEffect new).
-	
+	myBoxes := aCollectionOfBoxes.
+	myBoxes addFirst: (NoEffectBox new).
+	mySize := ( (myBoxes size)-1 ).
 ]
 
 { #category : #'as yet unclassified' }
@@ -124,15 +91,6 @@ Board >> positions [
 { #category : #'as yet unclassified' }
 Board >> replacePosition: position with: newPosition [
 	positions at:(positions indexOf: position) put: newPosition.
-]
-
-{ #category : #'as yet unclassified' }
-Board >> replacePositionsUsing: newLocations [
-	positions do: [:position | self replacePosition: position with:
-		(Position of: (position player) at: 
-		(newLocations at: position ifAbsent: [position absoluteLocation]))].
-	
-		
 ]
 
 { #category : #'as yet unclassified' }

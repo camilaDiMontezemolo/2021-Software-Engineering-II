@@ -9,13 +9,8 @@ Class {
 
 { #category : #'instance creation' }
 Dice class >> withSides: numberOfSides [
-	numberOfSides < 1 ifTrue: [ Error signal: 'Un dado no puede tener menos de 1 cara(s).' ].
+	numberOfSides < 3 ifTrue: [ Error signal: 'Un dado no puede tener menos de 3 cara(s).' ].
 	^self new initializeWithSides: numberOfSides.
-]
-
-{ #category : #initialize }
-Dice >> initialize [ 
-	sides:= 0.
 ]
 
 { #category : #initialize }

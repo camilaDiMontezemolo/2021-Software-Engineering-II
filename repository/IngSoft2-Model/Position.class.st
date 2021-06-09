@@ -16,26 +16,19 @@ Position class >> of: aPlayer at: anAbsoluteLocation [
 ]
 
 { #category : #initialize }
-Position >> == anotherPosition [
-	^((myPlayer name) = ((anotherPosition player)name))
-]
-
-{ #category : #initialize }
 Position >> absoluteLocation [
 	^absoluteLocation.
 ]
 
 { #category : #initialize }
 Position >> equals: anotherPosition [
-	^((myPlayer name) = ((anotherPosition player)name))
+	^(myPlayer = (anotherPosition player))
 ]
 
 { #category : #initialization }
 Position >> initializeWith: aPlayer at: anAbsoluteLocation [
 	myPlayer := aPlayer.
 	absoluteLocation := anAbsoluteLocation.
-	lap := 0.
-	location:= 0.
 ]
 
 { #category : #initialize }

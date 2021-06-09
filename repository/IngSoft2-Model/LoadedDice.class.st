@@ -15,18 +15,8 @@ LoadedDice class >> withTosses: someTosses [
 ]
 
 { #category : #'as yet unclassified' }
-LoadedDice >> indice [
-	^indice.
-]
-
-{ #category : #'as yet unclassified' }
-LoadedDice >> initialize [ 
-	indice:=0.
-	myTosses := OrderedCollection new.
-]
-
-{ #category : #'as yet unclassified' }
 LoadedDice >> initializeWithTheFollowingTosses: someTosses [ 
+	myTosses := OrderedCollection new.
 	myTosses:= someTosses.
 	indice:=0.
 ]
