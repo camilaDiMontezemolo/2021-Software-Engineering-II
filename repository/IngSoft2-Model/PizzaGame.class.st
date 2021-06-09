@@ -8,7 +8,8 @@ Class {
 		'myPositions',
 		'myDice',
 		'myCards',
-		'deck'
+		'deck',
+		'currentTurn'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -23,7 +24,16 @@ PizzaGame class >> withBoard: aBoard andPlayers: somePlayers andDie: someDie and
 
 { #category : #'as yet unclassified' }
 PizzaGame class >> withBoard: aBoard players: players dice: dice laps: laps andCards: cards [
+	(players isEmpty ) ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 jugador.' ].
+	(dice isEmpty ) ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 dado.' 	].
+	(laps <1 ) ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 vuelta.' 	].
 	^self new initializeWithBoard: aBoard players: players dice:dice laps: laps andCards: cards.
+]
+
+{ #category : #'as yet unclassified' }
+PizzaGame >> changeTurn [
+	(currentTurn == (myPlayers size)) ifTrue:[currentTurn:=0].
+	currentTurn := currentTurn +1.
 ]
 
 { #category : #'as yet unclassified' }
@@ -39,6 +49,7 @@ PizzaGame >> initializeWithBoard: aBoard andPlayers: somePlayers andDie: someDie
 	myBoard createPositionsFor: myPlayers.
 	myDice:=someDie.
 	myLaps:=someLaps.
+	currentTurn:=1.
 	deck:= Deck with: (OrderedCollection new).
 ]
 
@@ -50,6 +61,7 @@ PizzaGame >> initializeWithBoard: aBoard players: somePlayers dice: someDie laps
 	myBoard createPositionsFor: myPlayers.
 	myDice:=someDie.
 	myLaps:=someLaps.
+	currentTurn:=1.
 	deck := Deck with: initialCards.
 ]
 
@@ -61,7 +73,7 @@ PizzaGame >> isFinished [
 { #category : #'as yet unclassified' }
 PizzaGame >> oneRound [
 	myBoard positions do:
-		[ :position | self runTurnFor: position ]
+		[ :position | self runTurnFor ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -84,6 +96,14 @@ PizzaGame >> rollFor: aPosition [
 	myDice do: [ :dice | distance := distance + dice spin ].
 	distance:= distance + (deck modifyDistanceOf: (aPosition player)).
 	myBoard change: aPosition using: distance playing: self.
+]
+
+{ #category : #'as yet unclassified' }
+PizzaGame >> runTurnFor [
+	^ self isFinished
+		ifFalse: [ self rollFor:((myBoard positions) at:currentTurn).
+					  self changeTurn.]
+		ifTrue: [ ].
 ]
 
 { #category : #'as yet unclassified' }
