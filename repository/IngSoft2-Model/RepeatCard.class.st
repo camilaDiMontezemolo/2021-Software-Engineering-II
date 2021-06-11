@@ -1,5 +1,5 @@
 Class {
-	#name : #RedoCard,
+	#name : #RepeatCard,
 	#superclass : #Card,
 	#instVars : [
 		'owner',
@@ -11,25 +11,25 @@ Class {
 }
 
 { #category : #'instance creation' }
-RedoCard class >> of: player on: anotherPlayer [
+RepeatCard class >> of: player on: anotherPlayer [
 	^self new initializeWithPlayer: player andAffectedPlayer: anotherPlayer.
 ]
 
 { #category : #'as yet unclassified' }
-RedoCard >> affected [
+RepeatCard >> affected [
 	^affectedPlayer.
 ]
 
 { #category : #'as yet unclassified' }
-RedoCard >> applyEffectFrom: aDeck [
+RepeatCard >> applyEffectFrom: aDeck [
 	active
 		ifTrue:
-			[ ^ self redoPreviousCardEffect: aDeck ]
+			[ aDeck findLastTypeOfBoxForPlayer: affectedPlayer.]
 		ifFalse: [ ^ 0 ]
 ]
 
 { #category : #initialize }
-RedoCard >> initializeWithPlayer: player andAffectedPlayer: anotherPlayer [ 
+RepeatCard >> initializeWithPlayer: player andAffectedPlayer: anotherPlayer [ 
 	owner :=player.
 	affectedPlayer :=anotherPlayer.
 	active := (affectedPlayer isNotEmpty).
@@ -37,24 +37,16 @@ RedoCard >> initializeWithPlayer: player andAffectedPlayer: anotherPlayer [
 ]
 
 { #category : #initialize }
-RedoCard >> instant [
+RepeatCard >> instant [
 	^instant.
 ]
 
 { #category : #initialize }
-RedoCard >> owner [
+RepeatCard >> owner [
 	^owner.
 ]
 
 { #category : #'as yet unclassified' }
-RedoCard >> redoPreviousCardEffect: aDeck [
-	|newCard|
-	newCard := aDeck redoTheLastCardUsed: affectedPlayer.
-	aDeck replace: self with: newCard.
-	^newCard applyEffectFrom: aDeck
-]
-
-{ #category : #'as yet unclassified' }
-RedoCard >> usedOn: player [
+RepeatCard >> usedOn: player [
 	^(player = affectedPlayer)
 ]

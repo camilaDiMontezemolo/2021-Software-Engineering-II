@@ -31,9 +31,19 @@ PizzaGame class >> withBoard: aBoard players: players dice: dice laps: laps andC
 ]
 
 { #category : #'as yet unclassified' }
+PizzaGame >> applyCard: card to: affectedPlayer [
+	deck assignCard: card to: affectedPlayer.
+]
+
+{ #category : #'as yet unclassified' }
 PizzaGame >> changeTurn [
 	(currentTurn == (myPlayers size)) ifTrue:[currentTurn:=0].
 	currentTurn := currentTurn +1.
+]
+
+{ #category : #'as yet unclassified' }
+PizzaGame >> findLastTypeOfBoxForPlayer: aPlayer [
+	myBoard applyLastTypeOfBoxFor: aPlayer.
 ]
 
 { #category : #'as yet unclassified' }
@@ -50,7 +60,7 @@ PizzaGame >> initializeWithBoard: aBoard andPlayers: somePlayers andDie: someDie
 	myDice:=someDie.
 	myLaps:=someLaps.
 	currentTurn:=1.
-	deck:= Deck with: (OrderedCollection new).
+	deck:= Deck with: (OrderedCollection new) in: self.
 ]
 
 { #category : #initialize }
@@ -62,7 +72,7 @@ PizzaGame >> initializeWithBoard: aBoard players: somePlayers dice: someDie laps
 	myDice:=someDie.
 	myLaps:=someLaps.
 	currentTurn:=1.
-	deck := Deck with: initialCards.
+	deck := Deck with: initialCards in: self.
 ]
 
 { #category : #'as yet unclassified' }
@@ -73,7 +83,7 @@ PizzaGame >> isFinished [
 { #category : #'as yet unclassified' }
 PizzaGame >> oneRound [
 	myBoard positions do:
-		[ :position | self runTurnFor ]
+		[ :position | self runOneTurn ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -99,7 +109,7 @@ PizzaGame >> rollFor: aPosition [
 ]
 
 { #category : #'as yet unclassified' }
-PizzaGame >> runTurnFor [
+PizzaGame >> runOneTurn [
 	^ self isFinished
 		ifFalse: [ self rollFor:((myBoard positions) at:currentTurn).
 					  self changeTurn.]

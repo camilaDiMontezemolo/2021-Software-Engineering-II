@@ -1,5 +1,5 @@
 Class {
-	#name : #OverloadCard,
+	#name : #CancellationCard,
 	#superclass : #Card,
 	#instVars : [
 		'owner',
@@ -11,42 +11,43 @@ Class {
 }
 
 { #category : #'instance creation' }
-OverloadCard class >> of: player on: anotherPlayer [
+CancellationCard class >> of: player on: anotherPlayer [
 	^self new initializeWithPlayer: player andAffectedPlayer: anotherPlayer.
 ]
 
 { #category : #'as yet unclassified' }
-OverloadCard >> affected [
+CancellationCard >> affected [
 	^affectedPlayer.
 ]
 
 { #category : #'as yet unclassified' }
-OverloadCard >> applyEffectFrom: aDeck [ 
+CancellationCard >> applyEffectFrom: aDeck [ 
 	(active) 
-	ifTrue:[aDeck lastCardUsed: self.
-		^-2.]
+	ifTrue:[aDeck lastCardUsed:self.
+		aDeck removeCard: affectedPlayer.
+		aDeck removeCard: self.]
 	ifFalse:[^0].
 ]
 
 { #category : #initialize }
-OverloadCard >> initializeWithPlayer: player andAffectedPlayer: anotherPlayer [
+CancellationCard >> initializeWithPlayer: player andAffectedPlayer: anotherPlayer [ 
 	owner :=player.
 	affectedPlayer :=anotherPlayer.
-	active := (affectedPlayer isNotEmpty).
-	instant:= false.
+	active := (affectedPlayer isNotNil).
+	instant :=true.
 ]
 
 { #category : #initialize }
-OverloadCard >> instant [
+CancellationCard >> instant [
 	^instant.
 ]
 
 { #category : #initialize }
-OverloadCard >> owner [
+CancellationCard >> owner [
 	^owner.
 ]
 
 { #category : #'as yet unclassified' }
-OverloadCard >> usedOn: player [
+CancellationCard >> usedOn: player [
 	^(player = affectedPlayer)
 ]

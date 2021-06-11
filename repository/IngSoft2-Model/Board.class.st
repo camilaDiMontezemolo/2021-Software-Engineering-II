@@ -7,7 +7,7 @@ Class {
 		'positions',
 		'mylaps',
 		'lastBoxUsedbox',
-		'lastUsedbox'
+		'lastBoxUsed'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -24,11 +24,18 @@ Board class >> withSize: aSize [
 ]
 
 { #category : #'as yet unclassified' }
-Board >> applyEffectFor: aPosition and: gamePositions [
+Board >> applyEffectFor: aPosition [
 	| box |
 	box := self findBoxFor: aPosition.
-	box affect: gamePositions triggeredOn: aPosition with: self.
-	lastUsedbox:=box.
+	box affect: positions triggeredOn: aPosition with: self.
+	lastBoxUsed:=box.
+]
+
+{ #category : #'as yet unclassified' }
+Board >> applyLastTypeOfBoxFor: aPlayer [ 
+	| positionOfPlayer |
+	positionOfPlayer := (self findPositionOfPlayer: aPlayer) at:1.
+	lastBoxUsed affect: positions triggeredOn: positionOfPlayer with: self. 
 ]
 
 { #category : #'as yet unclassified' }
@@ -57,7 +64,7 @@ Board >> change: aPosition using: distance playing: game [
 	newPosition := self change: aPosition for: distance.
 	self replacePosition: aPosition  with: newPosition.
 	(game isFinished)
-			ifFalse: [self applyEffectFor: newPosition and: positions.].
+			ifFalse: [self applyEffectFor: newPosition].
 	"(game isFinished)
 			ifTrue: [ self replacePosition: aPosition  with:  ]"
 ]
@@ -71,6 +78,11 @@ Board >> createPositionsFor: players [
 Board >> findBoxFor: aPosition [
 	^ myBoxes at:
 			((aPosition absoluteLocation) - (mySize*((aPosition absoluteLocation)//mySize)))+1.
+]
+
+{ #category : #'as yet unclassified' }
+Board >> findPositionOfPlayer: aPlayer [
+	^(positions select: [: position| (position player)=aPlayer])
 ]
 
 { #category : #'as yet unclassified' }

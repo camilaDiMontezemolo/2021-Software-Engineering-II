@@ -1,5 +1,5 @@
 Class {
-	#name : #SpeedUpCard,
+	#name : #AccelerationCard,
 	#superclass : #Card,
 	#instVars : [
 		'owner',
@@ -11,42 +11,42 @@ Class {
 }
 
 { #category : #'instance creation' }
-SpeedUpCard class >> of: player on: affectedPlayer [
+AccelerationCard class >> of: player on: affectedPlayer [
 	^self new initializeWithPlayer: player andAffectedPlayer: affectedPlayer.
 ]
 
 { #category : #'as yet unclassified' }
-SpeedUpCard >> affected [
+AccelerationCard >> affected [
 	^affectedPlayer.
 ]
 
 { #category : #'as yet unclassified' }
-SpeedUpCard >> applyEffectFrom: aDeck [ 
+AccelerationCard >> applyEffectFrom: aDeck [ 
 	(active) 
-	ifTrue:[aDeck lastCardUsed:(self).
+	ifTrue:[aDeck lastCardUsed: self.
 		^1.]
 	ifFalse:[^0].
 ]
 
 { #category : #initialize }
-SpeedUpCard >> initializeWithPlayer: player andAffectedPlayer: anotherPlayer [
+AccelerationCard >> initializeWithPlayer: player andAffectedPlayer: anotherPlayer [
 	owner :=player.
 	affectedPlayer :=anotherPlayer.
 	active := (affectedPlayer isNotEmpty).
-	instant := false.
+	instant:=false.
 ]
 
 { #category : #initialize }
-SpeedUpCard >> instant [
+AccelerationCard >> instant [
 	^instant.
 ]
 
 { #category : #initialize }
-SpeedUpCard >> owner [
+AccelerationCard >> owner [
 	^owner.
 ]
 
 { #category : #'as yet unclassified' }
-SpeedUpCard >> usedOn: player [ 
-	^(player = affectedPlayer).
+AccelerationCard >> usedOn: player [ 
+	^(affectedPlayer includes: player).
 ]
