@@ -6,7 +6,6 @@ Class {
 		'myBoxes',
 		'positions',
 		'mylaps',
-		'lastBoxUsedbox',
 		'lastBoxUsed'
 	],
 	#category : #'IngSoft2-Model'
@@ -96,6 +95,7 @@ Board >> initializeWithBoxes: aCollectionOfBoxes [
 	myBoxes := aCollectionOfBoxes.
 	myBoxes addFirst: (NoEffectBox new).
 	mySize := ( (myBoxes size)-1 ).
+	lastBoxUsed := (NoEffectBox new).
 ]
 
 { #category : #'as yet unclassified' }

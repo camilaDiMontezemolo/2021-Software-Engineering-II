@@ -63,7 +63,7 @@ CementerioDePizzas_Game_Tests >> test001_aBoardShouldHaveMoreThanCeroBoxes [
 ]
 
 { #category : #tests }
-CementerioDePizzas_Game_Tests >> test001_aBoardShouldHaveMoreThanCeroDie [
+CementerioDePizzas_Game_Tests >> test002_aBoardShouldHaveMoreThanCeroDie [
 
 	|  myDie block boardWithoutDie someBoxes myBoard|
 	myDie := OrderedCollection with: (Dice withSides: 3).
@@ -81,7 +81,7 @@ CementerioDePizzas_Game_Tests >> test001_aBoardShouldHaveMoreThanCeroDie [
 ]
 
 { #category : #tests }
-CementerioDePizzas_Game_Tests >> test001_aBoardShouldHaveMoreThanCeroPlayers [
+CementerioDePizzas_Game_Tests >> test003_aBoardShouldHaveMoreThanCeroPlayers [
 
 	|  myDie block2 boardWithoutPlayers myBoxes|
 	
@@ -292,7 +292,7 @@ CementerioDePizzas_Game_Tests >> test012_CreateARandomMultiPlayerGame [
 ]
 
 { #category : #tests }
-CementerioDePizzas_Game_Tests >> test012_UseACancelationCard [
+CementerioDePizzas_Game_Tests >> test013_UseAnOverloadCard [
 	
 	| myBoxes myBoard testPlayers myDie game cards|
 	
@@ -303,18 +303,16 @@ CementerioDePizzas_Game_Tests >> test012_UseACancelationCard [
 		with: NoEffectBox new.
 		
 	cards := OrderedCollection
-		with: (CancellationCard of: #napolitana on: nil)
-		with: (SpeedUpCard of: #margarita on: '').
+		with: (OverloadCard of: #napolitana on: '').
 		
 	myBoard := Board withBoxes: myBoxes.
 	testPlayers := OrderedCollection with: #napolitana with: #margarita.
 	myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
 	game := PizzaGame withBoard: myBoard players: testPlayers dice: myDie laps: 1 andCards: cards.
-	game applyCard: cards second to: #margarita.
-	game applyCard: cards first to: cards second. 
+	game applyCard: cards first to: #margarita. 
 	game runOneTurn.
 	game runOneTurn.
-	self assert: ((game ranking) second) absoluteLocation equals: 2.
+	self assert: ((game ranking) second) absoluteLocation equals: 0.
 	self assert: ((game ranking) first) absoluteLocation equals: 2.
 	 
 	
@@ -322,7 +320,35 @@ CementerioDePizzas_Game_Tests >> test012_UseACancelationCard [
 ]
 
 { #category : #tests }
-CementerioDePizzas_Game_Tests >> test012_UseARedoCard [
+CementerioDePizzas_Game_Tests >> test013_UseAnOverloadCardAndEndUpWithNegativeNumbers [
+	
+	| myBoxes myBoard testPlayers myDie game cards|
+	
+	myBoxes := OrderedCollection 
+		with: NoEffectBox new 
+		with: NoEffectBox new
+		with: NoEffectBox new 
+		with: NoEffectBox new.
+		
+	cards := OrderedCollection
+		with: (OverloadCard of: #napolitana on: '').
+		
+	myBoard := Board withBoxes: myBoxes.
+	testPlayers := OrderedCollection with: #napolitana with: #margarita.
+	myDie := OrderedCollection with: (LoadedDice withTosses: #(1)).
+	game := PizzaGame withBoard: myBoard players: testPlayers dice: myDie laps: 1 andCards: cards.
+	game applyCard: cards first to: #margarita. 
+	game runOneTurn.
+	game runOneTurn.
+	self assert: ((game ranking) second) absoluteLocation equals: -1.
+	self assert: ((game ranking) first) absoluteLocation equals: 1.
+	 
+	
+	
+]
+
+{ #category : #tests }
+CementerioDePizzas_Game_Tests >> test014_UseARedoCard [
 	
 	| myBoxes myBoard testPlayers myDie game cards|
 	
@@ -349,7 +375,7 @@ CementerioDePizzas_Game_Tests >> test012_UseARedoCard [
 ]
 
 { #category : #tests }
-CementerioDePizzas_Game_Tests >> test012_UseARepeatCard [
+CementerioDePizzas_Game_Tests >> test015_UseARepeatCard [
 	
 	| myBoxes myBoard testPlayers myDie game cards|
 	
@@ -379,7 +405,37 @@ CementerioDePizzas_Game_Tests >> test012_UseARepeatCard [
 ]
 
 { #category : #tests }
-CementerioDePizzas_Game_Tests >> test012_UseASpeedUpCard [
+CementerioDePizzas_Game_Tests >> test015_UseARepeatCardWhenNoDieWasRolledYet [
+	
+	| myBoxes myBoard testPlayers myDie game cards|
+	
+	myBoxes := OrderedCollection 
+		with: SpeedupBox new
+		with: NoEffectBox new 
+		with: NoEffectBox new 
+		with: NoEffectBox new
+		with: NoEffectBox new 
+		with: NoEffectBox new.
+		
+	cards := OrderedCollection
+		with: (RepeatCard of: #napolitana on: '').
+		
+	myBoard := Board withBoxes: myBoxes.
+	testPlayers := OrderedCollection with:#margarita with: #napolitana.
+	myDie := OrderedCollection with: (LoadedDice withTosses: #(1)).
+	game := PizzaGame withBoard: myBoard players: testPlayers dice: myDie laps: 1 andCards: cards.
+	"game runOneTurn."
+	game applyCard: cards first to: #napolitana. 
+	
+	self assert: ((game ranking) first) absoluteLocation equals: 0.
+	self assert: ((game ranking) second) absoluteLocation equals: 0.
+	 
+	
+	
+]
+
+{ #category : #tests }
+CementerioDePizzas_Game_Tests >> test016_UseASpeedUpCard [
 	
 	| myBoxes myBoard testPlayers myDie game cards rankingOne |
 	
@@ -407,7 +463,7 @@ CementerioDePizzas_Game_Tests >> test012_UseASpeedUpCard [
 ]
 
 { #category : #tests }
-CementerioDePizzas_Game_Tests >> test012_UseASpeedUpCardOnTwoRounds [
+CementerioDePizzas_Game_Tests >> test017_UseASpeedUpCardOnTwoRounds [
 	
 	| myBoxes myBoard testPlayers myDie game cards rankingTwo |
 	
@@ -436,11 +492,13 @@ CementerioDePizzas_Game_Tests >> test012_UseASpeedUpCardOnTwoRounds [
 ]
 
 { #category : #tests }
-CementerioDePizzas_Game_Tests >> test012_UseAnAccelerationCard [
+CementerioDePizzas_Game_Tests >> test018_UseAnAccelerationCard [
 	
 	| myBoxes myBoard testPlayers myDie game cards|
 	
 	myBoxes := OrderedCollection 
+		with: NoEffectBox new 
+		with: NoEffectBox new
 		with: NoEffectBox new 
 		with: NoEffectBox new
 		with: NoEffectBox new 
@@ -451,20 +509,43 @@ CementerioDePizzas_Game_Tests >> test012_UseAnAccelerationCard [
 		
 	myBoard := Board withBoxes: myBoxes.
 	testPlayers := OrderedCollection with:#margarita with: #napolitana.
-	myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
+	myDie := OrderedCollection with: (LoadedDice withTosses: #(1)).
 	game := PizzaGame withBoard: myBoard players: testPlayers dice: myDie laps: 1 andCards: cards.
 	game applyCard:(cards at:1) to: testPlayers.
 	game oneRound.
+	self assert: ((game ranking) first) absoluteLocation equals: 2.
+	self assert: ((game ranking) second) absoluteLocation equals: 2.
 	
-	self assert: ((game ranking) first) absoluteLocation equals: 3.
-	self assert: ((game ranking) second) absoluteLocation equals: 3.
+	game oneRound.
+	self assert: ((game ranking) first) absoluteLocation equals: 4.
+	self assert: ((game ranking) second) absoluteLocation equals: 4.
 	 
 	
 	
 ]
 
 { #category : #tests }
-CementerioDePizzas_Game_Tests >> test012_UseAnOverloadCard [
+CementerioDePizzas_Game_Tests >> test019_ACardGeneratorGivesACollectionOfCards [
+	
+	| testPlayers cards |
+	
+		
+	"cards := OrderedCollection
+		with: (CancellationCard of: #napolitana on: nil)
+		with: (SpeedUpCard of: #margarita on: '')."
+
+	testPlayers := OrderedCollection with: #napolitana with: #margarita.
+	
+	cards := CardGenerator forPlayer: testPlayers give: 2.
+	
+	self assert: (cards size) equals: 4.
+	 
+	
+	
+]
+
+{ #category : #tests }
+CementerioDePizzas_Game_Tests >> test019_UseACancelationCard [
 	
 	| myBoxes myBoard testPlayers myDie game cards|
 	
@@ -475,18 +556,41 @@ CementerioDePizzas_Game_Tests >> test012_UseAnOverloadCard [
 		with: NoEffectBox new.
 		
 	cards := OrderedCollection
-		with: (OverloadCard of: #napolitana on: '').
+		with: (CancellationCard of: #napolitana on: nil)
+		with: (SpeedUpCard of: #margarita on: '').
 		
 	myBoard := Board withBoxes: myBoxes.
 	testPlayers := OrderedCollection with: #napolitana with: #margarita.
 	myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
 	game := PizzaGame withBoard: myBoard players: testPlayers dice: myDie laps: 1 andCards: cards.
-	game applyCard: cards first to: #margarita. 
+	game applyCard: cards second to: #margarita.
+	game applyCard: cards first to: cards second. 
 	game runOneTurn.
 	game runOneTurn.
-	self assert: ((game ranking) second) absoluteLocation equals: 0.
+	self assert: ((game ranking) second) absoluteLocation equals: 2.
 	self assert: ((game ranking) first) absoluteLocation equals: 2.
 	 
 	
 	
+]
+
+{ #category : #tests }
+CementerioDePizzas_Game_Tests >> test21_ACardBoxGivesCards [
+	"Hay que modificar banda de este test"
+	| game myBoard myDie ranking testPlayers myBoxes |
+	myBoxes := OrderedCollection
+		with: CardBox new with: NoEffectBox new with: NoEffectBox new
+		with: NoEffectBox new with: NoEffectBox new.
+	myBoard := Board withBoxes: myBoxes.
+	
+	testPlayers := OrderedCollection
+		with: #napolitana.
+	myDie := OrderedCollection with: (LoadedDice withTosses: #(1)).
+	
+	game := PizzaGame
+		withBoard: myBoard andPlayers: testPlayers andDie: myDie andLaps: 1.
+	game oneRound.
+	ranking := game ranking.
+	"self assert: (ranking at: 1) absoluteLocation equals: 5."
+
 ]
