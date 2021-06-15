@@ -21,11 +21,19 @@ Deck >> addCards: myNewCards [
 ]
 
 { #category : #'as yet unclassified' }
-Deck >> assignCard: card to: affectedPlayer [
+Deck >> assignCard: card to: affectedPlayer with: currentTurnPlayer [
 	| newCard |
 	newCard:=self createNewCard: card withAffectedPlayer: affectedPlayer.
-	self replace:card with: newCard.
-	(newCard instant)ifTrue: [newCard applyEffectFrom: self.]
+	(newCard instant)
+	ifTrue: [newCard applyEffectFrom: self.]
+	ifFalse: [ 	
+	(card owner = currentTurnPlayer)
+	ifTrue: [ self replace:card with: newCard. ]
+	ifFalse: [ Error signal: 'Un jugador no puede tirar una carta fuera de su turno.'] .]
+	"(newCard instant)ifTrue: [newCard applyEffectFrom: self.]."	
+
+	
+
 ]
 
 { #category : #'as yet unclassified' }

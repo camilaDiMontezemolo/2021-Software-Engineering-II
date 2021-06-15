@@ -11,7 +11,8 @@ Class {
 
 { #category : #'as yet unclassified' }
 CardGenerator class >> forPlayer: testPlayers give: aNumberOfCards [
-	((testPlayers size) < 1 ) ifTrue: [ Error signal: 'Un deck no puede tener menos de 1 jugadore.' ].
+	((testPlayers size) < 1 ) ifTrue: [ Error signal: 'Un deck no puede tener menos de 1 jugadores.' ].
+	(aNumberOfCards < 1 ) ifTrue: [ Error signal: 'Un deck no puede tener menos de 1 carta.' ].
 	^self new initializeWithPlayers: testPlayers and: aNumberOfCards.
 
 ]

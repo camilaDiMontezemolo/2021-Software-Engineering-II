@@ -25,7 +25,7 @@ CancellationCard >> applyEffectFrom: aDeck [
 	(active) 
 	ifTrue:[aDeck lastCardUsed:self.
 		aDeck removeCard: affectedPlayer.
-		aDeck removeCard: self.]
+		"aDeck removeCard: self".]
 	ifFalse:[^0].
 ]
 

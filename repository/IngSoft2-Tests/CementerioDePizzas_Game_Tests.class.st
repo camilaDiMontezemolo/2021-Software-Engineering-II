@@ -341,6 +341,31 @@ CementerioDePizzas_Game_Tests >> test013_UseAnOverloadCardAndEndUpWithNegativeNu
 ]
 
 { #category : #tests }
+CementerioDePizzas_Game_Tests >> test014_ACardCanNotBeUsedOutsideYourTurn [
+	
+	| myBoxes myBoard testPlayers myDie game cards block|
+	
+	myBoxes := OrderedCollection 
+		with: NoEffectBox new 
+		with: NoEffectBox new
+		with: NoEffectBox new 
+		with: NoEffectBox new
+		with: NoEffectBox new 
+		with: NoEffectBox new.
+		
+	cards := OrderedCollection
+		with: (AccelerationCard of:#napolitana on:'').
+		
+	myBoard := Board withBoxes: myBoxes.
+	testPlayers := OrderedCollection with:#margarita with: #napolitana.
+	myDie := OrderedCollection with: (LoadedDice withTosses: #(1)).
+	game := PizzaGame withBoard: myBoard players: testPlayers dice: myDie laps: 1 andCards: cards.
+	game oneRound.
+	block:=[game applyCard:(cards at:1) to: testPlayers.].
+	self should: block raise: Error withMessage: 'Un jugador no puede tirar una carta fuera de su turno.'
+]
+
+{ #category : #tests }
 CementerioDePizzas_Game_Tests >> test014_UseARedoCard [
 	
 	| myBoxes myBoard testPlayers myDie game cards|
@@ -501,7 +526,7 @@ CementerioDePizzas_Game_Tests >> test018_UseAnAccelerationCard [
 		with: (AccelerationCard of:#napolitana on:'').
 		
 	myBoard := Board withBoxes: myBoxes.
-	testPlayers := OrderedCollection with:#margarita with: #napolitana.
+	testPlayers := OrderedCollection with:#napolitana with: #margarita.
 	myDie := OrderedCollection with: (LoadedDice withTosses: #(1)).
 	game := PizzaGame withBoard: myBoard players: testPlayers dice: myDie laps: 1 andCards: cards.
 	game applyCard:(cards at:1) to: testPlayers.
@@ -538,6 +563,37 @@ CementerioDePizzas_Game_Tests >> test019_ACardGeneratorGivesACollectionOfCards [
 ]
 
 { #category : #tests }
+CementerioDePizzas_Game_Tests >> test019_ACardGeneratorShouldntBeAbleToGiveCardsToZeroPlayers [
+	
+	| testPlayers block |
+	
+	testPlayers := OrderedCollection new.
+	block:=[CardGenerator forPlayer: testPlayers give: 2.].
+	
+	self should: block raise: Error withMessage: 'Un deck no puede tener menos de 1 jugadores.'
+	
+	
+	
+]
+
+{ #category : #tests }
+CementerioDePizzas_Game_Tests >> test019_ACardGeneratorShouldntBeAbleToGiveZeroCards [
+	
+	| testPlayers block |
+	
+	testPlayers := OrderedCollection with: #napolitana with: #margarita.
+	block:=[CardGenerator forPlayer: testPlayers give: 0.].
+	
+	"((testPlayers size) < 1 ) ifTrue: [ Error signal: 'Un deck no puede tener menos de 1 jugadores.' ].
+	((aNumberOfCards size) < 1 ) ifTrue: [ Error signal: 'Un deck no puede tener menos de 1 carta.' ]."
+
+	self should: block raise: Error withMessage: 'Un deck no puede tener menos de 1 carta.'
+	
+	
+	
+]
+
+{ #category : #tests }
 CementerioDePizzas_Game_Tests >> test019_UseACancelationCard [
 	
 	| myBoxes myBoard testPlayers myDie game cards|
@@ -556,13 +612,13 @@ CementerioDePizzas_Game_Tests >> test019_UseACancelationCard [
 	testPlayers := OrderedCollection with: #napolitana with: #margarita.
 	myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
 	game := PizzaGame withBoard: myBoard players: testPlayers dice: myDie laps: 1 andCards: cards.
+	game runOneTurn.
 	game applyCard: cards second to: #margarita.
 	game applyCard: cards first to: cards second. 
 	game runOneTurn.
-	game runOneTurn.
 	self assert: ((game ranking) second) absoluteLocation equals: 2.
 	self assert: ((game ranking) first) absoluteLocation equals: 2.
-	 
+	"self assert: cards size equals: 0."
 	
 	
 ]
@@ -573,9 +629,7 @@ CementerioDePizzas_Game_Tests >> test21_ACardBoxGivesCards [
 	| game myBoard myDie ranking testPlayers myBoxes cards|
 		
 	
-	myBoxes := OrderedCollection
-		with: (CardBoxLoaded loadedWith: (OrderedCollection with: (SpeedUpCard of: #napolitana on: ''))) with: NoEffectBox new with: NoEffectBox new
-		with: NoEffectBox new with: NoEffectBox new.
+	myBoxes := OrderedCollection with: (CardBoxLoaded loadedWith: (OrderedCollection with: (SpeedUpCard of: #napolitana on: ''))) with: NoEffectBox new with: NoEffectBox new with: NoEffectBox new with: NoEffectBox new.
 	myBoard := Board withBoxes: myBoxes.
 	
 	testPlayers := OrderedCollection with: #napolitana.	

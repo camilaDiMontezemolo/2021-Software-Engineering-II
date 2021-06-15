@@ -18,13 +18,16 @@ Class {
 PizzaGame class >> withBoard: aBoard players: players dice: dice laps: laps andCards: cards [
 	(players isEmpty ) ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 jugador.' ].
 	(dice isEmpty ) ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 dado.' 	].
-	(laps <1 ) ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 vuelta.' 	].
+	(laps <1 ) ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 vuelta.' ].
 	^self new initializeWithBoard: aBoard players: players dice:dice laps: laps andCards: cards.
 ]
 
 { #category : #'as yet unclassified' }
 PizzaGame >> applyCard: card to: affectedPlayer [
-	myDeck assignCard: card to: affectedPlayer.
+	myDeck assignCard: card to: affectedPlayer with: (myPlayers at: currentTurn).
+	
+	
+	
 ]
 
 { #category : #'as yet unclassified' }
