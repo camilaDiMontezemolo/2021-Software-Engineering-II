@@ -8,7 +8,7 @@ Class {
 		'myPositions',
 		'myDice',
 		'myCards',
-		'deck',
+		'myDeck',
 		'currentTurn'
 	],
 	#category : #'IngSoft2-Model'
@@ -32,7 +32,7 @@ PizzaGame class >> withBoard: aBoard players: players dice: dice laps: laps andC
 
 { #category : #'as yet unclassified' }
 PizzaGame >> applyCard: card to: affectedPlayer [
-	deck assignCard: card to: affectedPlayer.
+	myDeck assignCard: card to: affectedPlayer.
 ]
 
 { #category : #'as yet unclassified' }
@@ -44,6 +44,14 @@ PizzaGame >> changeTurn [
 { #category : #'as yet unclassified' }
 PizzaGame >> findLastTypeOfBoxForPlayer: aPlayer [
 	myBoard applyLastTypeOfBoxFor: aPlayer.
+]
+
+{ #category : #'as yet unclassified' }
+PizzaGame >> findNewCards [
+	((myBoard newCards) isEmpty)
+	ifFalse: [ myDeck addCards: myBoard newCards.].
+	myBoard resetNewCards.
+
 ]
 
 { #category : #'as yet unclassified' }
@@ -60,7 +68,7 @@ PizzaGame >> initializeWithBoard: aBoard andPlayers: somePlayers andDie: someDie
 	myDice:=someDie.
 	myLaps:=someLaps.
 	currentTurn:=1.
-	deck:= Deck with: (OrderedCollection new) in: self.
+	myDeck:= Deck with: (OrderedCollection new) in: self.
 ]
 
 { #category : #initialize }
@@ -72,7 +80,7 @@ PizzaGame >> initializeWithBoard: aBoard players: somePlayers dice: someDie laps
 	myDice:=someDie.
 	myLaps:=someLaps.
 	currentTurn:=1.
-	deck := Deck with: initialCards in: self.
+	myDeck := Deck with: initialCards in: self.
 ]
 
 { #category : #'as yet unclassified' }
@@ -104,7 +112,7 @@ PizzaGame >> rollFor: aPosition [
 	| distance |
 	distance := 0.
 	myDice do: [ :dice | distance := distance + dice spin ].
-	distance:= distance + (deck modifyDistanceOf: (aPosition player)).
+	distance:= distance + (myDeck modifyDistanceOf: (aPosition player)).
 	myBoard change: aPosition using: distance playing: self.
 ]
 
@@ -112,6 +120,7 @@ PizzaGame >> rollFor: aPosition [
 PizzaGame >> runOneTurn [
 	^ self isFinished
 		ifFalse: [ self rollFor:((myBoard positions) at:currentTurn).
-					  self changeTurn.]
+					  self changeTurn.
+					  self findNewCards.]
 		ifTrue: [ ].
 ]

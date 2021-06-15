@@ -6,7 +6,8 @@ Class {
 		'myBoxes',
 		'positions',
 		'mylaps',
-		'lastBoxUsed'
+		'lastBoxUsed',
+		'myNewCards'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -96,6 +97,12 @@ Board >> initializeWithBoxes: aCollectionOfBoxes [
 	myBoxes addFirst: (NoEffectBox new).
 	mySize := ( (myBoxes size)-1 ).
 	lastBoxUsed := (NoEffectBox new).
+	myNewCards := OrderedCollection new. 
+]
+
+{ #category : #'as yet unclassified' }
+Board >> newCards [
+	^myNewCards.
 ]
 
 { #category : #'as yet unclassified' }
@@ -106,6 +113,16 @@ Board >> positions [
 { #category : #'as yet unclassified' }
 Board >> replacePosition: position with: newPosition [
 	positions at:(positions indexOf: position) put: newPosition.
+]
+
+{ #category : #'as yet unclassified' }
+Board >> resetNewCards [
+	myNewCards removeAll.
+]
+
+{ #category : #'as yet unclassified' }
+Board >> saveNewCards: newCards [
+	myNewCards:= newCards. 
 ]
 
 { #category : #'as yet unclassified' }

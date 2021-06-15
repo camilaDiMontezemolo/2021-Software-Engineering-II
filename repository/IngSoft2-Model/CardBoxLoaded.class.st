@@ -1,24 +1,25 @@
 Class {
-	#name : #CardBox,
+	#name : #CardBoxLoaded,
 	#superclass : #Box,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'as yet unclassified' }
-CardBox class >> loadedWith: someCards [ 
+CardBoxLoaded class >> loadedWith: someCards [ 
 ^self new initializeLoaded: someCards.
 ]
 
 { #category : #'as yet unclassified' }
-CardBox >> affect: positions triggeredOn: aPosition with: board [ 
+CardBoxLoaded >> affect: positions triggeredOn: aPosition with: board [ 
 	| playerWhoGetsTheCard newCards |
 	playerWhoGetsTheCard := OrderedCollection with: (aPosition player).
-	newCards:= CardGenerator forPlayer: playerWhoGetsTheCard give: 1.
+	newCards:= OrderedCollection with: (SpeedUpCard of: #napolitana on: '').
+	"newCards:= CardGenerator forPlayer: playerWhoGetsTheCard give: 1."
 	board saveNewCards: newCards.
 
 ]
 
 { #category : #'as yet unclassified' }
-CardBox >> initializeLoaded: someCards [
+CardBoxLoaded >> initializeLoaded: someCards [
 
 ]

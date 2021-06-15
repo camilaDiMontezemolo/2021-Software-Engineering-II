@@ -16,6 +16,11 @@ Deck class >> with: initialCards in: aGame [
 ]
 
 { #category : #'as yet unclassified' }
+Deck >> addCards: myNewCards [
+	cards addAll: myNewCards.
+]
+
+{ #category : #'as yet unclassified' }
 Deck >> assignCard: card to: affectedPlayer [
 	| newCard |
 	newCard:=self createNewCard: card withAffectedPlayer: affectedPlayer.
