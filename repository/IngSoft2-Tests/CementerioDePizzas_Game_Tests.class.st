@@ -17,14 +17,14 @@ CementerioDePizzas_Game_Tests >> should: block raise: kindOfError withMessage: e
 CementerioDePizzas_Game_Tests >> test000_AGameShouldHaveAtLeastOneLap [
 	"a dummy test comment"
 	"un dia en un cementerio de pizzas habian 2 pizzas"
-	| myDie myPlayers  block myBoard |
+	| myDie myPlayers  block myBoard cards myBoxes|
 	
 	myDie := OrderedCollection with: (Dice withSides: 3).
-	
+	myBoxes:= BoxGenerator give: 10.
+	myBoard:= Board withBoxes: myBoxes.
 	myPlayers:= (OrderedCollection with: #hawaiana).
-	
-	block:=[PizzaGame withBoard:myBoard andPlayers: myPlayers andDie: myDie andLaps: 0].
-	
+	cards := CardGenerator forPlayer: myPlayers give: 2.
+	block:=[PizzaGame withBoard:myBoard players: myPlayers dice: myDie laps: 0 andCards: cards].
 	self should: block raise: Error withMessage: 'Un juego no puede tener menos de 1 vuelta.'.
 	
 ]
@@ -33,17 +33,17 @@ CementerioDePizzas_Game_Tests >> test000_AGameShouldHaveAtLeastOneLap [
 CementerioDePizzas_Game_Tests >> test000_CreateAGameWithOnePlayerAnd10Boxes [
 	"a dummy test comment"
 	"un dia en un cementerio de pizzas habian 2 pizzas"
-	| myBoard myDie myPlayers myGame myBoxes|
+	| myBoard myDie myPlayers myBoxes cards|
 	
 	myDie := OrderedCollection with: (Dice withSides: 3).
 	
 	myPlayers:= (OrderedCollection with: #hawaiana).
 	
-	myBoxes := OrderedCollection new.
 	myBoxes:= BoxGenerator give: 10.
 	myBoard:= Board withBoxes: myBoxes.
 	
-	myGame:= PizzaGame withBoard:myBoard andPlayers: myPlayers andDie: myDie andLaps: 1.
+	cards := CardGenerator forPlayer: myPlayers give: 2.
+	PizzaGame withBoard:myBoard players: myPlayers dice: myDie laps: 1 andCards: cards.
 	
 	self assert: (myBoard sizeOfBoard) equals: 10.
 	
@@ -65,16 +65,18 @@ CementerioDePizzas_Game_Tests >> test001_aBoardShouldHaveMoreThanCeroBoxes [
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> test002_aBoardShouldHaveMoreThanCeroDie [
 
-	|  myDie block boardWithoutDie someBoxes myBoard|
-	myDie := OrderedCollection with: (Dice withSides: 3).
-	someBoxes := OrderedCollection new.
+	|  block someBoxes myBoard testPlayers cards|
+
 	someBoxes:= BoxGenerator give: 20.
 	myBoard:= Board withBoxes: someBoxes.
-	block:=[boardWithoutDie := PizzaGame
+	testPlayers:=(OrderedCollection with: #hawaiana).
+	cards := CardGenerator forPlayer: testPlayers give: 2.
+	block:=[PizzaGame
 		withBoard: myBoard
-		andPlayers: (OrderedCollection with: #hawaiana)
-		andDie: OrderedCollection new
-		andLaps: 1
+		players: testPlayers
+		dice: OrderedCollection new
+		laps: 1
+		andCards: cards.
 		].
 		
 	self should: block raise: Error withMessage: 'Un juego no puede tener menos de 1 dado.'.
@@ -83,20 +85,21 @@ CementerioDePizzas_Game_Tests >> test002_aBoardShouldHaveMoreThanCeroDie [
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> test003_aBoardShouldHaveMoreThanCeroPlayers [
 
-	|  myDie block2 boardWithoutPlayers myBoxes|
+	|  myDie block myBoxes cards|
 	
 	myDie := OrderedCollection with: (Dice withSides: 3).
 	myBoxes := OrderedCollection with: (BoxGenerator give: 10).
+	cards := CardGenerator forPlayer: (OrderedCollection with: #Margarita) give: 2.
 
-	block2:= [
-		boardWithoutPlayers :=PizzaGame
+	block:= [ PizzaGame
 		withBoard: (Board withBoxes: myBoxes)
-		andPlayers: OrderedCollection new
-		andDie: myDie
-		andLaps: 1.
+		players: OrderedCollection new
+		dice: myDie
+		laps: 1
+		andCards: cards.
 		].
 	
-	self should: block2 raise: Error withMessage: 'Un juego no puede tener menos de 1 jugador.'.
+	self should: block raise: Error withMessage: 'Un juego no puede tener menos de 1 jugador.'.
 		
 ]
 
@@ -121,15 +124,15 @@ CementerioDePizzas_Game_Tests >> test005_CreateAPosition [
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> test006_AMoonWalkBoxJumpsAPlayerBoxesBack [
 	
-	| myBoxes myBoard testPlayers myDie game positions|
+	| myBoxes myBoard testPlayers myDie game cards|
 	
 	myBoxes := OrderedCollection with: NoEffectBox new with: (MoonWalkBox loadedWith: 1) with: NoEffectBox with: NoEffectBox.
 	myBoard := Board withBoxes: myBoxes.
 	testPlayers := OrderedCollection with: #napolitana with: #hawaiana.
 	myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
-	game := PizzaGame withBoard: myBoard andPlayers: testPlayers andDie: myDie andLaps: 1.
+	cards := CardGenerator forPlayer: testPlayers give: 2.
+	game := PizzaGame withBoard: myBoard players: testPlayers dice: myDie laps: 1 andCards: cards.
 	game oneRound.
-	positions := game ranking.
 
 	self assert: (myBoard positions at:2)absoluteLocation equals: 1.
 	
@@ -137,7 +140,7 @@ CementerioDePizzas_Game_Tests >> test006_AMoonWalkBoxJumpsAPlayerBoxesBack [
 
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> test007_CreateAGameMultiPlayer [
-	| game myBoard myDie napolitana ranking margarita testPlayers mozzarella myBoxes |
+	| game myBoard myDie napolitana ranking margarita testPlayers mozzarella myBoxes cards|
 	napolitana := #napolitana.
 	margarita := #margarita.
 	mozzarella := #mozzarella.
@@ -155,11 +158,8 @@ CementerioDePizzas_Game_Tests >> test007_CreateAGameMultiPlayer [
 		with: #mozzarella.
 	myDie := OrderedCollection
 		with: (LoadedDice withTosses: #(4 4 4 2 2 2 2 2 2 6 6 6 2 2 2)).
-	game := PizzaGame
-		withBoard: myBoard
-		andPlayers: testPlayers
-		andDie: myDie
-		andLaps: 1.
+	cards := CardGenerator forPlayer: testPlayers give: 2.
+	game := PizzaGame withBoard: myBoard players: testPlayers dice: myDie laps: 1 andCards: cards.
 	game play.
 	ranking := game ranking.
 	self assert: game isFinished.
@@ -172,7 +172,7 @@ CementerioDePizzas_Game_Tests >> test007_CreateAGameMultiPlayer [
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> test008_ANoEffectBoxHasNoEffects [
 	
-		| myBoxes myBoard testPlayers myDie game positions |
+		| myBoxes myBoard testPlayers myDie game positions cards|
 	
 	myBoxes := OrderedCollection 
 		with: NoEffectBox new 
@@ -180,7 +180,8 @@ CementerioDePizzas_Game_Tests >> test008_ANoEffectBoxHasNoEffects [
 	myBoard := Board withBoxes: myBoxes.
 	testPlayers := OrderedCollection with: #napolitana.
 	myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
-	game := PizzaGame withBoard: myBoard andPlayers: testPlayers andDie: myDie andLaps: 1.
+	cards := CardGenerator forPlayer: testPlayers give: 2.
+	game := PizzaGame withBoard: myBoard players: testPlayers dice: myDie laps: 1 andCards: cards.
 	game oneRound.
 	positions := game ranking.
 
@@ -191,7 +192,7 @@ CementerioDePizzas_Game_Tests >> test008_ANoEffectBoxHasNoEffects [
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> test009_ASpeedupBoxJumpsYouFourBoxes [
 	
-	| game myBoard myDie ranking testPlayers myBoxes |
+	| game myBoard myDie ranking testPlayers myBoxes cards|
 	myBoxes := OrderedCollection
 		with: SpeedupBox new
 		with: NoEffectBox new
@@ -199,15 +200,10 @@ CementerioDePizzas_Game_Tests >> test009_ASpeedupBoxJumpsYouFourBoxes [
 		with: NoEffectBox new
 		with: NoEffectBox new.
 	myBoard := Board withBoxes: myBoxes.
-	testPlayers := OrderedCollection
-		with: #napolitana.
-	myDie := OrderedCollection
-		with: (LoadedDice withTosses: #(1)).
-	game := PizzaGame
-		withBoard: myBoard
-		andPlayers: testPlayers
-		andDie: myDie
-		andLaps: 1.
+	testPlayers := OrderedCollection with: #napolitana.
+	myDie := OrderedCollection with: (LoadedDice withTosses: #(1)).
+	cards := CardGenerator forPlayer: testPlayers give: 2.
+	game := PizzaGame withBoard: myBoard players: testPlayers dice: myDie laps: 1 andCards: cards.
 	game oneRound.
 	ranking := game ranking.
 	self assert: (ranking at: 1) absoluteLocation equals: 5.
@@ -217,7 +213,7 @@ CementerioDePizzas_Game_Tests >> test009_ASpeedupBoxJumpsYouFourBoxes [
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> test010_AnAtomicBombBoxSendsEveryoneBackToZero [
 	
-	| game myBoard myDie ranking testPlayers myBoxes |
+	| game myBoard myDie ranking testPlayers myBoxes cards|
 	myBoxes := OrderedCollection
 		with: NoEffectBox new
 		with: NoEffectBox new
@@ -231,11 +227,8 @@ CementerioDePizzas_Game_Tests >> test010_AnAtomicBombBoxSendsEveryoneBackToZero 
 		with: #hawaiana.
 	myDie := OrderedCollection
 		with: (LoadedDice withTosses: #(4)).
-	game := PizzaGame
-		withBoard: myBoard
-		andPlayers: testPlayers
-		andDie: myDie
-		andLaps: 2.
+	cards := CardGenerator forPlayer: testPlayers give: 2.
+	game := PizzaGame withBoard: myBoard players: testPlayers dice: myDie laps: 2 andCards: cards.
 	game oneRound.
 	game oneRound.
 	ranking := game ranking.
@@ -248,16 +241,17 @@ CementerioDePizzas_Game_Tests >> test010_AnAtomicBombBoxSendsEveryoneBackToZero 
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> test011_CreateAGameSinglePlayer [
 	
-	| myBoard game myDie positions napolitana myBoxes|
+	| myBoard game myDie positions napolitana myBoxes testPlayers cards|
 	
 	napolitana:= #napolitana.
 	
 	myDie := OrderedCollection with: (Dice withSides: 5).
-	myBoxes := OrderedCollection new.
 	myBoxes:= BoxGenerator give: 5.
 	myBoard:= Board withBoxes: myBoxes.
+	testPlayers:= OrderedCollection with: napolitana.
 	
-	game:= PizzaGame withBoard: myBoard andPlayers: (OrderedCollection with: napolitana) andDie: myDie andLaps: 1.
+	cards := CardGenerator forPlayer: testPlayers give: 2.
+	game := PizzaGame withBoard: myBoard players: testPlayers dice: myDie laps: 1 andCards: cards.
 	
 	game play.
 	positions := game ranking.
@@ -269,21 +263,20 @@ CementerioDePizzas_Game_Tests >> test011_CreateAGameSinglePlayer [
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> test012_CreateARandomMultiPlayerGame [
 	
-	| game myBoard myDie napolitana margarita testPlayers mozzarella myBoxes|
+	| game myBoard myDie napolitana margarita testPlayers mozzarella myBoxes cards|
 	
 	napolitana:= #napolitana.	
 	margarita:= #margarita.
 	mozzarella:= #mozzarella.
 	
-	myBoxes := OrderedCollection new.
 	myBoxes:= BoxGenerator give: 40.
 	myBoard:= Board withBoxes: myBoxes.
 	
 	testPlayers:= OrderedCollection with: napolitana with: margarita with: mozzarella.
 	
 	myDie := OrderedCollection with: (Dice withSides: 5) with: (Dice withSides: 4).
-	
-	game:= PizzaGame withBoard: myBoard andPlayers: testPlayers andDie: myDie andLaps: 1.
+	cards := CardGenerator forPlayer: testPlayers give: 2.
+	game:= PizzaGame withBoard: myBoard players: testPlayers dice: myDie laps: 1 andCards: cards.
 	
 	game play.
 	
@@ -302,8 +295,7 @@ CementerioDePizzas_Game_Tests >> test013_UseAnOverloadCard [
 		with: NoEffectBox new 
 		with: NoEffectBox new.
 		
-	cards := OrderedCollection
-		with: (OverloadCard of: #napolitana on: '').
+	cards := OrderedCollection with: (OverloadCard of: #napolitana on: '').
 		
 	myBoard := Board withBoxes: myBoxes.
 	testPlayers := OrderedCollection with: #napolitana with: #margarita.

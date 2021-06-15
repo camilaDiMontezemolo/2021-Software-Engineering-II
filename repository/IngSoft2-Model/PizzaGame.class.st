@@ -14,14 +14,6 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'instance creation' }
-PizzaGame class >> withBoard: aBoard andPlayers: somePlayers andDie: someDie andLaps: someLaps [.
-	(somePlayers isEmpty ) ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 jugador.' ].
-	(someDie isEmpty ) ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 dado.' 	].
-	(someLaps <1 ) ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 vuelta.' 	].
-	^self new initializeWithBoard: aBoard andPlayers: somePlayers andDie: someDie andLaps: someLaps.
-]
-
 { #category : #'as yet unclassified' }
 PizzaGame class >> withBoard: aBoard players: players dice: dice laps: laps andCards: cards [
 	(players isEmpty ) ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 jugador.' ].
@@ -57,18 +49,6 @@ PizzaGame >> findNewCards [
 { #category : #'as yet unclassified' }
 PizzaGame >> firstPlace [
 	^self ranking at: 1.
-]
-
-{ #category : #initialize }
-PizzaGame >> initializeWithBoard: aBoard andPlayers: somePlayers andDie: someDie andLaps: someLaps [
-	myBoard:=aBoard.
-	myPlayers:=somePlayers.
-	myPositions:= OrderedCollection new.
-	myBoard createPositionsFor: myPlayers.
-	myDice:=someDie.
-	myLaps:=someLaps.
-	currentTurn:=1.
-	myDeck:= Deck with: (OrderedCollection new) in: self.
 ]
 
 { #category : #initialize }
