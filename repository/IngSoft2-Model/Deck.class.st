@@ -25,11 +25,13 @@ Deck >> assignCard: card to: affectedPlayer with: currentTurnPlayer [
 	| newCard |
 	newCard:=self createNewCard: card withAffectedPlayer: affectedPlayer.
 	(newCard instant)
-	ifTrue: [newCard applyEffectFrom: self.]
+	ifTrue: [newCard applyEffectFrom: self.
+			self removeCard: card.]
 	ifFalse: [ 	
 	(card owner = currentTurnPlayer)
 	ifTrue: [ self replace:card with: newCard. ]
-	ifFalse: [ Error signal: 'Un jugador no puede tirar una carta fuera de su turno.'] .]
+	ifFalse: [ Error signal: 'Un jugador no puede tirar una carta fuera de su turno.'] .
+				].
 	"(newCard instant)ifTrue: [newCard applyEffectFrom: self.]."	
 
 	
@@ -78,7 +80,7 @@ Deck >> redoTheLastCardUsed: aPlayer [
 
 { #category : #'as yet unclassified' }
 Deck >> removeCard: aCard [
-	cards remove: aCard.
+	cards remove: aCard ifAbsent: [ Error signal: 'No se puede cancelar una carta que no está en deck'].
 ]
 
 { #category : #'as yet unclassified' }
