@@ -571,8 +571,10 @@ CementerioDePizzas_Game_Tests >> test019_UseACancelationCard [
 CementerioDePizzas_Game_Tests >> test21_ACardBoxGivesCards [
 	"Hay que modificar banda de este test"
 	| game myBoard myDie ranking testPlayers myBoxes cards|
+		
+	
 	myBoxes := OrderedCollection
-		with: CardBoxLoaded new with: NoEffectBox new with: NoEffectBox new
+		with: (CardBoxLoaded loadedWith: (OrderedCollection with: (SpeedUpCard of: #napolitana on: ''))) with: NoEffectBox new with: NoEffectBox new
 		with: NoEffectBox new with: NoEffectBox new.
 	myBoard := Board withBoxes: myBoxes.
 	
