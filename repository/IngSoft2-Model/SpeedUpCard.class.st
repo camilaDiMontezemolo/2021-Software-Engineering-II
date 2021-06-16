@@ -16,11 +16,6 @@ SpeedUpCard class >> of: player on: affectedPlayer [
 ]
 
 { #category : #'as yet unclassified' }
-SpeedUpCard >> affected [
-	^affectedPlayer.
-]
-
-{ #category : #'as yet unclassified' }
 SpeedUpCard >> applyEffectFrom: aDeck [ 
 	(active) 
 	ifTrue:[aDeck lastCardUsed:(self).

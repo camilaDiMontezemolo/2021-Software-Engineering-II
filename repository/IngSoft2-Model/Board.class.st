@@ -7,7 +7,7 @@ Class {
 		'positions',
 		'mylaps',
 		'lastBoxUsed',
-		'myNewCards'
+		'cardsForGame'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -46,6 +46,11 @@ Board >> calculateNewLocationFor: position [
 	(laps ==0)
 	ifTrue:[^0.]
 	ifFalse:[^(mySize*laps)+1.].
+]
+
+{ #category : #'as yet unclassified' }
+Board >> cardsForGame [
+	^cardsForGame.
 ]
 
 { #category : #'as yet unclassified' }
@@ -95,12 +100,12 @@ Board >> initializeWithBoxes: aCollectionOfBoxes [
 	myBoxes addFirst: (NoEffectBox new).
 	mySize := ( (myBoxes size)-1 ).
 	lastBoxUsed := (NoEffectBox new).
-	myNewCards := OrderedCollection new. 
+	cardsForGame := OrderedCollection new. 
 ]
 
 { #category : #'as yet unclassified' }
-Board >> newCards [
-	^myNewCards.
+Board >> newCardswereAdded: newCards [
+	cardsForGame:= newCards. 
 ]
 
 { #category : #'as yet unclassified' }
@@ -114,13 +119,8 @@ Board >> replacePosition: position with: newPosition [
 ]
 
 { #category : #'as yet unclassified' }
-Board >> resetNewCards [
-	myNewCards removeAll.
-]
-
-{ #category : #'as yet unclassified' }
-Board >> saveNewCards: newCards [
-	myNewCards:= newCards. 
+Board >> resetBoxCards [
+	cardsForGame removeAll.
 ]
 
 { #category : #'as yet unclassified' }

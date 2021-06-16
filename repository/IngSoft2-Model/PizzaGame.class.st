@@ -37,16 +37,16 @@ PizzaGame >> changeTurn [
 ]
 
 { #category : #'as yet unclassified' }
-PizzaGame >> findLastTypeOfBoxForPlayer: aPlayer [
-	myBoard applyLastTypeOfBoxFor: aPlayer.
+PizzaGame >> collectCardsFromrBoxes [
+	((myBoard cardsForGame) isEmpty)
+	ifFalse: [ myDeck addCards: myBoard cardsForGame.].
+	myBoard resetBoxCards.
+
 ]
 
 { #category : #'as yet unclassified' }
-PizzaGame >> findNewCards [
-	((myBoard newCards) isEmpty)
-	ifFalse: [ myDeck addCards: myBoard newCards.].
-	myBoard resetNewCards.
-
+PizzaGame >> findLastTypeOfBoxForPlayer: aPlayer [
+	myBoard applyLastTypeOfBoxFor: aPlayer.
 ]
 
 { #category : #'as yet unclassified' }
@@ -104,6 +104,6 @@ PizzaGame >> runOneTurn [
 	^ self isFinished
 		ifFalse: [ self rollFor:((myBoard positions) at:currentTurn).
 					  self changeTurn.
-					  self findNewCards.]
+					  self collectCardsFromrBoxes.]
 		ifTrue:[]
 ]
