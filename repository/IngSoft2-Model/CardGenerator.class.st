@@ -21,7 +21,12 @@ CardGenerator class >> forPlayer: testPlayers give: aNumberOfCards [
 CardGenerator >> distributeCardsFor: onePlayer [
 	|randomCards emptyCard |
 	emptyCard := EmptyCard new.
-	randomCards:=OrderedCollection with: (AccelerationCard of: onePlayer on: '') with: (CancellationCard of: onePlayer on: emptyCard) with: (OverloadCard of: onePlayer on: '') with: (RedoCard of: onePlayer on: '') with: (RepeatCard of: onePlayer on: '') with:(SpeedUpCard of: onePlayer on: '').
+	randomCards:=OrderedCollection 
+		with: (AccelerationCard of: onePlayer on: '') 
+		with: (CancellationCard of: onePlayer on: emptyCard) 
+		with: (OverloadCard of: onePlayer on: '') 
+		with: (RedoCard of: onePlayer on: '') 
+		with: (RepeatCard of: onePlayer on: '') with:(SpeedUpCard of: onePlayer on: '').
 	
 	randomCards := randomCards shuffled.
 	temporalHand add: (randomCards at: 1).
