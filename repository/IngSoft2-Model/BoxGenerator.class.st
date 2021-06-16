@@ -42,7 +42,6 @@ BoxGenerator >> initializeWithSize: aSize [
 			(myBoxes size) to: (mySize) do: [:emptyBox | myBoxes add: (NoEffectBox new) ].
 		].
 	myBoxes := myBoxes shuffled.
-	"myBoxes addFirst: (NoEffectBox new)."
 	^myBoxes.
 	
 ]

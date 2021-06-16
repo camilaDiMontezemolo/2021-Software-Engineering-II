@@ -26,8 +26,3 @@ CardBoxLoaded >> initializeLoaded: someCards [
 	loadedCards := someCards.
 
 ]
-
-{ #category : #'as yet unclassified' }
-CardBoxLoaded >> loadedCards [
-	^loadedCards.
-]
