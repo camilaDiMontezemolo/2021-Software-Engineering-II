@@ -23,20 +23,19 @@ Deck >> addCards: myNewCards [
 { #category : #'as yet unclassified' }
 Deck >> assignCard: card to: affectedPlayer with: currentTurnPlayer [
 	| newCard |
-	newCard := self createNewCard: card withAffectedPlayer: affectedPlayer.
+	newCard := self
+		createNewCard: card
+		withAffectedPlayer: affectedPlayer.
 	newCard instant
-		ifTrue: [
-			self replace:card with:newCard. 
-			newCard applyEffectFrom: self.
-			 self removeCard: newCard.
-			]
-		ifFalse:
-			[ self checkPlayer: currentTurnPlayer banana: card manzana: newCard ]
-	"(newCard instant)ifTrue: [newCard applyEffectFrom: self.]."
+		ifTrue: [ self replaceInstantCard: card withCard: newCard ]
+		ifFalse: [ self
+				checkMplayerOf: card
+				withCurrentTurn: currentTurnPlayer
+				generating: newCard ]
 ]
 
 { #category : #'as yet unclassified' }
-Deck >> checkPlayer: currentTurnPlayer banana: card manzana: newCard [
+Deck >> checkMplayerOf: card withCurrentTurn: currentTurnPlayer generating: newCard [
 	card owner = currentTurnPlayer
 		ifTrue: [ self replace: card with: newCard ]
 		ifFalse: [ Error
@@ -91,4 +90,11 @@ Deck >> removeCard: aCard [
 { #category : #'as yet unclassified' }
 Deck >> replace: card with: newCard [  
 	cards at: (cards indexOf: card) put: newCard.
+]
+
+{ #category : #'as yet unclassified' }
+Deck >> replaceInstantCard: card withCard: newCard [
+	self replace: card with: newCard.
+	newCard applyEffectFrom: self.
+	self removeCard: newCard
 ]
