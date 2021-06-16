@@ -105,5 +105,5 @@ PizzaGame >> runOneTurn [
 		ifFalse: [ self rollFor:((myBoard positions) at:currentTurn).
 					  self changeTurn.
 					  self findNewCards.]
-		ifTrue: [ ].
+		ifTrue:[]
 ]

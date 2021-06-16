@@ -24,8 +24,7 @@ CancellationCard >> affected [
 CancellationCard >> applyEffectFrom: aDeck [ 
 	(active) 
 	ifTrue:[aDeck lastCardUsed:self.
-		aDeck removeCard: affectedCard.
-		"aDeck removeCard: self."]
+		aDeck removeCard: affectedCard.]
 	ifFalse:[^0].
 ]
 

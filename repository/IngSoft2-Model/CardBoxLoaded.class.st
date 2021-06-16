@@ -14,10 +14,8 @@ CardBoxLoaded class >> loadedWith: someCards [
 
 { #category : #'as yet unclassified' }
 CardBoxLoaded >> affect: positions triggeredOn: aPosition with: board [ 
-	| playerWhoGetsTheCard newCards |
-	playerWhoGetsTheCard := OrderedCollection with: (aPosition player).
+	| newCards |
 	newCards:= loadedCards.
-	"newCards:= CardGenerator forPlayer: playerWhoGetsTheCard give: 1."
 	board saveNewCards: newCards.
 
 ]

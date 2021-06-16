@@ -65,8 +65,6 @@ Board >> change: aPosition using: distance playing: game [
 	self replacePosition: aPosition  with: newPosition.
 	(game isFinished)
 			ifFalse: [self applyEffectFor: newPosition].
-	"(game isFinished)
-			ifTrue: [ self replacePosition: aPosition  with:  ]"
 ]
 
 { #category : #'as yet unclassified' }
