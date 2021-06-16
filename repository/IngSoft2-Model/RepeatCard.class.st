@@ -16,15 +16,11 @@ RepeatCard class >> of: player on: anotherPlayer [
 ]
 
 { #category : #'as yet unclassified' }
-RepeatCard >> affected [
-	^affectedPlayer.
-]
-
-{ #category : #'as yet unclassified' }
 RepeatCard >> applyEffectFrom: aDeck [
 	active
 		ifTrue:
-			[ aDeck findLastTypeOfBoxForPlayer: affectedPlayer.]
+			[aDeck lastCardUsed: self. 
+			aDeck findLastTypeOfBoxForPlayer: affectedPlayer.]
 		ifFalse: [ ^ 0 ]
 ]
 
@@ -39,11 +35,6 @@ RepeatCard >> initializeWithPlayer: player andAffectedPlayer: anotherPlayer [
 { #category : #initialize }
 RepeatCard >> instant [
 	^instant.
-]
-
-{ #category : #initialize }
-RepeatCard >> isAnEmptyCard [
-	^false.
 ]
 
 { #category : #initialize }
