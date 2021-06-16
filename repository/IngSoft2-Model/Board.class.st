@@ -5,7 +5,9 @@ Class {
 		'mySize',
 		'myBoxes',
 		'positions',
-		'mylaps'
+		'mylaps',
+		'lastBoxUsed',
+		'cardsForGame'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -22,10 +24,18 @@ Board class >> withSize: aSize [
 ]
 
 { #category : #'as yet unclassified' }
-Board >> applyEffectFor: aPosition and: gamePositions [
+Board >> applyEffectFor: aPosition [
 	| box |
 	box := self findBoxFor: aPosition.
-	box affect: gamePositions triggeredOn: aPosition with: self.
+	box affect: positions triggeredOn: aPosition with: self.
+	lastBoxUsed:=box.
+]
+
+{ #category : #'as yet unclassified' }
+Board >> applyLastTypeOfBoxFor: aPlayer [ 
+	| positionOfPlayer |
+	positionOfPlayer := (self findPositionOfPlayer: aPlayer) at:1.
+	lastBoxUsed affect: positions triggeredOn: positionOfPlayer with: self. 
 ]
 
 { #category : #'as yet unclassified' }
@@ -36,6 +46,11 @@ Board >> calculateNewLocationFor: position [
 	(laps ==0)
 	ifTrue:[^0.]
 	ifFalse:[^(mySize*laps)+1.].
+]
+
+{ #category : #'as yet unclassified' }
+Board >> cardsForGame [
+	^cardsForGame.
 ]
 
 { #category : #'as yet unclassified' }
@@ -54,9 +69,7 @@ Board >> change: aPosition using: distance playing: game [
 	newPosition := self change: aPosition for: distance.
 	self replacePosition: aPosition  with: newPosition.
 	(game isFinished)
-			ifFalse: [self applyEffectFor: newPosition and: positions.].
-	"(game isFinished)
-			ifTrue: [ self replacePosition: aPosition  with:  ]"
+			ifFalse: [self applyEffectFor: newPosition].
 ]
 
 { #category : #'as yet unclassified' }
@@ -71,6 +84,11 @@ Board >> findBoxFor: aPosition [
 ]
 
 { #category : #'as yet unclassified' }
+Board >> findPositionOfPlayer: aPlayer [
+	^(positions select: [: position| (position player)=aPlayer])
+]
+
+{ #category : #'as yet unclassified' }
 Board >> generatePositionFor: aPosition at: absoluteLocation [
 	^(Position of: (aPosition player) at: absoluteLocation).
 ]
@@ -81,6 +99,13 @@ Board >> initializeWithBoxes: aCollectionOfBoxes [
 	myBoxes := aCollectionOfBoxes.
 	myBoxes addFirst: (NoEffectBox new).
 	mySize := ( (myBoxes size)-1 ).
+	lastBoxUsed := (NoEffectBox new).
+	cardsForGame := OrderedCollection new. 
+]
+
+{ #category : #'as yet unclassified' }
+Board >> newCardswereAdded: newCards [
+	cardsForGame:= newCards. 
 ]
 
 { #category : #'as yet unclassified' }
@@ -91,6 +116,11 @@ Board >> positions [
 { #category : #'as yet unclassified' }
 Board >> replacePosition: position with: newPosition [
 	positions at:(positions indexOf: position) put: newPosition.
+]
+
+{ #category : #'as yet unclassified' }
+Board >> resetBoxCards [
+	cardsForGame removeAll.
 ]
 
 { #category : #'as yet unclassified' }
