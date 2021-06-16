@@ -369,24 +369,63 @@ CementerioDePizzas_Game_Tests >> test014_ACardCanNotBeUsedOutsideYourTurn [
 CementerioDePizzas_Game_Tests >> test014_UseARedoCard [
 	
 	| myBoxes myBoard testPlayers myDie game cards|
+
+    myBoxes := OrderedCollection 
+        with: NoEffectBox new 
+        with: NoEffectBox new
+        with: NoEffectBox new 
+        with: NoEffectBox new.
+
+    cards := OrderedCollection
+        with: (SpeedUpCard of: #margarita on:#margarita)
+        with: (RedoCard of: #napolitana on: #napolitana).
+
+    myBoard := Board withBoxes: myBoxes.
+    testPlayers := OrderedCollection with:#margarita with: #napolitana.
+    myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
+    game := PizzaGame withBoard: myBoard players: testPlayers dice: myDie laps: 1 andCards: cards.
+    game oneRound.
+
+    self assert: ((game ranking) second) absoluteLocation equals: 3.
+	 
+	
+	
+]
+
+{ #category : #tests }
+CementerioDePizzas_Game_Tests >> test014_UseARedoCardOverCancelation [
+	
+	| myBoxes myBoard testPlayers myDie game cards cardOne cardTwo cardThree cardFour emptyCard |
 	
 	myBoxes := OrderedCollection 
+		with: NoEffectBox new
+		with: NoEffectBox new 
 		with: NoEffectBox new 
 		with: NoEffectBox new
 		with: NoEffectBox new 
 		with: NoEffectBox new.
-		
+	emptyCard := EmptyCard new.	
+	cardOne :=SpeedUpCard of: #margarita on:#margarita.
+	cardTwo := SpeedUpCard of: #margarita on:#margarita.
+	cardThree := CancellationCard of:#napolitana on:emptyCard.
+	cardFour := RedoCard of: #napolitana on: ''.
+	
 	cards := OrderedCollection
-		with: (SpeedUpCard of: #margarita on:#margarita)
-		with: (RedoCard of: #napolitana on: #napolitana).
+		with: cardOne
+		with: cardTwo
+		with: cardThree
+		with: cardFour.
 		
 	myBoard := Board withBoxes: myBoxes.
 	testPlayers := OrderedCollection with:#margarita with: #napolitana.
 	myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
-	game := PizzaGame withBoard: myBoard players: testPlayers dice: myDie laps: 1 andCards: cards.
+	game := PizzaGame withBoard: myBoard players: testPlayers dice: myDie laps: 10 andCards: cards.
+	game applyCard: (cardThree) to: (cardOne). 
+	game applyCard: (cardFour) to: (cardTwo). 
 	game oneRound.
 	
-	self assert: ((game ranking) second) absoluteLocation equals: 3.
+	self assert: ((game ranking) second) absoluteLocation equals: 2.
+	self assert: ((game ranking) first) absoluteLocation equals: 2.
 	 
 	
 	
@@ -597,8 +636,10 @@ CementerioDePizzas_Game_Tests >> test019_ACardGeneratorShouldntBeAbleToGiveZeroC
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> test019_UseACancelationCard [
 	
-	| myBoxes myBoard testPlayers myDie game cards|
+	| myBoxes myBoard testPlayers myDie game cards emptyCard|
 	
+	emptyCard := EmptyCard new.
+
 	myBoxes := OrderedCollection 
 		with: NoEffectBox new 
 		with: NoEffectBox new
@@ -606,7 +647,7 @@ CementerioDePizzas_Game_Tests >> test019_UseACancelationCard [
 		with: NoEffectBox new.
 		
 	cards := OrderedCollection
-		with: (CancellationCard of: #napolitana on: nil)
+		with: (CancellationCard of: #napolitana on:emptyCard)
 		with: (SpeedUpCard of: #margarita on: '').
 		
 	myBoard := Board withBoxes: myBoxes.
@@ -627,16 +668,16 @@ CementerioDePizzas_Game_Tests >> test019_UseACancelationCard [
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> test019_UseACancelationCardWithError [
 	
-	| myBoxes myBoard testPlayers myDie game cards|
+	| myBoxes myBoard testPlayers myDie game cards emptyCard |
 	
 	myBoxes := OrderedCollection 
 		with: NoEffectBox new 
 		with: NoEffectBox new
 		with: NoEffectBox new 
 		with: NoEffectBox new.
-		
+	emptyCard := EmptyCard new.
 	cards := OrderedCollection
-		with: (CancellationCard of: #napolitana on: nil)
+		with: (CancellationCard of: #napolitana on: emptyCard)
 		with: (SpeedUpCard of: #margarita on: '').
 		
 	myBoard := Board withBoxes: myBoxes.
@@ -658,7 +699,6 @@ CementerioDePizzas_Game_Tests >> test21_ACardBoxGivesCards [
 	"Hay que modificar banda de este test"
 	| game myBoard myDie ranking testPlayers myBoxes cards|
 		
-	
 	myBoxes := OrderedCollection with: (CardBoxLoaded loadedWith: (OrderedCollection with: (SpeedUpCard of: #napolitana on: ''))) with: NoEffectBox new with: NoEffectBox new with: NoEffectBox new with: NoEffectBox new.
 	myBoard := Board withBoxes: myBoxes.
 	

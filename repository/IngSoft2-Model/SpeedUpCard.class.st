@@ -42,6 +42,11 @@ SpeedUpCard >> instant [
 ]
 
 { #category : #initialize }
+SpeedUpCard >> isAnEmptyCard [
+	^false.
+]
+
+{ #category : #initialize }
 SpeedUpCard >> owner [
 	^owner.
 ]

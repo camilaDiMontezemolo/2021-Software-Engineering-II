@@ -41,6 +41,11 @@ AccelerationCard >> instant [
 	^instant.
 ]
 
+{ #category : #'as yet unclassified' }
+AccelerationCard >> isAnEmptyCard [
+	^false.
+]
+
 { #category : #initialize }
 AccelerationCard >> owner [
 	^owner.

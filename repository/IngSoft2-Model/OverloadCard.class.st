@@ -42,6 +42,11 @@ OverloadCard >> instant [
 ]
 
 { #category : #initialize }
+OverloadCard >> isAnEmptyCard [
+	^false.
+]
+
+{ #category : #initialize }
 OverloadCard >> owner [
 	^owner.
 ]

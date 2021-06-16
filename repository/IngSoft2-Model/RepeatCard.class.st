@@ -42,6 +42,11 @@ RepeatCard >> instant [
 ]
 
 { #category : #initialize }
+RepeatCard >> isAnEmptyCard [
+	^false.
+]
+
+{ #category : #initialize }
 RepeatCard >> owner [
 	^owner.
 ]
