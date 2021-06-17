@@ -5,6 +5,16 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+EmptyCard >> active [
+	^true
+]
+
+{ #category : #'as yet unclassified' }
+EmptyCard >> instant [
+	^false
+]
+
+{ #category : #'as yet unclassified' }
 EmptyCard >> isAnEmptyCard [
 	^true.
 ]

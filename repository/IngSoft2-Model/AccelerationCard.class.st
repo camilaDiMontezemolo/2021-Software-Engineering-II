@@ -16,6 +16,11 @@ AccelerationCard class >> of: player on: affectedPlayer [
 ]
 
 { #category : #'as yet unclassified' }
+AccelerationCard >> active [
+	^ active
+]
+
+{ #category : #'as yet unclassified' }
 AccelerationCard >> applyEffectFrom: aDeck [ 
 	(active) 
 	ifTrue:[aDeck lastCardUsed: self.

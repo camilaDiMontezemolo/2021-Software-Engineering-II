@@ -443,6 +443,60 @@ CementerioDePizzas_Game_Tests >> testUseACancelationCardOnAnAccelerationCard [
 ]
 
 { #category : #tests }
+CementerioDePizzas_Game_Tests >> testUseACancelationCardOnAnInactiveCardRaiseError [
+	
+	| myBoxes myBoard testPlayers myDie game cards emptyCard block |
+	
+	myBoxes := OrderedCollection 
+		with: NoEffectBox new 
+		with: NoEffectBox new
+		with: NoEffectBox new 
+		with: NoEffectBox new.
+	emptyCard := EmptyCard new.
+	cards := OrderedCollection
+		with: (CancellationCard of: #napolitana on: emptyCard)
+		with: (SpeedUpCard of: #margarita on: #'').
+		
+	myBoard := Board withBoxes: myBoxes.
+	testPlayers := OrderedCollection with: #napolitana with: #margarita.
+	myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
+	game := PizzaGame withBoard: myBoard players: testPlayers dice: myDie laps: 1 andCards: cards.
+	game runOneTurn.
+	 
+	block:=[game applyCard: cards first to: cards second.].
+	self should: block raise: Error withMessage: 'No se puede cancelar una carta inactiva.'
+
+	
+]
+
+{ #category : #tests }
+CementerioDePizzas_Game_Tests >> testUseACancelationCardOnAnInstantCardRaiseAnError [
+	
+	| myBoxes myBoard testPlayers myDie game cards emptyCard block |
+	
+	myBoxes := OrderedCollection 
+		with: NoEffectBox new 
+		with: NoEffectBox new
+		with: NoEffectBox new 
+		with: NoEffectBox new.
+	emptyCard := EmptyCard new.
+	cards := OrderedCollection
+		with: (CancellationCard of: #napolitana on: emptyCard)
+		with: (CancellationCard of: #margarita on: emptyCard).
+		
+	myBoard := Board withBoxes: myBoxes.
+	testPlayers := OrderedCollection with: #napolitana with: #margarita.
+	myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
+	game := PizzaGame withBoard: myBoard players: testPlayers dice: myDie laps: 1 andCards: cards.
+	game runOneTurn.
+	 
+	block:=[game applyCard: cards first to: cards second.].
+	self should: block raise: Error withMessage: 'No se puede cancelar una carta instantanea.'
+
+	
+]
+
+{ #category : #tests }
 CementerioDePizzas_Game_Tests >> testUseACancelationCardOnAnOverloadCard [
 	
 	| myBoxes myBoard testPlayers myDie game cards emptyCard|
@@ -470,34 +524,6 @@ CementerioDePizzas_Game_Tests >> testUseACancelationCardOnAnOverloadCard [
 	self assert: ((game ranking) second) absoluteLocation equals: 2.
 	self assert: ((game ranking) first) absoluteLocation equals: 2.
 	
-	self assert: cards size equals: 0.
-	
-]
-
-{ #category : #tests }
-CementerioDePizzas_Game_Tests >> testUseACancelationCardWithError [
-	
-	| myBoxes myBoard testPlayers myDie game cards emptyCard |
-	
-	myBoxes := OrderedCollection 
-		with: NoEffectBox new 
-		with: NoEffectBox new
-		with: NoEffectBox new 
-		with: NoEffectBox new.
-	emptyCard := EmptyCard new.
-	cards := OrderedCollection
-		with: (CancellationCard of: #napolitana on: emptyCard)
-		with: (SpeedUpCard of: #margarita on: '').
-		
-	myBoard := Board withBoxes: myBoxes.
-	testPlayers := OrderedCollection with: #napolitana with: #margarita.
-	myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
-	game := PizzaGame withBoard: myBoard players: testPlayers dice: myDie laps: 1 andCards: cards.
-	game runOneTurn.
-	game applyCard: cards first to: cards second. 
-	game runOneTurn.
-	self assert: ((game ranking) second) absoluteLocation equals: 2.
-	self assert: ((game ranking) first) absoluteLocation equals: 2.
 	self assert: cards size equals: 0.
 	
 ]

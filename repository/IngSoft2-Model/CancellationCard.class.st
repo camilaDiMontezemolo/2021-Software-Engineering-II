@@ -12,7 +12,11 @@ Class {
 
 { #category : #'instance creation' }
 CancellationCard class >> of: player on: anotherCard [
-	^self new initializeWithPlayer: player andAffectedCard: anotherCard.
+	anotherCard instant
+		ifTrue: [ Error signal: 'No se puede cancelar una carta instantanea.' ].
+	(anotherCard active) 
+	ifFalse: [ Error signal: 'No se puede cancelar una carta inactiva.' ].
+	^ self new initializeWithPlayer: player andAffectedCard: anotherCard
 ]
 
 { #category : #'as yet unclassified' }

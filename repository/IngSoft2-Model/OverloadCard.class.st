@@ -16,6 +16,11 @@ OverloadCard class >> of: player on: anotherPlayer [
 ]
 
 { #category : #'as yet unclassified' }
+OverloadCard >> active [
+	^ active
+]
+
+{ #category : #'as yet unclassified' }
 OverloadCard >> applyEffectFrom: aDeck [ 
 	(active) 
 	ifTrue:[aDeck lastCardUsed: self.
