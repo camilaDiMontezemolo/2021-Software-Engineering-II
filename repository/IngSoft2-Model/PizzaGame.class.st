@@ -15,11 +15,12 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-PizzaGame class >> withBoard: aBoard players: players dice: dice laps: laps andCards: cards [
-	(players isEmpty ) ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 jugador.' ].
-	(dice isEmpty ) ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 dado.' 	].
-	(laps <1 ) ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 vuelta.' ].
-	^self new initializeWithBoard: aBoard players: players dice:dice laps: laps andCards: cards.
+PizzaGame class >> withBoxes: someBoxes players: somePlayers dice: someDice laps: someLaps andCards: initialCards [
+	(somePlayers isEmpty ) ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 jugador.' ].
+	(someDice isEmpty ) ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 dado.' 	].
+	(someLaps <1 ) ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 vuelta.' ].
+	((someBoxes size) <1 ) ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 casillero.' ].
+	^self new initializeWithBoxes: someBoxes players: somePlayers dice: someDice laps: someLaps andCards: initialCards.
 ]
 
 { #category : #'as yet unclassified' }
@@ -28,6 +29,11 @@ PizzaGame >> applyCard: card to: affectedPlayer [
 	
 	
 	
+]
+
+{ #category : #'as yet unclassified' }
+PizzaGame >> board [
+	^myBoard.
 ]
 
 { #category : #'as yet unclassified' }
@@ -55,11 +61,11 @@ PizzaGame >> firstPlace [
 ]
 
 { #category : #initialize }
-PizzaGame >> initializeWithBoard: aBoard players: somePlayers dice: someDie laps: someLaps andCards: initialCards [ 
-	myBoard:=aBoard.
+PizzaGame >> initializeWithBoxes: someBoxes players: somePlayers dice: someDie laps: someLaps andCards: initialCards [
+	myBoard:=Board withBoxes: someBoxes andSomePlayers: somePlayers forAGame: self.
 	myPlayers:=somePlayers.
 	myPositions:= OrderedCollection new.
-	myBoard createPositionsFor: myPlayers.
+	myBoard createPositions.
 	myDice:=someDie.
 	myLaps:=someLaps.
 	currentTurn:=1.
@@ -72,38 +78,36 @@ PizzaGame >> isFinished [
 ]
 
 { #category : #'as yet unclassified' }
-PizzaGame >> oneRound [
-	myBoard positions do:
-		[ :position | self runOneTurn ]
+PizzaGame >> play [
+	[ self isFinished ] whileFalse:
+		[ self playTurnForAllPlayers ]
+]
+
+{ #category : #accessing }
+PizzaGame >> playNextTurn [
+	self isFinished
+		ifTrue: [ ^ self ].
+	self rollFor: (myPlayers at: currentTurn).
+	self changeTurn.
+	self collectCardsFromrBoxes.
 ]
 
 { #category : #'as yet unclassified' }
-PizzaGame >> play [
-	[ self isFinished ] whileFalse:
-		[ self oneRound ]
+PizzaGame >> playTurnForAllPlayers [
+	myPlayers do: [:player | self playNextTurn ].
 ]
 
 { #category : #'as yet unclassified' }
 PizzaGame >> ranking [
-	(myBoard positions) sort: [:a :c | 
-		a absoluteLocation > c absoluteLocation].
+	(myBoard positions) sort: [:position1 :position2 | position1 > position2].
 	^(myBoard positions).
 ]
 
 { #category : #'as yet unclassified' }
-PizzaGame >> rollFor: aPosition [
+PizzaGame >> rollFor: aPlayer [
 	| distance |
 	distance := 0.
 	myDice do: [ :dice | distance := distance + dice spin ].
-	distance:= distance + (myDeck modifyDistanceOf: (aPosition player)).
-	myBoard change: aPosition using: distance playing: self.
-]
-
-{ #category : #'as yet unclassified' }
-PizzaGame >> runOneTurn [
-	^ self isFinished
-		ifFalse: [ self rollFor:((myBoard positions) at:currentTurn).
-					  self changeTurn.
-					  self collectCardsFromrBoxes.]
-		ifTrue:[]
+	distance:= distance + (myDeck modifyDistanceOf: aPlayer).
+	myBoard changePositionOf: aPlayer by: distance playing: self.
 ]

@@ -7,14 +7,16 @@ Class {
 		'positions',
 		'mylaps',
 		'lastBoxUsed',
-		'cardsForGame'
+		'cardsForGame',
+		'myPlayers',
+		'myGame'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #instanceCreation }
-Board class >> withBoxes: aCollectionOfBoxes [
-	^self new initializeWithBoxes: aCollectionOfBoxes.
+Board class >> withBoxes: aCollectionOfBoxes andSomePlayers: somePlayers forAGame: aGame [
+	^self new initializeWithBoxes: aCollectionOfBoxes andSomePlayers: somePlayers forAGame: aGame.
 ]
 
 { #category : #'instance creation' }
@@ -54,27 +56,29 @@ Board >> cardsForGame [
 ]
 
 { #category : #'as yet unclassified' }
-Board >> change: aPosition for: distance [
-	| pos |
-	pos:= (aPosition absoluteLocation) +distance.
-	^(self generatePositionFor: aPosition at: pos).
+Board >> change: aPosition by: distance [
+	| newAbsolute newPosition|
+   newAbsolute:= (aPosition absoluteLocation) +distance.
+	newPosition:= (self generatePositionFor: aPosition at: newAbsolute).
+	self replacePosition: aPosition with: newPosition.
+   ^newPosition.
 		
 	
 		
 ]
 
 { #category : #'as yet unclassified' }
-Board >> change: aPosition using: distance playing: game [
-	|newPosition|
-	newPosition := self change: aPosition for: distance.
-	self replacePosition: aPosition  with: newPosition.
+Board >> changePositionOf: aPlayer by: distance playing: game [
+	|newPosition playerPosition|
+	playerPosition:= (positions select: [:position | position player= aPlayer ]) first.
+	newPosition := self change: playerPosition by: distance.
 	(game isFinished)
 			ifFalse: [self applyEffectFor: newPosition].
 ]
 
 { #category : #'as yet unclassified' }
-Board >> createPositionsFor: players [
-	positions:= players collect: [ :player | (Position of: player at: 0)].
+Board >> createPositions [
+	positions:= myPlayers collect: [ :player | (Position of: player at: 0 on: self)].
 ]
 
 { #category : #'as yet unclassified' }
@@ -94,13 +98,15 @@ Board >> generatePositionFor: aPosition at: absoluteLocation [
 ]
 
 { #category : #initialize }
-Board >> initializeWithBoxes: aCollectionOfBoxes [ 
+Board >> initializeWithBoxes: aCollectionOfBoxes andSomePlayers: somePlayers forAGame: aGame [
 	myBoxes := OrderedCollection new.
 	myBoxes := aCollectionOfBoxes.
 	myBoxes addFirst: (NoEffectBox new).
 	mySize := ( (myBoxes size)-1 ).
 	lastBoxUsed := (NoEffectBox new).
-	cardsForGame := OrderedCollection new. 
+	cardsForGame := OrderedCollection new.
+	myPlayers:= somePlayers.
+	myGame:=aGame.
 ]
 
 { #category : #'as yet unclassified' }
