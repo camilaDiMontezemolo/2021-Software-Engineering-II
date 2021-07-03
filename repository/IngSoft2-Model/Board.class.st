@@ -97,6 +97,21 @@ Board >> generatePositionFor: aPosition at: absoluteLocation [
 	^(Position of: (aPosition player) at: absoluteLocation).
 ]
 
+{ #category : #'as yet unclassified' }
+Board >> giveMeTheLapsOfThisPosition: absoluteLocation [.
+	^absoluteLocation//mySize.
+]
+
+{ #category : #'as yet unclassified' }
+Board >> giveMeTheLocationOfThisPosition: absoluteLocation [.
+	^absoluteLocation -((absoluteLocation//mySize)*mySize).
+]
+
+{ #category : #testing }
+Board >> hasAnyPlayerSurpassed: someLaps [
+	^(self positions) anySatisfy: [ :position | ((position absoluteLocation)//mySize) >= someLaps].
+]
+
 { #category : #initialize }
 Board >> initializeWithBoxes: aCollectionOfBoxes andSomePlayers: somePlayers forAGame: aGame [
 	myBoxes := OrderedCollection new.
@@ -107,6 +122,21 @@ Board >> initializeWithBoxes: aCollectionOfBoxes andSomePlayers: somePlayers for
 	cardsForGame := OrderedCollection new.
 	myPlayers:= somePlayers.
 	myGame:=aGame.
+]
+
+{ #category : #'as yet unclassified' }
+Board >> move: aPosition by: aDistance [
+	self replacePosition: aPosition 
+					with: (self generatePositionFor: aPosition at: (aPosition absoluteLocation)+aDistance).
+					
+]
+
+{ #category : #'as yet unclassified' }
+Board >> moveAllPlayersToFirstBoxSlot [
+	positions do: 
+	[:position |self replacePosition: position with:
+		( self generatePositionFor: position at: 
+			(self calculateNewLocationFor: position))].
 ]
 
 { #category : #'as yet unclassified' }
@@ -127,9 +157,4 @@ Board >> replacePosition: position with: newPosition [
 { #category : #'as yet unclassified' }
 Board >> resetBoxCards [
 	cardsForGame removeAll.
-]
-
-{ #category : #'as yet unclassified' }
-Board >> sizeOfBoard [
-	^mySize.
 ]

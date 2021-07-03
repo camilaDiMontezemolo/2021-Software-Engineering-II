@@ -74,7 +74,7 @@ PizzaGame >> initializeWithBoxes: someBoxes players: somePlayers dice: someDie l
 
 { #category : #'as yet unclassified' }
 PizzaGame >> isFinished [
-	^(myBoard positions) anySatisfy: [ :position | ((position absoluteLocation)//(myBoard sizeOfBoard)) >= myLaps].
+	^myBoard hasAnyPlayerSurpassed: myLaps.
 ]
 
 { #category : #'as yet unclassified' }
@@ -99,8 +99,7 @@ PizzaGame >> playTurnForAllPlayers [
 
 { #category : #'as yet unclassified' }
 PizzaGame >> ranking [
-	(myBoard positions) sort: [:position1 :position2 | position1 > position2].
-	^(myBoard positions).
+	^(myBoard positions) asSortedCollection: [:position1 :position2 | position1 > position2].
 ]
 
 { #category : #'as yet unclassified' }

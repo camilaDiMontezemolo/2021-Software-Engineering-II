@@ -158,9 +158,7 @@ CementerioDePizzas_Game_Tests >> testACardGeneratorShouldntBeAbleToGiveZeroCards
 
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> testADiceShouldHaveAtLeastOneSide [
-	| myDice block |
-	myDice := Dice withSides: 6.
-	self assert: (myDice sides) equals:6.
+	| block |
 	
 	block:= [Dice withSides: 0.].
 	self should: block raise: Error withMessage: 'Un dado no puede tener menos de 3 cara(s).'.
@@ -294,8 +292,8 @@ CementerioDePizzas_Game_Tests >> testCreateAGameMultiPlayer [
 	self assert: game isFinished.
 	self assert: game firstPlace player identicalTo: napolitana.
 	self assert: (ranking at: 1) player identicalTo: napolitana.
-	self assert: (ranking at: 2) player identicalTo: margarita.
-	self assert: (ranking at: 3) player identicalTo: mozzarella
+	self assert: (ranking at: 2) player identicalTo: mozzarella.
+	self assert: (ranking at: 3) player identicalTo: margarita
 ]
 
 { #category : #tests }
@@ -317,24 +315,6 @@ CementerioDePizzas_Game_Tests >> testCreateAGameSinglePlayer [
 	positions := game ranking.
 	self assert: (game isFinished).
 	self assert: (positions at:1) player identicalTo: napolitana.
-	
-]
-
-{ #category : #tests }
-CementerioDePizzas_Game_Tests >> testCreateAGameWithOnePlayerAnd10Boxes [
-
-	| myDie myPlayers myBoxes cards game |
-	
-	myDie := OrderedCollection with: (Dice withSides: 3).
-	
-	myPlayers:= (OrderedCollection with: #hawaiana).
-	
-	myBoxes:= BoxGenerator give: 10.
-	
-	cards := CardGenerator forPlayer: myPlayers give: 2.
-	game:=PizzaGame withBoxes: myBoxes players: myPlayers dice: myDie laps: 1 andCards: cards.
-	
-	self assert: (game board sizeOfBoard) equals: 10.
 	
 ]
 

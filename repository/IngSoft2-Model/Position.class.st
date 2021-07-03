@@ -52,12 +52,12 @@ Position >> isOfSamePlayerAs: anotherPosition [
 
 { #category : #initialize }
 Position >> lap [
-	^(absoluteLocation//(myBoard sizeOfBoard)).
+	^myBoard giveMeTheLapsOfThisPosition: absoluteLocation.
 ]
 
 { #category : #initialize }
 Position >> location [
-	^absoluteLocation -((absoluteLocation//(myBoard sizeOfBoard))*(myBoard sizeOfBoard)).
+	^myBoard giveMeTheLocationOfThisPosition: absoluteLocation.
 ]
 
 { #category : #initialize }

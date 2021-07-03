@@ -19,11 +19,6 @@ Dice >> initializeWithSides: aNumberOfSides [
 ]
 
 { #category : #'as yet unclassified' }
-Dice >> sides [
-	^sides.
-]
-
-{ #category : #'as yet unclassified' }
 Dice >> spin [
 	^(sides atRandom).
 ]
