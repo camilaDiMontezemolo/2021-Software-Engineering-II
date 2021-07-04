@@ -9,18 +9,17 @@ Class {
 
 { #category : #'as yet unclassified' }
 MoonWalkBox class >> loadedWith: aNumber [ 
-^self new initializeLoaded: aNumber.
+	(aNumber <1 ) ifTrue: [ Error signal: 'Un moonwalk no te puede tirar menos de 1 para atras.' ].
+	^self new initializeLoaded: aNumber.
 	
 ]
 
 { #category : #'as yet unclassified' }
 MoonWalkBox >> affect: positions triggeredOn: aPosition with: board [
 	| affectedPositions|
-	affectedPositions :=(positions  reject: [:position| position equals: aPosition]).
-	affectedPositions do: 
-	[:position |board replacePosition: position 
-					with: (board generatePositionFor: position at:(position absoluteLocation)-n)].
-
+	affectedPositions :=(positions reject: [:position| position isOfSamePlayerAs: aPosition]).
+	affectedPositions do: [:position |board move: position by: n].
+	
 ]
 
 { #category : #'as yet unclassified' }
@@ -30,5 +29,5 @@ MoonWalkBox >> initialize [
 
 { #category : #'as yet unclassified' }
 MoonWalkBox >> initializeLoaded: aNumber [.
-	n:= aNumber.
+	n:= 0-aNumber.
 ]

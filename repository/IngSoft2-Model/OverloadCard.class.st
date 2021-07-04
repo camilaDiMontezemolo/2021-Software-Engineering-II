@@ -16,8 +16,13 @@ OverloadCard class >> of: player on: anotherPlayer [
 ]
 
 { #category : #'as yet unclassified' }
-OverloadCard >> affected [
-	^affectedPlayer.
+OverloadCard >> active [
+	^active
+]
+
+{ #category : #'as yet unclassified' }
+OverloadCard >> affectedPlayer [
+	^affectedPlayer
 ]
 
 { #category : #'as yet unclassified' }
@@ -36,12 +41,17 @@ OverloadCard >> initializeWithPlayer: player andAffectedPlayer: anotherPlayer [
 	instant:= false.
 ]
 
-{ #category : #initialize }
+{ #category : #'as yet unclassified' }
 OverloadCard >> instant [
 	^instant.
 ]
 
 { #category : #initialize }
+OverloadCard >> isAnEmptyCard [
+	^false.
+]
+
+{ #category : #'as yet unclassified' }
 OverloadCard >> owner [
 	^owner.
 ]

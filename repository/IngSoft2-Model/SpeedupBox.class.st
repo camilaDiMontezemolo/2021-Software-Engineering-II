@@ -6,6 +6,6 @@ Class {
 
 { #category : #'as yet unclassified' }
 SpeedupBox >> affect: positions triggeredOn: aPosition with: board [ 
-	board replacePosition: aPosition 
-					with: (board generatePositionFor: aPosition at:(aPosition absoluteLocation)+4).
+	board move: aPosition by:4.
+
 ]

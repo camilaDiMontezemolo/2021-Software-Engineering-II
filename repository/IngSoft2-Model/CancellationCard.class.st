@@ -5,49 +5,58 @@ Class {
 		'owner',
 		'affectedPlayer',
 		'active',
-		'instant'
+		'instant',
+		'affectedCard'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
-CancellationCard class >> of: player on: anotherPlayer [
-	^self new initializeWithPlayer: player andAffectedPlayer: anotherPlayer.
+CancellationCard class >> of: player on: anotherCard [
+	anotherCard instant
+		ifTrue: [ Error signal: 'No se puede cancelar una carta instantanea.' ].
+	(anotherCard active) 
+	ifFalse: [ Error signal: 'No se puede cancelar una carta inactiva.' ].
+	^ self new initializeWithPlayer: player andAffectedCard: anotherCard
 ]
 
 { #category : #'as yet unclassified' }
-CancellationCard >> affected [
-	^affectedPlayer.
+CancellationCard >> active [
+	^active
+]
+
+{ #category : #'as yet unclassified' }
+CancellationCard >> affectedCard [
+	^affectedCard
 ]
 
 { #category : #'as yet unclassified' }
 CancellationCard >> applyEffectFrom: aDeck [ 
 	(active) 
 	ifTrue:[aDeck lastCardUsed:self.
-		aDeck removeCard: affectedPlayer.
-		aDeck removeCard: self.]
+		aDeck removeCard: affectedCard.]
 	ifFalse:[^0].
 ]
 
 { #category : #initialize }
-CancellationCard >> initializeWithPlayer: player andAffectedPlayer: anotherPlayer [ 
+CancellationCard >> initializeWithPlayer: player andAffectedCard: anotherCard [ 
 	owner :=player.
-	affectedPlayer :=anotherPlayer.
-	active := (affectedPlayer isNotNil).
+	affectedCard :=anotherCard.
+	active := (anotherCard isAnEmptyCard) not.
 	instant :=true.
 ]
 
-{ #category : #initialize }
+{ #category : #'as yet unclassified' }
 CancellationCard >> instant [
 	^instant.
 ]
 
-{ #category : #initialize }
+{ #category : #'as yet unclassified' }
 CancellationCard >> owner [
 	^owner.
 ]
 
 { #category : #'as yet unclassified' }
 CancellationCard >> usedOn: player [
-	^(player = affectedPlayer)
+	^(player = affectedCard)
 ]

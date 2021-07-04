@@ -16,8 +16,13 @@ SpeedUpCard class >> of: player on: affectedPlayer [
 ]
 
 { #category : #'as yet unclassified' }
-SpeedUpCard >> affected [
-	^affectedPlayer.
+SpeedUpCard >> active [
+	^active
+]
+
+{ #category : #initialize }
+SpeedUpCard >> affectedPlayer [
+	^affectedPlayer
 ]
 
 { #category : #'as yet unclassified' }
@@ -36,12 +41,17 @@ SpeedUpCard >> initializeWithPlayer: player andAffectedPlayer: anotherPlayer [
 	instant := false.
 ]
 
-{ #category : #initialize }
+{ #category : #'as yet unclassified' }
 SpeedUpCard >> instant [
 	^instant.
 ]
 
 { #category : #initialize }
+SpeedUpCard >> isAnEmptyCard [
+	^false.
+]
+
+{ #category : #'as yet unclassified' }
 SpeedUpCard >> owner [
 	^owner.
 ]

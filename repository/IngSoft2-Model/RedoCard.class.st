@@ -16,8 +16,13 @@ RedoCard class >> of: player on: anotherPlayer [
 ]
 
 { #category : #'as yet unclassified' }
-RedoCard >> affected [
-	^affectedPlayer.
+RedoCard >> active [
+	^active
+]
+
+{ #category : #'as yet unclassified' }
+RedoCard >> affectedPlayer [
+	^affectedPlayer
 ]
 
 { #category : #'as yet unclassified' }
@@ -32,16 +37,16 @@ RedoCard >> applyEffectFrom: aDeck [
 RedoCard >> initializeWithPlayer: player andAffectedPlayer: anotherPlayer [ 
 	owner :=player.
 	affectedPlayer :=anotherPlayer.
-	active := (affectedPlayer isNotEmpty).
+	active := (affectedPlayer isNotNil).
 	instant := true.
 ]
 
-{ #category : #initialize }
+{ #category : #'as yet unclassified' }
 RedoCard >> instant [
 	^instant.
 ]
 
-{ #category : #initialize }
+{ #category : #'as yet unclassified' }
 RedoCard >> owner [
 	^owner.
 ]
@@ -50,7 +55,7 @@ RedoCard >> owner [
 RedoCard >> redoPreviousCardEffect: aDeck [
 	|newCard|
 	newCard := aDeck redoTheLastCardUsed: affectedPlayer.
-	aDeck replace: self with: newCard.
+	aDeck addCards: (OrderedCollection with: newCard).
 	^newCard applyEffectFrom: aDeck
 ]
 
