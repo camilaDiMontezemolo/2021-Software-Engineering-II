@@ -16,6 +16,16 @@ RedoCard class >> of: player on: anotherPlayer [
 ]
 
 { #category : #'as yet unclassified' }
+RedoCard >> active [
+	^active
+]
+
+{ #category : #'as yet unclassified' }
+RedoCard >> affectedPlayer [
+	^affectedPlayer
+]
+
+{ #category : #'as yet unclassified' }
 RedoCard >> applyEffectFrom: aDeck [
 	active
 		ifTrue:
@@ -29,6 +39,16 @@ RedoCard >> initializeWithPlayer: player andAffectedPlayer: anotherPlayer [
 	affectedPlayer :=anotherPlayer.
 	active := (affectedPlayer isNotNil).
 	instant := true.
+]
+
+{ #category : #'as yet unclassified' }
+RedoCard >> instant [
+	^instant.
+]
+
+{ #category : #'as yet unclassified' }
+RedoCard >> owner [
+	^owner.
 ]
 
 { #category : #'as yet unclassified' }

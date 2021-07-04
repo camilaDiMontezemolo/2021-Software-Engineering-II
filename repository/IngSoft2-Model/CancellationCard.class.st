@@ -21,6 +21,16 @@ CancellationCard class >> of: player on: anotherCard [
 ]
 
 { #category : #'as yet unclassified' }
+CancellationCard >> active [
+	^active
+]
+
+{ #category : #'as yet unclassified' }
+CancellationCard >> affectedCard [
+	^affectedCard
+]
+
+{ #category : #'as yet unclassified' }
 CancellationCard >> applyEffectFrom: aDeck [ 
 	(active) 
 	ifTrue:[aDeck lastCardUsed:self.
@@ -34,6 +44,16 @@ CancellationCard >> initializeWithPlayer: player andAffectedCard: anotherCard [
 	affectedCard :=anotherCard.
 	active := (anotherCard isAnEmptyCard) not.
 	instant :=true.
+]
+
+{ #category : #'as yet unclassified' }
+CancellationCard >> instant [
+	^instant.
+]
+
+{ #category : #'as yet unclassified' }
+CancellationCard >> owner [
+	^owner.
 ]
 
 { #category : #'as yet unclassified' }

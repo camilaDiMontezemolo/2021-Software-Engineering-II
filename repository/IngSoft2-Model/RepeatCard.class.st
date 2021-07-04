@@ -16,6 +16,16 @@ RepeatCard class >> of: player on: anotherPlayer [
 ]
 
 { #category : #'as yet unclassified' }
+RepeatCard >> active [
+	^active
+]
+
+{ #category : #'as yet unclassified' }
+RepeatCard >> affectedPlayer [
+	^affectedPlayer
+]
+
+{ #category : #'as yet unclassified' }
 RepeatCard >> applyEffectFrom: aDeck [
 	active
 		ifTrue:
@@ -30,6 +40,16 @@ RepeatCard >> initializeWithPlayer: player andAffectedPlayer: anotherPlayer [
 	affectedPlayer :=anotherPlayer.
 	active := (affectedPlayer isNotEmpty).
 	instant := true.
+]
+
+{ #category : #'as yet unclassified' }
+RepeatCard >> instant [
+	^instant.
+]
+
+{ #category : #'as yet unclassified' }
+RepeatCard >> owner [
+	^owner.
 ]
 
 { #category : #'as yet unclassified' }

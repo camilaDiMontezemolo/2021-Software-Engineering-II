@@ -16,6 +16,16 @@ OverloadCard class >> of: player on: anotherPlayer [
 ]
 
 { #category : #'as yet unclassified' }
+OverloadCard >> active [
+	^active
+]
+
+{ #category : #'as yet unclassified' }
+OverloadCard >> affectedPlayer [
+	^affectedPlayer
+]
+
+{ #category : #'as yet unclassified' }
 OverloadCard >> applyEffectFrom: aDeck [ 
 	(active) 
 	ifTrue:[aDeck lastCardUsed: self.
@@ -31,9 +41,19 @@ OverloadCard >> initializeWithPlayer: player andAffectedPlayer: anotherPlayer [
 	instant:= false.
 ]
 
+{ #category : #'as yet unclassified' }
+OverloadCard >> instant [
+	^instant.
+]
+
 { #category : #initialize }
 OverloadCard >> isAnEmptyCard [
 	^false.
+]
+
+{ #category : #'as yet unclassified' }
+OverloadCard >> owner [
+	^owner.
 ]
 
 { #category : #'as yet unclassified' }
