@@ -11,10 +11,16 @@ Class {
 
 { #category : #'as yet unclassified' }
 CardGenerator class >> forPlayer: testPlayers give: aNumberOfCards [
-	((testPlayers size) < 1 ) ifTrue: [ Error signal: 'Un deck no puede tener menos de 1 jugadores.' ].
-	(aNumberOfCards < 1 ) ifTrue: [ Error signal: 'Un deck no puede tener menos de 1 carta.' ].
-	^self new initializeWithPlayers: testPlayers and: aNumberOfCards.
+	self validatePlayers: testPlayers andNumberOfCards: aNumberOfCards.
+	^ self new initializeWithPlayers: testPlayers and: aNumberOfCards
+]
 
+{ #category : #'as yet unclassified' }
+CardGenerator class >> validatePlayers: testPlayers andNumberOfCards: aNumberOfCards [
+	testPlayers size < 1
+		ifTrue: [ Error signal: 'Un deck no puede tener menos de 1 jugadores.' ].
+	aNumberOfCards < 1
+		ifTrue: [ Error signal: 'Un deck no puede tener menos de 1 carta.' ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -29,7 +35,7 @@ CardGenerator >> distributeCardsFor: onePlayer [
 		with: (RepeatCard of: onePlayer on: '') with:(SpeedUpCard of: onePlayer on: '').
 	
 	randomCards := randomCards shuffled.
-	temporalHand add: (randomCards at: 1).
+	temporalHand add: (randomCards first).
 
 ]
 

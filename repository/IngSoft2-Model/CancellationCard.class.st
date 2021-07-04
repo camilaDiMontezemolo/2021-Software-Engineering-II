@@ -3,6 +3,7 @@ Class {
 	#superclass : #Card,
 	#instVars : [
 		'owner',
+		'affectedPlayer',
 		'active',
 		'instant',
 		'affectedCard'
@@ -33,16 +34,6 @@ CancellationCard >> initializeWithPlayer: player andAffectedCard: anotherCard [
 	affectedCard :=anotherCard.
 	active := (anotherCard isAnEmptyCard) not.
 	instant :=true.
-]
-
-{ #category : #initialize }
-CancellationCard >> instant [
-	^instant.
-]
-
-{ #category : #initialize }
-CancellationCard >> owner [
-	^owner.
 ]
 
 { #category : #'as yet unclassified' }

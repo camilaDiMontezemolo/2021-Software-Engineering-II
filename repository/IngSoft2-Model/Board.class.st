@@ -19,12 +19,6 @@ Board class >> withBoxes: aCollectionOfBoxes andSomePlayers: somePlayers forAGam
 	^self new initializeWithBoxes: aCollectionOfBoxes andSomePlayers: somePlayers forAGame: aGame.
 ]
 
-{ #category : #'instance creation' }
-Board class >> withSize: aSize [
-	(aSize < 1 ) ifTrue: [ Error signal: 'Un tablero no puede tener menos de 1 casillero.' ].
-	^self new initializeWithSize: aSize.
-]
-
 { #category : #'as yet unclassified' }
 Board >> applyEffectFor: aPosition [
 	| box |
@@ -36,7 +30,7 @@ Board >> applyEffectFor: aPosition [
 { #category : #'as yet unclassified' }
 Board >> applyLastTypeOfBoxFor: aPlayer [ 
 	| positionOfPlayer |
-	positionOfPlayer := (self findPositionOfPlayer: aPlayer) at:1.
+	positionOfPlayer := self findPositionOfPlayer: aPlayer.
 	lastBoxUsed affect: positions triggeredOn: positionOfPlayer with: self. 
 ]
 
@@ -89,12 +83,12 @@ Board >> findBoxFor: aPosition [
 
 { #category : #'as yet unclassified' }
 Board >> findPositionOfPlayer: aPlayer [
-	^(positions select: [: position| (position player)=aPlayer])
+	^(positions select: [: position| (position player)=aPlayer]) first.
 ]
 
 { #category : #'as yet unclassified' }
 Board >> generatePositionFor: aPosition at: absoluteLocation [
-	^(Position of: (aPosition player) at: absoluteLocation).
+	^(Position of: (aPosition player) at: absoluteLocation on: self).
 ]
 
 { #category : #'as yet unclassified' }
@@ -140,7 +134,7 @@ Board >> moveAllPlayersToFirstBoxSlot [
 ]
 
 { #category : #'as yet unclassified' }
-Board >> newCardswereAdded: newCards [
+Board >> newCardsWereAdded: newCards [
 	cardsForGame:= newCards. 
 ]
 

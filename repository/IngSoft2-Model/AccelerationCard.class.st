@@ -16,11 +16,6 @@ AccelerationCard class >> of: player on: affectedPlayer [
 ]
 
 { #category : #'as yet unclassified' }
-AccelerationCard >> active [
-	^ active
-]
-
-{ #category : #'as yet unclassified' }
 AccelerationCard >> applyEffectFrom: aDeck [ 
 	(active) 
 	ifTrue:[aDeck lastCardUsed: self.
@@ -36,19 +31,9 @@ AccelerationCard >> initializeWithPlayer: player andAffectedPlayer: anotherPlaye
 	instant:=false.
 ]
 
-{ #category : #initialize }
-AccelerationCard >> instant [
-	^instant.
-]
-
 { #category : #'as yet unclassified' }
 AccelerationCard >> isAnEmptyCard [
 	^false.
-]
-
-{ #category : #initialize }
-AccelerationCard >> owner [
-	^owner.
 ]
 
 { #category : #'as yet unclassified' }

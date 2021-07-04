@@ -16,7 +16,7 @@ CardBoxLoaded class >> loadedWith: someCards [
 CardBoxLoaded >> affect: positions triggeredOn: aPosition with: board [ 
 	| newCards |
 	newCards:= loadedCards.
-	board newCardswereAdded: newCards.
+	board newCardsWereAdded: newCards.
 
 ]
 

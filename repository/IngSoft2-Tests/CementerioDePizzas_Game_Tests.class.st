@@ -54,6 +54,26 @@ CementerioDePizzas_Game_Tests >> testABoardShouldHaveMoreThanCeroPlayers [
 ]
 
 { #category : #tests }
+CementerioDePizzas_Game_Tests >> testABoardShouldHaveMoreThanZeroBoxes [
+
+    |  myDie block cards|
+
+    myDie := OrderedCollection with: (Dice withSides: 3).
+    cards := CardGenerator forPlayer: (OrderedCollection with: #Margarita) give: 2.
+
+    block:= [ PizzaGame
+        withBoxes: OrderedCollection new
+        players: (OrderedCollection with: #Margarita)
+        dice: myDie
+        laps: 1
+        andCards: cards.
+        ].
+
+    self should: block raise: Error withMessage: 'Un juego no puede tener menos de 1 casillero.'.
+		
+]
+
+{ #category : #tests }
 CementerioDePizzas_Game_Tests >> testACardBoxGivesCards [
 	| game myDie ranking testPlayers myBoxes cards cardBox |
 	cardBox := CardBoxLoaded
@@ -316,14 +336,6 @@ CementerioDePizzas_Game_Tests >> testCreateAGameSinglePlayer [
 	self assert: (game isFinished).
 	self assert: (positions at:1) player identicalTo: napolitana.
 	
-]
-
-{ #category : #tests }
-CementerioDePizzas_Game_Tests >> testCreateAPosition [
-	|myPosition anAbsoluteLocation |
-	anAbsoluteLocation := 20.
-	myPosition := Position of: #napolitana at: anAbsoluteLocation.
-	self assert: (myPosition absoluteLocation) equals:20.
 ]
 
 { #category : #tests }
@@ -755,17 +767,4 @@ CementerioDePizzas_Game_Tests >> testUseAnOverloadCardAndEndUpWithNegativeNumber
 	 
 	
 	
-]
-
-{ #category : #tests }
-CementerioDePizzas_Game_Tests >> testaBoardShouldHaveMoreThanCeroBoxes [
-
-	| block kindOfError errorMessage|
-	
-	
-	block := [ Board withSize:0.].
-	kindOfError := Error.
-	errorMessage := 'Un tablero no puede tener menos de 1 casillero.'.
-	
-	self should: block raise: kindOfError withMessage: errorMessage.
 ]

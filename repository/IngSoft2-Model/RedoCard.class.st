@@ -31,16 +31,6 @@ RedoCard >> initializeWithPlayer: player andAffectedPlayer: anotherPlayer [
 	instant := true.
 ]
 
-{ #category : #initialize }
-RedoCard >> instant [
-	^instant.
-]
-
-{ #category : #initialize }
-RedoCard >> owner [
-	^owner.
-]
-
 { #category : #'as yet unclassified' }
 RedoCard >> redoPreviousCardEffect: aDeck [
 	|newCard|

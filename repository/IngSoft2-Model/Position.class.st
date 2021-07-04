@@ -12,11 +12,6 @@ Class {
 }
 
 { #category : #instanceCreation }
-Position class >> of: aPlayer at: anAbsoluteLocation [
-	^self new initializeWith: aPlayer at: anAbsoluteLocation.
-]
-
-{ #category : #instanceCreation }
 Position class >> of: aPlayer at: anAbsoluteLocation on: aBoard [
 	^self new initializeWith: aPlayer at: anAbsoluteLocation on: aBoard.
 ]
@@ -30,12 +25,6 @@ Position >> > otherPosition [
 { #category : #initialize }
 Position >> absoluteLocation [
 	^absoluteLocation.
-]
-
-{ #category : #initialization }
-Position >> initializeWith: aPlayer at: anAbsoluteLocation [
-	myPlayer := aPlayer.
-	absoluteLocation := anAbsoluteLocation.
 ]
 
 { #category : #initialization }

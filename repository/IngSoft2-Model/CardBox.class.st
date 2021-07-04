@@ -9,6 +9,6 @@ CardBox >> affect: positions triggeredOn: aPosition with: board [
 	| playerWhoGetsTheCard newCards |
 	playerWhoGetsTheCard := OrderedCollection with: (aPosition player).
 	newCards:= CardGenerator forPlayer: playerWhoGetsTheCard give: 1.
-	board newCardswereAdded: newCards.
+	board newCardsWereAdded: newCards.
 
 ]

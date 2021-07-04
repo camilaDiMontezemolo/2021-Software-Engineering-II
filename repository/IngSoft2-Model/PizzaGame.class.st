@@ -15,12 +15,26 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+PizzaGame class >> validateLaps: someLaps boxes: someBoxes players: somePlayers andDice: someDice [
+	somePlayers isEmpty
+		ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 jugador.' ].
+	someDice isEmpty
+		ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 dado.' ].
+	someLaps < 1
+		ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 vuelta.' ].
+	someBoxes size < 1
+		ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 casillero.' ]
+]
+
+{ #category : #'as yet unclassified' }
 PizzaGame class >> withBoxes: someBoxes players: somePlayers dice: someDice laps: someLaps andCards: initialCards [
-	(somePlayers isEmpty ) ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 jugador.' ].
-	(someDice isEmpty ) ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 dado.' 	].
-	(someLaps <1 ) ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 vuelta.' ].
-	((someBoxes size) <1 ) ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 casillero.' ].
-	^self new initializeWithBoxes: someBoxes players: somePlayers dice: someDice laps: someLaps andCards: initialCards.
+	self
+		validateLaps: someLaps
+		boxes: someBoxes
+		players: somePlayers
+		andDice: someDice.
+	^ self new
+		initializeWithBoxes: someBoxes players: somePlayers dice: someDice laps: someLaps andCards: initialCards
 ]
 
 { #category : #'as yet unclassified' }
@@ -57,7 +71,7 @@ PizzaGame >> findLastTypeOfBoxForPlayer: aPlayer [
 
 { #category : #'as yet unclassified' }
 PizzaGame >> firstPlace [
-	^self ranking at: 1.
+	^self ranking first.
 ]
 
 { #category : #initialize }

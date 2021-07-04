@@ -32,16 +32,6 @@ RepeatCard >> initializeWithPlayer: player andAffectedPlayer: anotherPlayer [
 	instant := true.
 ]
 
-{ #category : #initialize }
-RepeatCard >> instant [
-	^instant.
-]
-
-{ #category : #initialize }
-RepeatCard >> owner [
-	^owner.
-]
-
 { #category : #'as yet unclassified' }
 RepeatCard >> usedOn: player [
 	^(player = affectedPlayer)

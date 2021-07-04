@@ -10,9 +10,14 @@ Class {
 
 { #category : #'as yet unclassified' }
 BoxGenerator class >> give: aSize [
-	(aSize < 1 ) ifTrue: [ Error signal: 'Un tablero no puede tener menos de 1 casillero.' ].
-	^self new initializeWithSize: aSize.
+	self validateSize: aSize.
+	^ self new initializeWithSize: aSize
+]
 
+{ #category : #'as yet unclassified' }
+BoxGenerator class >> validateSize: aSize [
+	aSize < 1
+		ifTrue: [ Error signal: 'Un tablero no puede tener menos de 1 casillero.' ]
 ]
 
 { #category : #'as yet unclassified' }

@@ -16,11 +16,6 @@ SpeedUpCard class >> of: player on: affectedPlayer [
 ]
 
 { #category : #'as yet unclassified' }
-SpeedUpCard >> active [
-	^ active
-]
-
-{ #category : #'as yet unclassified' }
 SpeedUpCard >> applyEffectFrom: aDeck [ 
 	(active) 
 	ifTrue:[aDeck lastCardUsed:(self).
@@ -37,18 +32,8 @@ SpeedUpCard >> initializeWithPlayer: player andAffectedPlayer: anotherPlayer [
 ]
 
 { #category : #initialize }
-SpeedUpCard >> instant [
-	^instant.
-]
-
-{ #category : #initialize }
 SpeedUpCard >> isAnEmptyCard [
 	^false.
-]
-
-{ #category : #initialize }
-SpeedUpCard >> owner [
-	^owner.
 ]
 
 { #category : #'as yet unclassified' }
