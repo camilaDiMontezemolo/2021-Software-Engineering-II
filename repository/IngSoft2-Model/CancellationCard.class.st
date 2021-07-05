@@ -51,6 +51,13 @@ CancellationCard >> instant [
 	^instant.
 ]
 
+{ #category : #testing }
+CancellationCard >> isAssignedTo: onePlayer [
+	owner :=onePlayer.
+	active := (affectedCard isAnEmptyCard) not.
+	instant :=true.
+]
+
 { #category : #'as yet unclassified' }
 CancellationCard >> owner [
 	^owner.

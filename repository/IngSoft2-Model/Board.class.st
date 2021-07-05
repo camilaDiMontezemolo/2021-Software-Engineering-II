@@ -92,6 +92,11 @@ Board >> generatePositionFor: aPosition at: absoluteLocation [
 ]
 
 { #category : #'as yet unclassified' }
+Board >> getACardFor: playerWhoGetsTheCard [
+	myGame getACardFor: playerWhoGetsTheCard.
+]
+
+{ #category : #'as yet unclassified' }
 Board >> giveMeTheLapsOfThisPosition: absoluteLocation [.
 	^absoluteLocation//mySize.
 ]

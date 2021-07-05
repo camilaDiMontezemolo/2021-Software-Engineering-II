@@ -8,8 +8,9 @@ Class {
 		'myPositions',
 		'myDice',
 		'myCards',
-		'myDeck',
-		'currentTurn'
+		'currentTurn',
+		'myCardManager',
+		'myDeck'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -38,8 +39,11 @@ PizzaGame class >> withBoxes: someBoxes players: somePlayers dice: someDice laps
 ]
 
 { #category : #'as yet unclassified' }
-PizzaGame >> applyCard: card to: affectedPlayer [
-	myDeck assignCard: card to: affectedPlayer with: (myPlayers at: currentTurn).
+PizzaGame >> applyCard: theIndexOfCard to: affectedPlayer [
+	myCardManager assignCard: theIndexOfCard to: affectedPlayer with: (myPlayers at: currentTurn).
+
+"applyCard: card to: affectedPlayer
+	myCardManager assignCard: card to: affectedPlayer with: (myPlayers at: currentTurn)."
 	
 	
 	
@@ -59,7 +63,7 @@ PizzaGame >> changeTurn [
 { #category : #'as yet unclassified' }
 PizzaGame >> collectCardsFromrBoxes [
 	((myBoard cardsForGame) isEmpty)
-	ifFalse: [ myDeck addCards: myBoard cardsForGame.].
+	ifFalse: [ myCardManager addCards: myBoard cardsForGame.].
 	myBoard resetBoxCards.
 
 ]
@@ -74,6 +78,11 @@ PizzaGame >> firstPlace [
 	^self ranking first.
 ]
 
+{ #category : #'as yet unclassified' }
+PizzaGame >> getACardFor: playerWhoGetsTheCard [
+	myCardManager handOutASingleCardFor: playerWhoGetsTheCard.
+]
+
 { #category : #initialize }
 PizzaGame >> initializeWithBoxes: someBoxes players: somePlayers dice: someDie laps: someLaps andDeck: deck [
 	myBoard:=Board withBoxes: someBoxes andSomePlayers: somePlayers forAGame: self.
@@ -83,8 +92,9 @@ PizzaGame >> initializeWithBoxes: someBoxes players: somePlayers dice: someDie l
 	myDice:=someDie.
 	myLaps:=someLaps.
 	currentTurn:=1.
-	"myDeck := deck."
-	myDeck := CardManager with: deck in: self.
+	myDeck := deck.
+	myCardManager := CardManager with: deck in: self.
+	myCardManager handOutInitialCardsFor: somePlayers.
 ]
 
 { #category : #'as yet unclassified' }
@@ -122,6 +132,6 @@ PizzaGame >> rollFor: aPlayer [
 	| distance |
 	distance := 0.
 	myDice do: [ :dice | distance := distance + dice spin ].
-	distance:= distance + (myDeck modifyDistanceOf: aPlayer).
+	distance:= distance + (myCardManager modifyDistanceOf: aPlayer).
 	myBoard changePositionOf: aPlayer by: distance playing: self.
 ]

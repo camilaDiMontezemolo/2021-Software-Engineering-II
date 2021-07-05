@@ -51,6 +51,13 @@ OverloadCard >> isAnEmptyCard [
 	^false.
 ]
 
+{ #category : #testing }
+OverloadCard >> isAssignedTo: onePlayer [
+	owner :=onePlayer.
+	active := (affectedPlayer isNotEmpty).
+	instant:= false.
+]
+
 { #category : #'as yet unclassified' }
 OverloadCard >> owner [
 	^owner.

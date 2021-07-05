@@ -51,6 +51,13 @@ SpeedUpCard >> isAnEmptyCard [
 	^false.
 ]
 
+{ #category : #initialize }
+SpeedUpCard >> isAssignedTo: onePlayer [
+	owner := onePlayer.
+	active := (affectedPlayer isNotEmpty).
+	instant := false.
+]
+
 { #category : #'as yet unclassified' }
 SpeedUpCard >> owner [
 	^owner.

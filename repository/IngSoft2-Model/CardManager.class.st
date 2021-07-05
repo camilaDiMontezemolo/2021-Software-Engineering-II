@@ -2,10 +2,12 @@ Class {
 	#name : #CardManager,
 	#superclass : #Object,
 	#instVars : [
-		'cards',
 		'lastCardUsed',
 		'cardRegister',
-		'myGame'
+		'myGame',
+		'myDeck',
+		'dealtCards',
+		'usedCards'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -17,21 +19,31 @@ CardManager class >> with: initialCards in: aGame [
 
 { #category : #'as yet unclassified' }
 CardManager >> addCards: myNewCards [
-	cards addAll: myNewCards.
+	dealtCards addAll: myNewCards.
 ]
 
 { #category : #'as yet unclassified' }
-CardManager >> assignCard: card to: affectedPlayer with: currentTurnPlayer [
+CardManager >> assign: aCard to: onePlayer [
 	| newCard |
-	newCard := self
-		createNewCard: card
-		withAffectedPlayer: affectedPlayer.
+	newCard := self createNewCard: aCard withOwner: onePlayer.
+	dealtCards add: newCard.
+	
+]
+
+{ #category : #'as yet unclassified' }
+CardManager >> assignCard: theIndexOfCard to: affectedPlayer with: currentTurnPlayer [
+	| newCard card |
+	card := self getCardFrom: currentTurnPlayer at: theIndexOfCard.
+	newCard := self createNewCard: card withAffectedPlayer: affectedPlayer.
 	newCard instant
 		ifTrue: [ self replaceInstantCard: card withCard: newCard ]
 		ifFalse: [ self
 				checkMplayerOf: card
 				withCurrentTurn: currentTurnPlayer
 				generating: newCard ]
+			
+		
+"	myCardManager assignCard: theIndexOfCard to: affectedPlayer with: (myPlayers at: currentTurn)."
 ]
 
 { #category : #'as yet unclassified' }
@@ -48,8 +60,18 @@ CardManager >> createNewCard: card withAffectedPlayer: aPlayer [
 ]
 
 { #category : #'as yet unclassified' }
+CardManager >> createNewCard: card withOwner: aPlayer [ 
+	^(card class of: aPlayer on:'').
+]
+
+{ #category : #'as yet unclassified' }
 CardManager >> findCardsAffecting: player [
-	^cards select: [:card| card usedOn: player].
+	^usedCards select: [:card| card usedOn: player].
+]
+
+{ #category : #'as yet unclassified' }
+CardManager >> findCardsBelonging: player [
+	^dealtCards select: [:card| card owner = player].
 ]
 
 { #category : #'as yet unclassified' }
@@ -57,10 +79,49 @@ CardManager >> findLastTypeOfBoxForPlayer: aPlayer [
 	myGame findLastTypeOfBoxForPlayer: aPlayer.
 ]
 
+{ #category : #'as yet unclassified' }
+CardManager >> getCardFrom: currentTurnPlayer at: theIndexOfCard [
+	| theirHand intendedCardToUse |
+	theirHand := self findCardsBelonging: currentTurnPlayer. 
+	(theirHand size < theIndexOfCard) ifTrue: [ Error signal: 'Usted No tiene tantas cartas.' ].
+	intendedCardToUse := theirHand at: theIndexOfCard.
+	"dealtCards remove: intendedCardToUse ifAbsent: [ Error signal: 'Esta carta no se encuentra.']."
+	^intendedCardToUse
+
+]
+
+{ #category : #'as yet unclassified' }
+CardManager >> giveACardTo: onePlayer [
+	| newCard |
+	newCard := myDeck drawACard.
+	self assign: newCard to: onePlayer.
+]
+
+{ #category : #'as yet unclassified' }
+CardManager >> handOutASingleCardFor: thePlayerOfThisTurn [
+	self giveACardTo: thePlayerOfThisTurn.
+
+"Lo malo de que existe giveACardTo es que tecnicamente puedo darme una carta desde fuera del juego, lo que rompe el enclapsulamiento. Quizas es mejor ELIMINAR este metodo y hacer todo dentro del do? el problema de eso es que queda feo"
+]
+
+{ #category : #'as yet unclassified' }
+CardManager >> handOutInitialCardsFor: thePlayersOfThisGame [
+	| n |
+	n:=0.
+	thePlayersOfThisGame do:
+		[ :onePlayer | [n<2] whileTrue: [self giveACardTo: onePlayer.
+		n:= n+1.]
+	].
+
+"Lo malo de que existe giveACardTo es que tecnicamente puedo darme una carta desde fuera del juego, lo que rompe el enclapsulamiento. Quizas es mejor ELIMINAR este metodo y hacer todo dentro del do? el problema de eso es que queda feo"
+]
+
 { #category : #initialize }
-CardManager >> initializeWithCards: initialCards in: aGame [
-	cards:= initialCards.
+CardManager >> initializeWithCards: initialDeck in: aGame [
+	myDeck := initialDeck.
 	myGame := aGame.
+	dealtCards := OrderedCollection new.
+	usedCards := OrderedCollection new.
 ]
 
 { #category : #'as yet unclassified' }
@@ -84,12 +145,14 @@ CardManager >> redoTheLastCardUsed: aPlayer [
 
 { #category : #'as yet unclassified' }
 CardManager >> removeCard: aCard [
-	cards remove: aCard ifAbsent: [ Error signal: 'No se puede cancelar una carta que no está en deck'].
+	dealtCards remove: aCard ifAbsent: [ Error signal: 'No se puede cancelar una carta que no está en deck'].
 ]
 
 { #category : #'as yet unclassified' }
 CardManager >> replace: card with: newCard [  
-	cards at: (cards indexOf: card) put: newCard.
+	"dealtCards at: (dealtCards indexOf: card) put: newCard."
+	usedCards add: newCard.
+	dealtCards remove: card.
 ]
 
 { #category : #'as yet unclassified' }

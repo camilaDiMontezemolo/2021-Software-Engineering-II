@@ -6,9 +6,14 @@ Class {
 
 { #category : #'as yet unclassified' }
 CardBox >> affect: positions triggeredOn: aPosition with: board [ 
-	| playerWhoGetsTheCard newCards |
-	playerWhoGetsTheCard := OrderedCollection with: (aPosition player).
+	| playerWhoGetsTheCard |
+	playerWhoGetsTheCard := (aPosition player).
+	board getACardFor: playerWhoGetsTheCard.
+	
+	
+	
+	"cardManager handOutASingleCardFor: playerWhoGetsTheCard
 	newCards:= DeckGenerator forPlayer: playerWhoGetsTheCard give: 1.
-	board newCardsWereAdded: newCards.
+	board newCardsWereAdded: newCards."
 
 ]
