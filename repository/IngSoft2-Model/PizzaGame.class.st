@@ -83,6 +83,16 @@ PizzaGame >> getACardFor: playerWhoGetsTheCard [
 	myCardManager handOutASingleCardFor: playerWhoGetsTheCard.
 ]
 
+{ #category : #'as yet unclassified' }
+PizzaGame >> getCards: player [ 
+	^(myCardManager getUsedCardsOf: player).
+]
+
+{ #category : #'as yet unclassified' }
+PizzaGame >> getPlayerHand: player [ 
+	^(myCardManager findCardsBelonging: player).
+]
+
 { #category : #initialize }
 PizzaGame >> initializeWithBoxes: someBoxes players: somePlayers dice: someDie laps: someLaps andDeck: deck [
 	myBoard:=Board withBoxes: someBoxes andSomePlayers: somePlayers forAGame: self.
@@ -120,6 +130,17 @@ PizzaGame >> playNextTurn [
 { #category : #'as yet unclassified' }
 PizzaGame >> playTurnForAllPlayers [
 	myPlayers do: [:player | self playNextTurn ].
+]
+
+{ #category : #'as yet unclassified' }
+PizzaGame >> player: player wantsToApplyCard: card to: target [
+	((myPlayers at: currentTurn) = player| (card class = CancellationCard))
+	ifTrue:[
+	myCardManager assignCard: card to: target with: player.]
+	ifFalse:[
+		Error signal: 'Un jugador no puede tirar una carta fuera de su turno.'
+	]
+	
 ]
 
 { #category : #'as yet unclassified' }

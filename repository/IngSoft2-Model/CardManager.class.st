@@ -23,17 +23,15 @@ CardManager >> addCards: myNewCards [
 ]
 
 { #category : #'as yet unclassified' }
-CardManager >> assign: aCard to: onePlayer [
+CardManager >> assign: aCard to: onePlayer [ 
 	| newCard |
 	newCard := self createNewCard: aCard withOwner: onePlayer.
 	dealtCards add: newCard.
-	
 ]
 
 { #category : #'as yet unclassified' }
-CardManager >> assignCard: theIndexOfCard to: affectedPlayer with: currentTurnPlayer [
-	| newCard card |
-	card := self getCardFrom: currentTurnPlayer at: theIndexOfCard.
+CardManager >> assignCard: card to: affectedPlayer with: currentTurnPlayer [
+	| newCard |
 	newCard := self createNewCard: card withAffectedPlayer: affectedPlayer.
 	newCard instant
 		ifTrue: [ self replaceInstantCard: card withCard: newCard ]
@@ -60,8 +58,10 @@ CardManager >> createNewCard: card withAffectedPlayer: aPlayer [
 ]
 
 { #category : #'as yet unclassified' }
-CardManager >> createNewCard: card withOwner: aPlayer [ 
-	^(card class of: aPlayer on:'').
+CardManager >> createNewCard: card withOwner: aPlayer [
+	((card class) = CancellationCard)
+	ifTrue:[^(card class of: aPlayer on: EmptyCard new).]
+	ifFalse:[^(card class of: aPlayer on:'').]
 ]
 
 { #category : #'as yet unclassified' }
@@ -91,6 +91,11 @@ CardManager >> getCardFrom: currentTurnPlayer at: theIndexOfCard [
 ]
 
 { #category : #'as yet unclassified' }
+CardManager >> getUsedCardsOf: player [
+	^usedCards select: [:card| card owner = player].
+]
+
+{ #category : #'as yet unclassified' }
 CardManager >> giveACardTo: onePlayer [
 	| newCard |
 	newCard := myDeck drawACard.
@@ -110,7 +115,8 @@ CardManager >> handOutInitialCardsFor: thePlayersOfThisGame [
 	n:=0.
 	thePlayersOfThisGame do:
 		[ :onePlayer | [n<2] whileTrue: [self giveACardTo: onePlayer.
-		n:= n+1.]
+		n:= n+1.].
+		n:=0.
 	].
 
 "Lo malo de que existe giveACardTo es que tecnicamente puedo darme una carta desde fuera del juego, lo que rompe el enclapsulamiento. Quizas es mejor ELIMINAR este metodo y hacer todo dentro del do? el problema de eso es que queda feo"
@@ -145,7 +151,7 @@ CardManager >> redoTheLastCardUsed: aPlayer [
 
 { #category : #'as yet unclassified' }
 CardManager >> removeCard: aCard [
-	dealtCards remove: aCard ifAbsent: [ Error signal: 'No se puede cancelar una carta que no está en deck'].
+	usedCards remove: aCard ifAbsent: [ Error signal: 'No se puede cancelar una carta que no está en deck'].
 ]
 
 { #category : #'as yet unclassified' }
@@ -159,5 +165,5 @@ CardManager >> replace: card with: newCard [
 CardManager >> replaceInstantCard: card withCard: newCard [
 	self replace: card with: newCard.
 	newCard applyEffectFrom: self.
-	self removeCard: newCard
+	self removeCard: newCard.
 ]

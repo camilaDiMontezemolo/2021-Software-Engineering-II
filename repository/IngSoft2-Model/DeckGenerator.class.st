@@ -54,7 +54,8 @@ DeckGenerator >> distributeCardsFor: onePlayer [
 		with: (CancellationCard of: onePlayer on: emptyCard) 
 		with: (OverloadCard of: onePlayer on: '') 
 		with: (RedoCard of: onePlayer on: '') 
-		with: (RepeatCard of: onePlayer on: '') with:(SpeedUpCard of: onePlayer on: '').
+		with: (RepeatCard of: onePlayer on: '') 
+		with:(SpeedUpCard of: onePlayer on: '').
 	
 	randomCards := randomCards shuffled.
 	temporalHand add: (randomCards first).
