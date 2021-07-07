@@ -95,7 +95,7 @@ CementerioDePizzas_Game_Tests >> testACardBoxGivesCards [
 	game := PizzaGame withBoxes: myBoxes players: testPlayers dice: myDie laps: 1 andDeck: deck.
 		
 	game playTurnForAllPlayers.
-	napolitanaHand := game getPlayerHand: #napolitana.
+	napolitanaHand := game playerHand: #napolitana.
 	game player: #napolitana wantsToApplyCard: (napolitanaHand at: 3) to: #napolitana.
 	game playTurnForAllPlayers.
 	ranking := game ranking.
@@ -375,10 +375,10 @@ CementerioDePizzas_Game_Tests >> testUseACancelationCardOnASpeedupCard [
 	myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
 	game := PizzaGame withBoxes: myBoxes players: testPlayers dice: myDie laps: 1 andDeck: deck.
 	game playNextTurn.
-	napolitanaHand := game getPlayerHand: #napolitana.
-	margaritaHand := game getPlayerHand: #margarita.
+	napolitanaHand := game playerHand: #napolitana.
+	margaritaHand := game playerHand: #margarita.
 	game player: #margarita wantsToApplyCard: (margaritaHand at: 1) to: #margarita.
-	margaritaCards := game getCards: #margarita.
+	margaritaCards := game usedCards: #margarita.
 	game player: #napolitana wantsToApplyCard: (napolitanaHand at: 1) to: (margaritaCards first).
 	game playNextTurn.
 	self assert: ((game ranking) second) absoluteLocation equals: 2.
@@ -412,10 +412,10 @@ CementerioDePizzas_Game_Tests >> testUseACancelationCardOnAnAccelerationCard [
 	myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
 	game := PizzaGame withBoxes: myBoxes players: testPlayers dice: myDie laps: 1 andDeck: deck.
 	game playNextTurn.
-	napolitanaHand := game getPlayerHand: #napolitana.
-	margaritaHand := game getPlayerHand: #margarita.
+	napolitanaHand := game playerHand: #napolitana.
+	margaritaHand := game playerHand: #margarita.
 	game applyCard: (margaritaHand at: 1) to: testPlayers.
-	margaritaCards := game getCards: #margarita.
+	margaritaCards := game usedCards: #margarita.
 	game applyCard: (napolitanaHand at: 1) to: (margaritaCards at: 1). 
 	game playNextTurn.
 	self assert: ((game ranking) second) absoluteLocation equals: 2.
@@ -445,8 +445,8 @@ CementerioDePizzas_Game_Tests >> testUseACancelationCardOnAnInactiveCardRaiseErr
 	myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
 	game := PizzaGame withBoxes: myBoxes players: testPlayers dice: myDie laps: 1 andDeck: deck.
 	game playNextTurn.
-	napolitanaHand := game getPlayerHand: #napolitana.
-	margaritaHand := game getPlayerHand: #margarita.
+	napolitanaHand := game playerHand: #napolitana.
+	margaritaHand := game playerHand: #margarita.
 
 	block:=[game applyCard: (napolitanaHand at: 1) to: (margaritaHand at: 1).].
 	self should: block raise: Error withMessage: 'No se puede cancelar una carta inactiva.'

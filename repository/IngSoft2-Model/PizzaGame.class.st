@@ -83,16 +83,6 @@ PizzaGame >> getACardFor: playerWhoGetsTheCard [
 	myCardManager handOutASingleCardFor: playerWhoGetsTheCard.
 ]
 
-{ #category : #'as yet unclassified' }
-PizzaGame >> getCards: player [ 
-	^(myCardManager getUsedCardsOf: player).
-]
-
-{ #category : #'as yet unclassified' }
-PizzaGame >> getPlayerHand: player [ 
-	^(myCardManager findCardsBelonging: player).
-]
-
 { #category : #initialize }
 PizzaGame >> initializeWithBoxes: someBoxes players: somePlayers dice: someDie laps: someLaps andDeck: deck [
 	myBoard:=Board withBoxes: someBoxes andSomePlayers: somePlayers forAGame: self.
@@ -144,6 +134,11 @@ PizzaGame >> player: player wantsToApplyCard: card to: target [
 ]
 
 { #category : #'as yet unclassified' }
+PizzaGame >> playerHand: player [ 
+	^(myCardManager findCardsBelonging: player).
+]
+
+{ #category : #'as yet unclassified' }
 PizzaGame >> ranking [
 	^(myBoard positions) asSortedCollection: [:position1 :position2 | position1 > position2].
 ]
@@ -155,4 +150,9 @@ PizzaGame >> rollFor: aPlayer [
 	myDice do: [ :dice | distance := distance + dice spin ].
 	distance:= distance + (myCardManager modifyDistanceOf: aPlayer).
 	myBoard changePositionOf: aPlayer by: distance playing: self.
+]
+
+{ #category : #'as yet unclassified' }
+PizzaGame >> usedCards: player [ 
+	^(myCardManager usedCardsOf: player).
 ]

@@ -10,10 +10,5 @@ CardBox >> affect: positions triggeredOn: aPosition with: board [
 	playerWhoGetsTheCard := (aPosition player).
 	board getACardFor: playerWhoGetsTheCard.
 	
-	
-	
-	"cardManager handOutASingleCardFor: playerWhoGetsTheCard
-	newCards:= DeckGenerator forPlayer: playerWhoGetsTheCard give: 1.
-	board newCardsWereAdded: newCards."
 
 ]

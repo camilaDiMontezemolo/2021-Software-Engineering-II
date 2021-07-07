@@ -80,22 +80,6 @@ CardManager >> findLastTypeOfBoxForPlayer: aPlayer [
 ]
 
 { #category : #'as yet unclassified' }
-CardManager >> getCardFrom: currentTurnPlayer at: theIndexOfCard [
-	| theirHand intendedCardToUse |
-	theirHand := self findCardsBelonging: currentTurnPlayer. 
-	(theirHand size < theIndexOfCard) ifTrue: [ Error signal: 'Usted No tiene tantas cartas.' ].
-	intendedCardToUse := theirHand at: theIndexOfCard.
-	"dealtCards remove: intendedCardToUse ifAbsent: [ Error signal: 'Esta carta no se encuentra.']."
-	^intendedCardToUse
-
-]
-
-{ #category : #'as yet unclassified' }
-CardManager >> getUsedCardsOf: player [
-	^usedCards select: [:card| card owner = player].
-]
-
-{ #category : #'as yet unclassified' }
 CardManager >> giveACardTo: onePlayer [
 	| newCard |
 	newCard := myDeck drawACard.
@@ -156,7 +140,6 @@ CardManager >> removeCard: aCard [
 
 { #category : #'as yet unclassified' }
 CardManager >> replace: card with: newCard [  
-	"dealtCards at: (dealtCards indexOf: card) put: newCard."
 	usedCards add: newCard.
 	dealtCards remove: card.
 ]
@@ -166,4 +149,9 @@ CardManager >> replaceInstantCard: card withCard: newCard [
 	self replace: card with: newCard.
 	newCard applyEffectFrom: self.
 	self removeCard: newCard.
+]
+
+{ #category : #'as yet unclassified' }
+CardManager >> usedCardsOf: player [
+	^usedCards select: [:card| card owner = player].
 ]
