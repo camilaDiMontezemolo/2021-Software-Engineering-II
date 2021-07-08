@@ -63,7 +63,7 @@ PizzaGame >> changeTurn [
 { #category : #'as yet unclassified' }
 PizzaGame >> collectCardsFromrBoxes [
 	((myBoard cardsForGame) isEmpty)
-	ifFalse: [ myCardManager addCards: myBoard cardsForGame.].
+	ifFalse: [ myCardManager addCardFromRedoCard: myBoard cardsForGame.].
 	myBoard resetBoxCards.
 
 ]
@@ -124,7 +124,7 @@ PizzaGame >> playTurnForAllPlayers [
 
 { #category : #'as yet unclassified' }
 PizzaGame >> player: player wantsToApplyCard: card to: target [
-	((myPlayers at: currentTurn) = player| (card class = CancellationCard))
+	((myPlayers at: currentTurn) = player| (card instant))
 	ifTrue:[
 	myCardManager assignCard: card to: target with: player.]
 	ifFalse:[
@@ -153,6 +153,6 @@ PizzaGame >> rollFor: aPlayer [
 ]
 
 { #category : #'as yet unclassified' }
-PizzaGame >> usedCards: player [ 
-	^(myCardManager usedCardsOf: player).
+PizzaGame >> usedCards [
+	^(myCardManager usedCards)
 ]

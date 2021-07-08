@@ -18,8 +18,9 @@ CardManager class >> with: initialCards in: aGame [
 ]
 
 { #category : #'as yet unclassified' }
-CardManager >> addCards: myNewCards [
-	dealtCards addAll: myNewCards.
+CardManager >> addCardFromRedoCard: newCards [
+	usedCards add: newCards.
+	"dealtCards addAll: myNewCards."
 ]
 
 { #category : #'as yet unclassified' }
@@ -117,6 +118,7 @@ CardManager >> initializeWithCards: initialDeck in: aGame [
 { #category : #'as yet unclassified' }
 CardManager >> lastCardUsed: newCard [
 	lastCardUsed:= newCard.
+	
 ]
 
 { #category : #'as yet unclassified' }
@@ -129,8 +131,8 @@ CardManager >> modifyDistanceOf: player [
 ]
 
 { #category : #'as yet unclassified' }
-CardManager >> redoTheLastCardUsed: aPlayer [ 
-	^(lastCardUsed class) of: aPlayer on: aPlayer.
+CardManager >> redoTheLastCardUsedBy:owner for: affectedPlayer [
+	^((lastCardUsed class) of: owner on: affectedPlayer).
 ]
 
 { #category : #'as yet unclassified' }
@@ -152,6 +154,6 @@ CardManager >> replaceInstantCard: card withCard: newCard [
 ]
 
 { #category : #'as yet unclassified' }
-CardManager >> usedCardsOf: player [
-	^usedCards select: [:card| card owner = player].
+CardManager >> usedCards [
+	^usedCards
 ]

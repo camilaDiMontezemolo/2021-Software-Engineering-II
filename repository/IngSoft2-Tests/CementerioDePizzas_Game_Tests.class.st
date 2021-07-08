@@ -106,7 +106,7 @@ CementerioDePizzas_Game_Tests >> testACardBoxGivesCards [
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> testACardCanNotBeUsedOutsideYourTurn [
 	
-	| myBoxes testPlayers myDie game cards block|
+	| myBoxes testPlayers myDie game cards block napolitanaCards |
 	
 	myBoxes := OrderedCollection 
 		with: NoEffectBox new 
@@ -128,7 +128,8 @@ CementerioDePizzas_Game_Tests >> testACardCanNotBeUsedOutsideYourTurn [
 	myDie := OrderedCollection with: (LoadedDice withTosses: #(1)).
 	game := PizzaGame 	withBoxes: myBoxes players: testPlayers dice: myDie laps: 1 andDeck: cards.
 	game playTurnForAllPlayers.
-	block:= [game player: #napolitana wantsToApplyCard: 1 to: testPlayers.].
+	napolitanaCards := game playerHand: #napolitana.
+	block:= [game player: #napolitana wantsToApplyCard: (napolitanaCards first) to: testPlayers.].
 	self should: block raise: Error withMessage: 'Un jugador no puede tirar una carta fuera de su turno.'
 ]
 
@@ -355,7 +356,7 @@ CementerioDePizzas_Game_Tests >> testCreateARandomMultiPlayerGame [
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> testUseACancelationCardOnASpeedupCard [
 	
-	| myBoxes testPlayers myDie game cards deck margaritaCards napolitanaHand margaritaHand |
+	| myBoxes testPlayers myDie game cards deck napolitanaHand margaritaHand usedCards |
 
 	myBoxes := OrderedCollection 
 		with: NoEffectBox new 
@@ -378,8 +379,8 @@ CementerioDePizzas_Game_Tests >> testUseACancelationCardOnASpeedupCard [
 	napolitanaHand := game playerHand: #napolitana.
 	margaritaHand := game playerHand: #margarita.
 	game player: #margarita wantsToApplyCard: (margaritaHand at: 1) to: #margarita.
-	margaritaCards := game usedCards: #margarita.
-	game player: #napolitana wantsToApplyCard: (napolitanaHand at: 1) to: (margaritaCards first).
+	usedCards := game usedCards.
+	game player: #napolitana wantsToApplyCard: (napolitanaHand at: 1) to: (usedCards first).
 	game playNextTurn.
 	self assert: ((game ranking) second) absoluteLocation equals: 2.
 	self assert: ((game ranking) first) absoluteLocation equals: 2.
@@ -391,10 +392,8 @@ CementerioDePizzas_Game_Tests >> testUseACancelationCardOnASpeedupCard [
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> testUseACancelationCardOnAnAccelerationCard [
 	
-	| myBoxes testPlayers myDie game cards emptyCard deck napolitanaHand margaritaHand margaritaCards |
+	| myBoxes testPlayers myDie game cards deck napolitanaHand margaritaHand usedCards |
 	
-	emptyCard := EmptyCard new.
-
 	myBoxes := OrderedCollection 
 		with: NoEffectBox new 
 		with: NoEffectBox new
@@ -412,11 +411,11 @@ CementerioDePizzas_Game_Tests >> testUseACancelationCardOnAnAccelerationCard [
 	myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
 	game := PizzaGame withBoxes: myBoxes players: testPlayers dice: myDie laps: 1 andDeck: deck.
 	game playNextTurn.
-	napolitanaHand := game playerHand: #napolitana.
 	margaritaHand := game playerHand: #margarita.
-	game applyCard: (margaritaHand at: 1) to: testPlayers.
-	margaritaCards := game usedCards: #margarita.
-	game applyCard: (napolitanaHand at: 1) to: (margaritaCards at: 1). 
+	game player: #margarita wantsToApplyCard: (margaritaHand first) to: testPlayers.
+	usedCards := game usedCards.
+	napolitanaHand := game playerHand: #napolitana.
+	game applyCard: (napolitanaHand first) to: (usedCards first). 
 	game playNextTurn.
 	self assert: ((game ranking) second) absoluteLocation equals: 2.
 	self assert: ((game ranking) first) absoluteLocation equals: 2.
@@ -448,7 +447,7 @@ CementerioDePizzas_Game_Tests >> testUseACancelationCardOnAnInactiveCardRaiseErr
 	napolitanaHand := game playerHand: #napolitana.
 	margaritaHand := game playerHand: #margarita.
 
-	block:=[game applyCard: (napolitanaHand at: 1) to: (margaritaHand at: 1).].
+	block:=[game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: (margaritaHand first).].
 	self should: block raise: Error withMessage: 'No se puede cancelar una carta inactiva.'
 
 	
@@ -457,7 +456,7 @@ CementerioDePizzas_Game_Tests >> testUseACancelationCardOnAnInactiveCardRaiseErr
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> testUseACancelationCardOnAnInstantCardRaiseAnError [
 	
-	| myBoxes testPlayers myDie game cards emptyCard block deck |
+	| myBoxes testPlayers myDie game cards emptyCard block deck napolitanaCards margaritaCards |
 	
 	myBoxes := OrderedCollection 
 		with: NoEffectBox new 
@@ -466,15 +465,18 @@ CementerioDePizzas_Game_Tests >> testUseACancelationCardOnAnInstantCardRaiseAnEr
 		with: NoEffectBox new.
 	emptyCard := EmptyCard new.
 	cards := OrderedCollection
-		with: (CancellationCard of: #napolitana on: emptyCard)
-		with: (CancellationCard of: #margarita on: emptyCard).
+		with: CancellationCard new
+		with: OverloadCard new
+		with: CancellationCard new
+		with: OverloadCard new.
 	deck := Deck withCards: cards. 	
 	testPlayers := OrderedCollection with: #napolitana with: #margarita.
 	myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
 	game := PizzaGame withBoxes: myBoxes players: testPlayers dice: myDie laps: 1 andDeck: deck.
-	game playNextTurn.
+	napolitanaCards := game playerHand: #napolitana.
+	margaritaCards := game playerHand: #margarita.
 	 
-	block:=[game applyCard: cards first to: cards second.].
+	block:=[game player: #napolitana wantsToApplyCard: (napolitanaCards first) to: (margaritaCards first).].
 	self should: block raise: Error withMessage: 'No se puede cancelar una carta instantanea.'
 
 	
@@ -483,7 +485,7 @@ CementerioDePizzas_Game_Tests >> testUseACancelationCardOnAnInstantCardRaiseAnEr
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> testUseACancelationCardOnAnOverloadCard [
 	
-	| myBoxes testPlayers myDie game cards emptyCard deck |
+	| myBoxes testPlayers myDie game cards emptyCard deck margaritaHand napolitanaHand usedCards |
 	
 	emptyCard := EmptyCard new.
 
@@ -494,15 +496,20 @@ CementerioDePizzas_Game_Tests >> testUseACancelationCardOnAnOverloadCard [
 		with: NoEffectBox new.
 		
 	cards := OrderedCollection
-		with: (CancellationCard of: #napolitana on:emptyCard)
-		with: (OverloadCard of: #margarita on: '').
+		with: CancellationCard new
+		with: OverloadCard new
+		with: OverloadCard new
+		with: OverloadCard new.
 	deck := Deck withCards: cards. 	
 	testPlayers := OrderedCollection with: #napolitana with: #margarita.
 	myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
 	game := PizzaGame withBoxes: myBoxes players: testPlayers dice: myDie laps: 1 andDeck: deck.
 	game playNextTurn.
-	game applyCard: cards second to: #margarita.
-	game applyCard: cards first to: cards second. 
+	margaritaHand := game playerHand: #margarita.
+	napolitanaHand := game playerHand: #napolitana.
+	game applyCard: (margaritaHand first) to: #margarita.
+	usedCards := game usedCards.
+	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: (usedCards first). 
 	game playNextTurn.
 	self assert: ((game ranking) second) absoluteLocation equals: 2.
 	self assert: ((game ranking) first) absoluteLocation equals: 2.
@@ -514,7 +521,7 @@ CementerioDePizzas_Game_Tests >> testUseACancelationCardOnAnOverloadCard [
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> testUseARedoCard [
 	
-	| myBoxes testPlayers myDie game cards deck |
+	| myBoxes testPlayers myDie game cards deck margaritaHand napolitanaHand |
 
     myBoxes := OrderedCollection 
         with: NoEffectBox new 
@@ -523,15 +530,24 @@ CementerioDePizzas_Game_Tests >> testUseARedoCard [
         with: NoEffectBox new.
 
     cards := OrderedCollection
-        with: (SpeedUpCard of: #margarita on:#margarita)
-        with: (RedoCard of: #napolitana on: #napolitana).
+		with: SpeedUpCard new
+		with: OverloadCard new
+		with: RedoCard new
+		with: OverloadCard new.
 	deck := Deck withCards: cards. 
-    testPlayers := OrderedCollection with:#margarita with: #napolitana.
-    myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
-    game := PizzaGame withBoxes: myBoxes players: testPlayers dice: myDie laps: 1 andDeck: deck.
-    game playTurnForAllPlayers.
+   testPlayers := OrderedCollection with:#margarita with: #napolitana.
+   myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
+   game := PizzaGame withBoxes: myBoxes players: testPlayers dice: myDie laps: 1 andDeck: deck.
+	margaritaHand := game playerHand: #margarita.
+	napolitanaHand := game playerHand: #napolitana.
+	game player: #margarita wantsToApplyCard: (margaritaHand first) to: #margarita.
+   game playNextTurn.
 
-    self assert: ((game ranking) second) absoluteLocation equals: 3.
+	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: #napolitana.
+	game playNextTurn.
+	
+	self assert: ((game ranking) first) absoluteLocation equals: 3.
+	self assert: ((game ranking) second) absoluteLocation equals: 3.
 	 
 	
 	
@@ -540,7 +556,7 @@ CementerioDePizzas_Game_Tests >> testUseARedoCard [
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> testUseARedoCardOverCancelation [
 	
-	| myBoxes testPlayers myDie game cards cardOne cardTwo cardThree cardFour emptyCard deck |
+	| myBoxes testPlayers myDie game cards deck margaritaHand napolitanaHand usedCards |
 	
 	myBoxes := OrderedCollection 
 		with: NoEffectBox new
@@ -549,23 +565,23 @@ CementerioDePizzas_Game_Tests >> testUseARedoCardOverCancelation [
 		with: NoEffectBox new
 		with: NoEffectBox new 
 		with: NoEffectBox new.
-	emptyCard := EmptyCard new.	
-	cardOne :=SpeedUpCard of: #margarita on:#margarita.
-	cardTwo := SpeedUpCard of: #margarita on:#margarita.
-	cardThree := CancellationCard of:#napolitana on:emptyCard.
-	cardFour := RedoCard of: #napolitana on: ''.
 	
 	cards := OrderedCollection
-		with: cardOne
-		with: cardTwo
-		with: cardThree
-		with: cardFour.
+		with: SpeedUpCard new
+		with: SpeedUpCard new
+		with: CancellationCard new
+		with: RedoCard new.
 	deck := Deck withCards: cards. 
 	testPlayers := OrderedCollection with:#margarita with: #napolitana.
 	myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
 	game := PizzaGame withBoxes: myBoxes players: testPlayers dice: myDie laps: 10 andDeck: deck.
-	game applyCard: (cardThree) to: (cardOne). 
-	game applyCard: (cardFour) to: (cardTwo). 
+	margaritaHand := game playerHand: #margarita.
+	napolitanaHand := game playerHand: #napolitana.
+	game player: #margarita wantsToApplyCard: (margaritaHand first) to: #margarita.
+	game player: #margarita wantsToApplyCard: (margaritaHand second) to: #margarita.
+	usedCards := game usedCards.
+	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: (usedCards second).
+	game player: #napolitana wantsToApplyCard: (napolitanaHand second) to: (usedCards first).
 	game playTurnForAllPlayers.
 	
 	self assert: ((game ranking) second) absoluteLocation equals: 2.
@@ -578,7 +594,7 @@ CementerioDePizzas_Game_Tests >> testUseARedoCardOverCancelation [
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> testUseARepeatCard [
 	
-	| myBoxes testPlayers myDie game cards deck |
+	| myBoxes testPlayers myDie game cards deck napolitanaHand |
 	
 	myBoxes := OrderedCollection 
 		with: SpeedupBox new
@@ -589,13 +605,17 @@ CementerioDePizzas_Game_Tests >> testUseARepeatCard [
 		with: NoEffectBox new.
 		
 	cards := OrderedCollection
-		with: (RepeatCard of: #napolitana on: '').
+		with: OverloadCard new
+		with: OverloadCard new
+		with: RepeatCard new
+		with: OverloadCard new.
 	deck := Deck withCards: cards. 	
 	testPlayers := OrderedCollection with:#margarita with: #napolitana.
 	myDie := OrderedCollection with: (LoadedDice withTosses: #(1)).
 	game := PizzaGame withBoxes: myBoxes players: testPlayers dice: myDie laps: 1 andDeck: deck.
 	game playNextTurn.
-	game applyCard: cards first to: #napolitana. 
+	napolitanaHand := game playerHand: #napolitana.
+	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: #napolitana.
 	
 	self assert: ((game ranking) first) absoluteLocation equals: 5.
 	self assert: ((game ranking) second) absoluteLocation equals: 4.
@@ -607,7 +627,7 @@ CementerioDePizzas_Game_Tests >> testUseARepeatCard [
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> testUseARepeatCardWhenNoDieWasRolledYet [
 	
-	| myBoxes testPlayers myDie game cards deck |
+	| myBoxes testPlayers myDie game cards deck margaritaHand |
 	
 	myBoxes := OrderedCollection 
 		with: SpeedupBox new
@@ -618,12 +638,16 @@ CementerioDePizzas_Game_Tests >> testUseARepeatCardWhenNoDieWasRolledYet [
 		with: NoEffectBox new.
 		
 	cards := OrderedCollection
-		with: (RepeatCard of: #napolitana on: '').
+		with: RepeatCard new
+		with: OverloadCard new
+		with: OverloadCard new
+		with: OverloadCard new.
 	deck := Deck withCards: cards. 
 	testPlayers := OrderedCollection with:#margarita with: #napolitana.
 	myDie := OrderedCollection with: (LoadedDice withTosses: #(1)).
 	game := PizzaGame withBoxes: myBoxes players: testPlayers dice: myDie laps: 1 andDeck: deck.
-	game applyCard: cards first to: #napolitana. 
+	margaritaHand := game playerHand: #margarita.
+	game player: #margarita wantsToApplyCard: (margaritaHand first) to: #margarita.
 	
 	self assert: ((game ranking) first) absoluteLocation equals: 0.
 	self assert: ((game ranking) second) absoluteLocation equals: 0.
@@ -635,7 +659,7 @@ CementerioDePizzas_Game_Tests >> testUseARepeatCardWhenNoDieWasRolledYet [
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> testUseASpeedUpCard [
 	
-	| myBoxes testPlayers myDie game cards rankingOne deck |
+	| myBoxes testPlayers myDie game cards rankingOne deck napolitanaHand |
 	
 	myBoxes := OrderedCollection 
 		with: NoEffectBox new 
@@ -644,17 +668,18 @@ CementerioDePizzas_Game_Tests >> testUseASpeedUpCard [
 		with: NoEffectBox new.
 		
 	cards := OrderedCollection
-		with: (SpeedUpCard of: #napolitana on: '').
+		with: SpeedUpCard new
+		with: OverloadCard new.
 	deck := Deck withCards: cards. 	
 	testPlayers := OrderedCollection with: #napolitana.
 	myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
 	game := PizzaGame withBoxes: myBoxes players: testPlayers dice: myDie laps: 1 andDeck: deck.
-	game applyCard: (cards at:1) to: #napolitana.
+	napolitanaHand := game playerHand: #napolitana.
+	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: #napolitana.
 	game playTurnForAllPlayers.
 	rankingOne:= game ranking.
 	
 	self assert: (rankingOne first) absoluteLocation equals: 3.
-	self assert: cards size equals: 1.
 	 
 	
 	
@@ -663,7 +688,7 @@ CementerioDePizzas_Game_Tests >> testUseASpeedUpCard [
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> testUseASpeedUpCardOnTwoRounds [
 	
-	| myBoxes testPlayers myDie game cards rankingTwo deck |
+	| myBoxes testPlayers myDie game cards rankingTwo deck napolitanaHand |
 	
 	myBoxes := OrderedCollection 
 		with: NoEffectBox new 
@@ -672,12 +697,14 @@ CementerioDePizzas_Game_Tests >> testUseASpeedUpCardOnTwoRounds [
 		with: NoEffectBox new.
 		
 	cards := OrderedCollection
-		with: (SpeedUpCard of: #napolitana on: '').
+		with: SpeedUpCard new
+		with: OverloadCard new.
 	deck := Deck withCards: cards. 
 	testPlayers := OrderedCollection with: #napolitana.
 	myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
 	game := PizzaGame withBoxes: myBoxes players: testPlayers dice: myDie laps: 1 andDeck: deck.
-	game applyCard: (cards at:1) to: #napolitana.
+	napolitanaHand := game playerHand: #napolitana.
+	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: #napolitana.
 	game playTurnForAllPlayers.
 	game playTurnForAllPlayers.
 	rankingTwo:= game ranking.
@@ -724,7 +751,7 @@ CementerioDePizzas_Game_Tests >> testUseAnAccelerationCard [
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> testUseAnOverloadCard [
 	
-	| myBoxes testPlayers myDie game cards deck |
+	| myBoxes testPlayers myDie game cards deck margaritaHand |
 	
 	myBoxes := OrderedCollection 
 		with: NoEffectBox new 
@@ -732,13 +759,17 @@ CementerioDePizzas_Game_Tests >> testUseAnOverloadCard [
 		with: NoEffectBox new 
 		with: NoEffectBox new.
 		
-	cards := OrderedCollection with: (OverloadCard of: #napolitana on: '').
+	cards := OrderedCollection 
+		with: OverloadCard new
+		with: OverloadCard new
+		with: OverloadCard new
+		with: OverloadCard new.
 	deck := Deck withCards: cards. 
-	testPlayers := OrderedCollection with: #napolitana with: #margarita.
+	testPlayers := OrderedCollection with: #margarita with: #napolitana.
 	myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
 	game := PizzaGame withBoxes: myBoxes players: testPlayers dice: myDie laps: 1 andDeck: deck.
-	game applyCard: cards first to: #margarita. 
-	self assert: (cards first) owner equals: #napolitana.
+	margaritaHand := game playerHand: #margarita.
+	game player: #margarita wantsToApplyCard: (margaritaHand first) to: #napolitana.
 	game playNextTurn.
 	game playNextTurn.
 	self assert: ((game ranking) second) absoluteLocation equals: 0.
@@ -751,7 +782,7 @@ CementerioDePizzas_Game_Tests >> testUseAnOverloadCard [
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> testUseAnOverloadCardAndEndUpWithNegativeNumbers [
 	
-	| myBoxes testPlayers myDie game cards deck |
+	| myBoxes testPlayers myDie game cards deck napolitanaHand |
 	
 	myBoxes := OrderedCollection 
 		with: NoEffectBox new 
@@ -760,12 +791,16 @@ CementerioDePizzas_Game_Tests >> testUseAnOverloadCardAndEndUpWithNegativeNumber
 		with: NoEffectBox new.
 		
 	cards := OrderedCollection
-		with: (OverloadCard of: #napolitana on: '').
+		with: OverloadCard new
+		with: OverloadCard new
+		with: OverloadCard new
+		with: OverloadCard new.
 	deck := Deck withCards: cards. 	
 	testPlayers := OrderedCollection with: #napolitana with: #margarita.
 	myDie := OrderedCollection with: (LoadedDice withTosses: #(1)).
 	game := PizzaGame withBoxes: myBoxes players: testPlayers dice: myDie laps: 1 andDeck: deck.
-	game applyCard: cards first to: #margarita. 
+	napolitanaHand := game playerHand: #napolitana.
+	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: #napolitana.
 	game playNextTurn.
 	game playNextTurn.
 	self assert: ((game ranking) second) absoluteLocation equals: -1.
