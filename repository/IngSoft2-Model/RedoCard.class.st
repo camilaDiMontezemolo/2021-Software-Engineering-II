@@ -46,13 +46,6 @@ RedoCard >> instant [
 	^instant.
 ]
 
-{ #category : #testing }
-RedoCard >> isAssignedTo: onePlayer [
-	owner :=onePlayer.
-	active := (affectedPlayer isNotNil).
-	instant := true.
-]
-
 { #category : #'as yet unclassified' }
 RedoCard >> owner [
 	^owner.

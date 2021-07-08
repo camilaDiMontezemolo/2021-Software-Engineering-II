@@ -61,14 +61,6 @@ PizzaGame >> changeTurn [
 ]
 
 { #category : #'as yet unclassified' }
-PizzaGame >> collectCardsFromrBoxes [
-	((myBoard cardsForGame) isEmpty)
-	ifFalse: [ myCardManager addCardFromRedoCard: myBoard cardsForGame.].
-	myBoard resetBoxCards.
-
-]
-
-{ #category : #'as yet unclassified' }
 PizzaGame >> findLastTypeOfBoxForPlayer: aPlayer [
 	myBoard applyLastTypeOfBoxFor: aPlayer.
 ]
@@ -114,7 +106,6 @@ PizzaGame >> playNextTurn [
 		ifTrue: [ ^ self ].
 	self rollFor: (myPlayers at: currentTurn).
 	self changeTurn.
-	self collectCardsFromrBoxes.
 ]
 
 { #category : #'as yet unclassified' }

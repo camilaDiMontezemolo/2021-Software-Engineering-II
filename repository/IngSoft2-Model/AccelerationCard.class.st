@@ -51,13 +51,6 @@ AccelerationCard >> isAnEmptyCard [
 	^false.
 ]
 
-{ #category : #testing }
-AccelerationCard >> isAssignedTo: onePlayer [
-	owner :=onePlayer.
-	active := (affectedPlayer isNotEmpty).
-	instant:=false.
-]
-
 { #category : #accessing }
 AccelerationCard >> owner [
 	^owner.

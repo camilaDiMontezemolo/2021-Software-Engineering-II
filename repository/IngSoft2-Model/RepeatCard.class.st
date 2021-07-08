@@ -47,13 +47,6 @@ RepeatCard >> instant [
 	^instant.
 ]
 
-{ #category : #initialize }
-RepeatCard >> isAssignedTo: onePlayer [
-	owner :=onePlayer.
-	active := (affectedPlayer isNotEmpty).
-	instant:=true.
-]
-
 { #category : #'as yet unclassified' }
 RepeatCard >> owner [
 	^owner.

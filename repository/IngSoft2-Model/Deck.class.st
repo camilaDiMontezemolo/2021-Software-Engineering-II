@@ -11,24 +11,11 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-Deck class >> forPlayer: testPlayers give: aNumberOfCards [
-	self validatePlayers: testPlayers andNumberOfCards: aNumberOfCards.
-	^ self new initializeWithPlayers: testPlayers and: aNumberOfCards
-]
-
-{ #category : #'as yet unclassified' }
-Deck class >> validatePlayers: testPlayers andNumberOfCards: aNumberOfCards [
-	testPlayers size < 1
-		ifTrue: [ Error signal: 'Un deck no puede tener menos de 1 jugadores.' ].
-	aNumberOfCards < 1
-		ifTrue: [ Error signal: 'Un deck no puede tener menos de 1 carta.' ]
-]
-
-{ #category : #'as yet unclassified' }
 Deck class >> withCards: aCollectionOfCards [
+(aCollectionOfCards size) < 1
+		ifTrue: [ Error signal: 'Un deck no puede tener menos de 1 carta.' ].
 	^ self new initializeWithCards: aCollectionOfCards
 	
-"falta hacer el validate, eliminar los 2 de arriba"
 ]
 
 { #category : #'as yet unclassified' }

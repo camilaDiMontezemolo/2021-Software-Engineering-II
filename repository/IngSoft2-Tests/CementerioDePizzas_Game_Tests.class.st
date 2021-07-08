@@ -456,14 +456,13 @@ CementerioDePizzas_Game_Tests >> testUseACancelationCardOnAnInactiveCardRaiseErr
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> testUseACancelationCardOnAnInstantCardRaiseAnError [
 	
-	| myBoxes testPlayers myDie game cards emptyCard block deck napolitanaCards margaritaCards |
+	| myBoxes testPlayers myDie game cards block deck napolitanaCards margaritaCards |
 	
 	myBoxes := OrderedCollection 
 		with: NoEffectBox new 
 		with: NoEffectBox new
 		with: NoEffectBox new 
 		with: NoEffectBox new.
-	emptyCard := EmptyCard new.
 	cards := OrderedCollection
 		with: CancellationCard new
 		with: OverloadCard new
@@ -485,9 +484,7 @@ CementerioDePizzas_Game_Tests >> testUseACancelationCardOnAnInstantCardRaiseAnEr
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> testUseACancelationCardOnAnOverloadCard [
 	
-	| myBoxes testPlayers myDie game cards emptyCard deck margaritaHand napolitanaHand usedCards |
-	
-	emptyCard := EmptyCard new.
+	| myBoxes testPlayers myDie game cards deck margaritaHand napolitanaHand usedCards |
 
 	myBoxes := OrderedCollection 
 		with: NoEffectBox new 
