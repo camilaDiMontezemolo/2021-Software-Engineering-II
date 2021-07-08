@@ -718,7 +718,7 @@ CementerioDePizzas_Game_Tests >> testUseASpeedUpCardOnTwoRounds [
 { #category : #tests }
 CementerioDePizzas_Game_Tests >> testUseAnAccelerationCard [
 	
-	| myBoxes testPlayers myDie game cards deck |
+	| myBoxes testPlayers myDie game cards deck napolitanaHand |
 	
 	myBoxes := OrderedCollection 
 		with: NoEffectBox new 
@@ -728,14 +728,18 @@ CementerioDePizzas_Game_Tests >> testUseAnAccelerationCard [
 		with: NoEffectBox new 
 		with: NoEffectBox new.
 		
-	cards := Deck withCards: (OrderedCollection
-	with: (AccelerationCard of:#napolitana on:'')
-	).
+	cards := OrderedCollection
+	with: AccelerationCard new
+	with: OverloadCard new
+	with: OverloadCard new
+	with: OverloadCard new.
+	
 	deck := Deck withCards: cards. 	
 	testPlayers := OrderedCollection with:#napolitana with: #margarita.
 	myDie := OrderedCollection with: (LoadedDice withTosses: #(1)).
 	game := PizzaGame withBoxes: myBoxes players: testPlayers dice: myDie laps: 1 andDeck: deck.
-	game applyCard:(cards at:1) to: testPlayers.
+	napolitanaHand := game playerHand: #napolitana.
+	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: testPlayers.
 	game playTurnForAllPlayers.
 	self assert: ((game ranking) first) absoluteLocation equals: 2.
 	self assert: ((game ranking) second) absoluteLocation equals: 2.
