@@ -2,15 +2,12 @@ Class {
 	#name : #Deck,
 	#superclass : #Object,
 	#instVars : [
-		'amountOfCardsToGive',
-		'myCards',
-		'temporalHand',
-		'theAlreadyDrawnCards'
+		'myCards'
 	],
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 Deck class >> withCards: aCollectionOfCards [
 (aCollectionOfCards size) < 1
 		ifTrue: [ Error signal: 'Un deck no puede tener menos de 1 carta.' ].
@@ -32,7 +29,7 @@ Deck >> drawACard [
 	^card.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 Deck >> initializeWithCards: aCollectionOfCards [
 	myCards:= aCollectionOfCards.
 

@@ -15,7 +15,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 PizzaGame class >> validateLaps: someLaps boxes: someBoxes players: somePlayers andDice: someDice [
 	somePlayers isEmpty
 		ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 jugador.' ].
@@ -27,7 +27,7 @@ PizzaGame class >> validateLaps: someLaps boxes: someBoxes players: somePlayers 
 		ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 casillero.' ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 PizzaGame class >> withBoxes: someBoxes players: somePlayers dice: someDice laps: someLaps andDeck: deck [
 	self
 		validateLaps: someLaps
@@ -115,11 +115,11 @@ PizzaGame >> playTurnForAllPlayers [
 
 { #category : #'as yet unclassified' }
 PizzaGame >> player: player wantsToApplyCard: card to: target [
-	((myPlayers at: currentTurn) = player| (card instant))
+	(((myPlayers at: currentTurn) = player| (card instant)) & (myPlayers includes: player))
 	ifTrue:[
 	myCardManager assignCard: card to: target with: player.]
 	ifFalse:[
-		Error signal: 'Un jugador no puede tirar una carta fuera de su turno.'
+		self sendCardErrorFor: player.
 	]
 	
 ]
@@ -127,6 +127,11 @@ PizzaGame >> player: player wantsToApplyCard: card to: target [
 { #category : #'as yet unclassified' }
 PizzaGame >> playerHand: player [ 
 	^(myCardManager findCardsBelonging: player).
+]
+
+{ #category : #initialize }
+PizzaGame >> players [
+	^myPlayers.
 ]
 
 { #category : #'as yet unclassified' }
@@ -141,6 +146,14 @@ PizzaGame >> rollFor: aPlayer [
 	myDice do: [ :dice | distance := distance + dice spin ].
 	distance:= distance + (myCardManager modifyDistanceOf: aPlayer).
 	myBoard changePositionOf: aPlayer by: distance playing: self.
+]
+
+{ #category : #'as yet unclassified' }
+PizzaGame >> sendCardErrorFor: player [
+	(myPlayers includes: player)
+	ifTrue: [ Error signal: 'Un jugador no puede tirar una carta fuera de su turno.' ]
+	ifFalse: [ Error signal: 'Esta persona no es un jugador del juego.' ].
+	
 ]
 
 { #category : #'as yet unclassified' }

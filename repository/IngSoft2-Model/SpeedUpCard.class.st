@@ -20,7 +20,7 @@ SpeedUpCard >> active [
 	^active
 ]
 
-{ #category : #initialize }
+{ #category : #'as yet unclassified' }
 SpeedUpCard >> affectedPlayer [
 	^affectedPlayer
 ]
@@ -46,7 +46,7 @@ SpeedUpCard >> instant [
 	^instant.
 ]
 
-{ #category : #initialize }
+{ #category : #'as yet unclassified' }
 SpeedUpCard >> isAnEmptyCard [
 	^false.
 ]

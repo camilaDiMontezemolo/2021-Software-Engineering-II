@@ -8,13 +8,13 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 BoxGenerator class >> give: aSize [
 	self validateSize: aSize.
 	^ self new initializeWithSize: aSize
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 BoxGenerator class >> validateSize: aSize [
 	aSize < 1
 		ifTrue: [ Error signal: 'Un tablero no puede tener menos de 1 casillero.' ]
@@ -32,7 +32,7 @@ BoxGenerator >> add: aPercentage of: aBoxType [
 		
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initalize }
 BoxGenerator >> initializeWithSize: aSize [
 	mySize := (aSize-1).
 	myBoxes := OrderedCollection new.

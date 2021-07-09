@@ -100,7 +100,7 @@ Board >> giveMeTheLocationOfThisPosition: absoluteLocation [.
 	^absoluteLocation -((absoluteLocation//mySize)*mySize).
 ]
 
-{ #category : #testing }
+{ #category : #'as yet unclassified' }
 Board >> hasAnyPlayerSurpassed: someLaps [
 	^(self positions) anySatisfy: [ :position | ((position absoluteLocation)//mySize) >= someLaps].
 ]

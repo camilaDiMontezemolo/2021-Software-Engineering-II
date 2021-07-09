@@ -41,8 +41,14 @@ CardManager >> assignCard: card to: affectedPlayer with: currentTurnPlayer [
 				withCurrentTurn: currentTurnPlayer
 				generating: newCard ]
 			
-		
-"	myCardManager assignCard: theIndexOfCard to: affectedPlayer with: (myPlayers at: currentTurn)."
+]
+
+{ #category : #'as yet unclassified' }
+CardManager >> check: card andRaiseErrorOf: target [
+	card class = AccelerationCard
+		ifTrue: [
+			(target = myGame players)
+				ifFalse: [ Error signal: 'La acceleration card debe tener a todos los otros jugadores como target.' ]. ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -54,8 +60,9 @@ CardManager >> checkMplayerOf: card withCurrentTurn: currentTurnPlayer generatin
 ]
 
 { #category : #'as yet unclassified' }
-CardManager >> createNewCard: card withAffectedPlayer: aPlayer [ 
-	^(card class of:card owner on:aPlayer).
+CardManager >> createNewCard: card withAffectedPlayer: target [
+	self check: card andRaiseErrorOf: target.
+	^ card class of: card owner on: target
 ]
 
 { #category : #'as yet unclassified' }

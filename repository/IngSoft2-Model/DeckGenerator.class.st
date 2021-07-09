@@ -2,21 +2,19 @@ Class {
 	#name : #DeckGenerator,
 	#superclass : #Object,
 	#classVars : [
-		'amountOfCardsToGive',
-		'myCards',
-		'temporalHand'
+		'myCards'
 	],
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 DeckGenerator class >> with: aNumberOfCards [
 	aNumberOfCards < 1
 		ifTrue: [ Error signal: 'Un deck no puede tener menos de 1 carta.' ].
 	^ self new initializeWithANumberOfCards: aNumberOfCards.
 ]
 
-{ #category : #initialization }
+{ #category : #'as yet unclassified' }
 DeckGenerator >> createCard [
 	|randomCards |
 	randomCards:=OrderedCollection 

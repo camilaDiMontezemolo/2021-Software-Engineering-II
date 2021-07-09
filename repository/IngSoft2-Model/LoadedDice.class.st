@@ -8,13 +8,13 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 LoadedDice class >> withTosses: someTosses [ 
 
 	^self new initializeWithTheFollowingTosses: someTosses.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initalize }
 LoadedDice >> initializeWithTheFollowingTosses: someTosses [ 
 	myTosses := OrderedCollection new.
 	myTosses:= someTosses.
