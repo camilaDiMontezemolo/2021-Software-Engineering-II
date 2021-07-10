@@ -5,6 +5,14 @@ Class {
 }
 
 { #category : #tests }
+CementerioDePizzas_Game_Tests >> assertDiscreteProbabilityEventOf: theTotalAmountOfCards and: theAmountOfCardsOfACertainType [
+| valor|
+valor= ((theAmountOfCardsOfACertainType/theTotalAmountOfCards)*100).
+self assert: (((theAmountOfCardsOfACertainType/theTotalAmountOfCards)*100) between: 7 and: 9)
+
+]
+
+{ #category : #tests }
 CementerioDePizzas_Game_Tests >> should: block raise: kindOfError withMessage: errorMessage [
 	self
 		should: block
@@ -14,18 +22,23 @@ CementerioDePizzas_Game_Tests >> should: block raise: kindOfError withMessage: e
 ]
 
 { #category : #tests }
-CementerioDePizzas_Game_Tests >> testACardGeneratorGivesACollectionOfCards [
+CementerioDePizzas_Game_Tests >> testACardGeneratorGivesACollectionOfCardsWithProbability [
 	
-	| cards |
-
-	
+	| cards cantidadDeOverloads cantidadDeSpeedUps cantidadDeAccelerationCard cantidadDeCancellationCard cantidadDeRedoCard cantidadDeRepeatCart |
 	cards := DeckGenerator with: 5000.
+	cantidadDeOverloads := cards count: [ :card | card isMemberOf: OverloadCard  ].
+	cantidadDeCancellationCard := cards count: [ :card | card isMemberOf: CancellationCard ].
+	cantidadDeSpeedUps := cards count: [ :card | card isMemberOf: SpeedUpCard ].
+	cantidadDeRepeatCart := cards count: [ :card | card isMemberOf: RepeatCard ].
+	cantidadDeAccelerationCard := cards count: [ :card | card isMemberOf: AccelerationCard ].
+	cantidadDeRedoCard := cards count: [ :card | card isMemberOf: RedoCard ].
 	
-	self assert: (cards size) equals: 5000.
-	
-	
-	 
-	
+	self assert: (cantidadDeOverloads between: 700 and: 900).	
+	self assert: (cantidadDeCancellationCard between: 700 and: 900).
+	self assert: (cantidadDeRepeatCart between: 700 and: 900).
+	self assert: (cantidadDeAccelerationCard between: 700 and: 900).
+	self assert: (cantidadDeRedoCard between: 700 and: 900).
+	self assert: (cantidadDeSpeedUps between: 700 and: 900).
 	
 ]
 
