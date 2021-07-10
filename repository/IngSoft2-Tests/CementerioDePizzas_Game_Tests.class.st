@@ -5,14 +5,6 @@ Class {
 }
 
 { #category : #tests }
-CementerioDePizzas_Game_Tests >> assertDiscreteProbabilityEventOf: theTotalAmountOfCards and: theAmountOfCardsOfACertainType [
-| valor|
-valor= ((theAmountOfCardsOfACertainType/theTotalAmountOfCards)*100).
-self assert: (((theAmountOfCardsOfACertainType/theTotalAmountOfCards)*100) between: 7 and: 9)
-
-]
-
-{ #category : #tests }
 CementerioDePizzas_Game_Tests >> should: block raise: kindOfError withMessage: errorMessage [
 	self
 		should: block
