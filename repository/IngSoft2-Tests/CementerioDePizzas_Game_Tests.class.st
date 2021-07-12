@@ -60,7 +60,7 @@ CementerioDePizzas_Game_Tests >> testAGameShouldHaveAtLeastOneLap [
 	| myDie myPlayers block cards myBoxes|
 	
 	myDie := OrderedCollection with: (Die withSides: 3).
-	myBoxes:= BoxGenerator give: 10.
+	myBoxes:= BoxGenerator give:10 andProbabilitiesForNoEffectBox: 0.38 andSpeed: 0.2 andWormm: 0.2 andMoon: 0.1 andAtomic: 0.02 andCardBox: 0.1..
 	myPlayers:= (OrderedCollection with: #hawaiana).
 	cards := Deck withCards: (DeckGenerator with: 2).
 	block:=[PizzaGame withBoxes: myBoxes players: myPlayers dice: myDie laps: 0 andDeck: cards].
@@ -108,7 +108,7 @@ CementerioDePizzas_Game_Tests >> testCreateAGameSinglePlayer [
 	napolitana:= #napolitana.
 	
 	myDie := OrderedCollection with: (Die withSides: 5).
-	myBoxes:= BoxGenerator give: 5.
+	myBoxes:= BoxGenerator give: 5 andProbabilitiesForNoEffectBox: 0.38 andSpeed: 0.2 andWormm: 0.2 andMoon: 0.1 andAtomic: 0.02 andCardBox: 0.1.
 	
 	testPlayers:= OrderedCollection with: napolitana.
 	
@@ -132,7 +132,7 @@ CementerioDePizzas_Game_Tests >> testCreateARandomMultiPlayerGame [
 	margarita:= #margarita.
 	mozzarella:= #mozzarella.
 	
-	myBoxes:= BoxGenerator give: 40.
+	myBoxes:= BoxGenerator give: 40 andProbabilitiesForNoEffectBox: 0.38 andSpeed: 0.2 andWormm: 0.2 andMoon: 0.1 andAtomic: 0.02 andCardBox: 0.1.
 	
 	testPlayers:= OrderedCollection with: napolitana with: margarita with: mozzarella.
 	

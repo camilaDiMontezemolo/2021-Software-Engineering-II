@@ -18,7 +18,7 @@ Board_Tests >> testABoardShouldHaveMoreThanCeroDie [
 
 	|  block someBoxes testPlayers cards|
 
-	someBoxes:= BoxGenerator give: 20.
+	someBoxes:= BoxGenerator give: 20 andProbabilitiesForNoEffectBox: 0.38 andSpeed: 0.2 andWormm: 0.2 andMoon: 0.1 andAtomic: 0.02 andCardBox: 0.1.
 	testPlayers:=(OrderedCollection with: #hawaiana).
 	cards := Deck withCards: (DeckGenerator with: 2).
 
@@ -39,7 +39,7 @@ Board_Tests >> testABoardShouldHaveMoreThanCeroPlayers [
 	|  myDie block myBoxes cards|
 	
 	myDie := OrderedCollection with: (Die withSides: 3).
-	myBoxes := OrderedCollection with: (BoxGenerator give: 10).
+	myBoxes := OrderedCollection with: (BoxGenerator give: 20 andProbabilitiesForNoEffectBox: 0.38 andSpeed: 0.2 andWormm: 0.2 andMoon: 0.1 andAtomic: 0.02 andCardBox: 0.1).
 	cards := Deck withCards: (DeckGenerator with: 2).
 
 	block:= [ PizzaGame
@@ -72,6 +72,38 @@ Board_Tests >> testABoardShouldHaveMoreThanZeroBoxes [
 
     self should: block raise: Error withMessage: 'Un juego no puede tener menos de 1 casillero.'.
 		
+]
+
+{ #category : #tests }
+Board_Tests >> testABoxGeneratorGivesBoxesWithProbabilities [
+
+	| someBoxes cantidadDeNoEffectBoxes cantidadDeSpeed cantidadDeWorm cantidadDeMoon cantidadDeAtomic cantidadCardBox |
+
+	someBoxes:= BoxGenerator give: 5000 andProbabilitiesForNoEffectBox: 0.38 andSpeed: 0.2 andWormm: 0.2 andMoon: 0.1 andAtomic: 0.02 andCardBox: 0.1.
+	
+	cantidadDeNoEffectBoxes := someBoxes count: [ :card | card isMemberOf: NoEffectBox ].
+	cantidadDeSpeed := someBoxes count: [ :card | card isMemberOf: SpeedupBox ].
+	cantidadDeWorm := someBoxes count: [ :card | card isMemberOf: WormHoleBox ].
+	cantidadDeMoon := someBoxes count: [ :card | card isMemberOf: MoonWalkBox ].
+	cantidadDeAtomic := someBoxes count: [ :card | card isMemberOf: AtomicBombBox ].
+	cantidadCardBox := someBoxes count: [ :card | card isMemberOf: CardBox ].
+
+	self assert: (cantidadDeNoEffectBoxes between: 1800 and: 2000).	
+	self assert: (cantidadDeSpeed between: 900 and: 1000).
+	self assert: (cantidadDeWorm between: 900 and: 1000).	
+	self assert: (cantidadDeMoon between: 400 and: 500).
+	self assert: (cantidadDeAtomic between: 50 and: 150).	
+	self assert: (cantidadCardBox between: 400 and: 500).
+]
+
+{ #category : #tests }
+Board_Tests >> testABoxGeneratorShouldNotGiveBoxesIfProbabilitiesSumMoreThanOne [
+
+	| block|
+
+	block:=[ BoxGenerator give: 20 andProbabilitiesForNoEffectBox: 0.48 andSpeed: 0.2 andWormm: 0.2 andMoon: 0.1 andAtomic: 0.02 andCardBox: 0.1.	].
+		
+	self should: block raise: Error withMessage: 'Las suma de probabilidades debe ser mayor a 1.'.
 ]
 
 { #category : #tests }
