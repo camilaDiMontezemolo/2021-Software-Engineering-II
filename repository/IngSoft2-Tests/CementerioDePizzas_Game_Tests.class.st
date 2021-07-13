@@ -25,12 +25,12 @@ CementerioDePizzas_Game_Tests >> testACardGeneratorGivesACollectionOfCardsWithPr
 	cantidadDeAccelerationCard := cards count: [ :card | card isMemberOf: AccelerationCard ].
 	cantidadDeRedoCard := cards count: [ :card | card isMemberOf: RedoCard ].
 	
-	self assert: (cantidadDeOverloads between: 700 and: 900).	
-	self assert: (cantidadDeCancellationCard between: 700 and: 900).
-	self assert: (cantidadDeRepeatCart between: 700 and: 900).
-	self assert: (cantidadDeAccelerationCard between: 700 and: 900).
-	self assert: (cantidadDeRedoCard between: 700 and: 900).
-	self assert: (cantidadDeSpeedUps between: 700 and: 900).
+	self assert: (cantidadDeOverloads between: 650 and: 950).	
+	self assert: (cantidadDeCancellationCard between: 650 and: 950).
+	self assert: (cantidadDeRepeatCart between: 650 and: 950).
+	self assert: (cantidadDeAccelerationCard between: 650 and: 950).
+	self assert: (cantidadDeRedoCard between: 650 and: 950).
+	self assert: (cantidadDeSpeedUps between: 650 and: 950).
 	
 ]
 

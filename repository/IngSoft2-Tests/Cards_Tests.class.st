@@ -134,8 +134,8 @@ Cards_Tests >> testUseACancelationCardOnASpeedupCard [
 	usedCards := game usedCards.
 	game player: #napolitana wantsToApplyCard: (napolitanaHand at: 1) to: (usedCards first).
 	game playNextTurn.
-	self assert: ((game ranking) second) absoluteLocation equals: 2.
-	self assert: ((game ranking) first) absoluteLocation equals: 2.
+	self assert: ((game ranking) second) location equals: 2.
+	self assert: ((game ranking) first) location equals: 2.
 	
 	self assert: cards size equals: 0.
 	
@@ -169,8 +169,8 @@ Cards_Tests >> testUseACancelationCardOnAnAccelerationCard [
 	napolitanaHand := game playerHand: #napolitana.
 	game applyCard: (napolitanaHand first) to: (usedCards first). 
 	game playNextTurn.
-	self assert: ((game ranking) second) absoluteLocation equals: 2.
-	self assert: ((game ranking) first) absoluteLocation equals: 2.
+	self assert: ((game ranking) second) location equals: 2.
+	self assert: ((game ranking) first) location equals: 2.
 	
 	self assert: cards size equals: 0.
 	
@@ -260,8 +260,8 @@ Cards_Tests >> testUseACancelationCardOnAnOverloadCard [
 	usedCards := game usedCards.
 	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: (usedCards first). 
 	game playNextTurn.
-	self assert: ((game ranking) second) absoluteLocation equals: 2.
-	self assert: ((game ranking) first) absoluteLocation equals: 2.
+	self assert: ((game ranking) second) location equals: 2.
+	self assert: ((game ranking) first) location equals: 2.
 	
 	self assert: cards size equals: 0.
 	
@@ -295,8 +295,8 @@ Cards_Tests >> testUseARedoCard [
 	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: #napolitana.
 	game playNextTurn.
 	
-	self assert: ((game ranking) first) absoluteLocation equals: 3.
-	self assert: ((game ranking) second) absoluteLocation equals: 3.
+	self assert: ((game ranking) first) location equals: 3.
+	self assert: ((game ranking) second) location equals: 3.
 	 
 	
 	
@@ -333,8 +333,8 @@ Cards_Tests >> testUseARedoCardOverCancelation [
 	game player: #napolitana wantsToApplyCard: (napolitanaHand second) to: (usedCards first).
 	game playTurnForAllPlayers.
 	
-	self assert: ((game ranking) second) absoluteLocation equals: 2.
-	self assert: ((game ranking) first) absoluteLocation equals: 2.
+	self assert: ((game ranking) second) location equals: 2.
+	self assert: ((game ranking) first) location equals: 2.
 	 
 	
 	
@@ -366,8 +366,8 @@ Cards_Tests >> testUseARepeatCard [
 	napolitanaHand := game playerHand: #napolitana.
 	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: #napolitana.
 	
-	self assert: ((game ranking) first) absoluteLocation equals: 5.
-	self assert: ((game ranking) second) absoluteLocation equals: 4.
+	self assert: ((game ranking) first) location equals: 5.
+	self assert: ((game ranking) second) location equals: 4.
 	 
 	
 	
@@ -398,8 +398,8 @@ Cards_Tests >> testUseARepeatCardWhenNoDieWasRolledYet [
 	margaritaHand := game playerHand: #margarita.
 	game player: #margarita wantsToApplyCard: (margaritaHand first) to: #margarita.
 	
-	self assert: ((game ranking) first) absoluteLocation equals: 0.
-	self assert: ((game ranking) second) absoluteLocation equals: 0.
+	self assert: ((game ranking) first) location equals: 0.
+	self assert: ((game ranking) second) location equals: 0.
 	 
 	
 	
@@ -428,7 +428,7 @@ Cards_Tests >> testUseASpeedUpCard [
 	game playTurnForAllPlayers.
 	rankingOne:= game ranking.
 	
-	self assert: (rankingOne first) absoluteLocation equals: 3.
+	self assert: (rankingOne first) location equals: 3.
 	 
 	
 	
@@ -458,7 +458,7 @@ Cards_Tests >> testUseASpeedUpCardOnTwoRounds [
 	game playTurnForAllPlayers.
 	rankingTwo:= game ranking.
 	
-	self assert: (rankingTwo first) absoluteLocation equals: 6.
+	self assert: (rankingTwo first) location equals: 2.
 	 
 	
 	
@@ -490,12 +490,12 @@ Cards_Tests >> testUseAnAccelerationCard [
 	napolitanaHand := game playerHand: #napolitana.
 	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: testPlayers.
 	game playTurnForAllPlayers.
-	self assert: ((game ranking) first) absoluteLocation equals: 2.
-	self assert: ((game ranking) second) absoluteLocation equals: 2.
+	self assert: ((game ranking) first) location equals: 2.
+	self assert: ((game ranking) second) location equals: 2.
 	
 	game playTurnForAllPlayers.
-	self assert: ((game ranking) first) absoluteLocation equals: 4.
-	self assert: ((game ranking) second) absoluteLocation equals: 4.
+	self assert: ((game ranking) first) location equals: 4.
+	self assert: ((game ranking) second) location equals: 4.
 	 
 	
 	
@@ -525,8 +525,8 @@ Cards_Tests >> testUseAnOverloadCard [
 	game player: #margarita wantsToApplyCard: (margaritaHand first) to: #napolitana.
 	game playNextTurn.
 	game playNextTurn.
-	self assert: ((game ranking) second) absoluteLocation equals: 0.
-	self assert: ((game ranking) first) absoluteLocation equals: 2.
+	self assert: ((game ranking) second) location equals: 0.
+	self assert: ((game ranking) first) location equals: 2.
 	 
 	
 	
@@ -556,8 +556,9 @@ Cards_Tests >> testUseAnOverloadCardAndEndUpWithNegativeNumbers [
 	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: #napolitana.
 	game playNextTurn.
 	game playNextTurn.
-	self assert: ((game ranking) second) absoluteLocation equals: -1.
-	self assert: ((game ranking) first) absoluteLocation equals: 1.
+	self assert: ((game ranking) second) location equals: 3.
+	self assert: ((game ranking) first) location equals: 1.
+	self assert: ((game ranking) second) lap equals: -1.
 	 
 	
 	
