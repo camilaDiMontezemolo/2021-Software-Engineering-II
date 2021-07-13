@@ -132,7 +132,7 @@ Board_Tests >> testACardBoxGivesCards [
 	game playTurnForAllPlayers.
 	ranking := game ranking.
 	
-	self assert: (ranking at: 1) absoluteLocation equals: 3.
+	self assert: (ranking first) absoluteLocation equals: 3.
 ]
 
 { #category : #tests }

@@ -21,11 +21,6 @@ OverloadCard >> active [
 ]
 
 { #category : #'as yet unclassified' }
-OverloadCard >> affectedPlayer [
-	^affectedPlayer
-]
-
-{ #category : #'as yet unclassified' }
 OverloadCard >> applyEffectFrom: aDeck [ 
 	(active) 
 	ifTrue:[aDeck lastCardUsed: self.
@@ -47,7 +42,7 @@ OverloadCard >> instant [
 ]
 
 { #category : #'as yet unclassified' }
-OverloadCard >> isAnEmptyCard [
+OverloadCard >> isAnEmptyObject [
 	^false.
 ]
 

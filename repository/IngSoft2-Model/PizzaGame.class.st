@@ -16,7 +16,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-PizzaGame class >> validateLaps: someLaps boxes: someBoxes players: somePlayers andDice: someDice [
+PizzaGame class >> validateLaps: someLaps boxes: someBoxes players: somePlayers dice: someDice andDeck: aDeck [
 	somePlayers isEmpty
 		ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 jugador.' ].
 	someDice isEmpty
@@ -24,7 +24,9 @@ PizzaGame class >> validateLaps: someLaps boxes: someBoxes players: somePlayers 
 	someLaps < 1
 		ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 vuelta.' ].
 	someBoxes size < 1
-		ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 casillero.' ]
+		ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 casillero.' ].
+	(aDeck numberOfCards < 2)
+		ifTrue: [ Error signal: 'Un juego no puede tener menos de 2 cartas.' ].
 ]
 
 { #category : #'instance creation' }
@@ -33,7 +35,8 @@ PizzaGame class >> withBoxes: someBoxes players: somePlayers dice: someDice laps
 		validateLaps: someLaps
 		boxes: someBoxes
 		players: somePlayers
-		andDice: someDice.
+		dice: someDice
+		andDeck: deck.
 	^ self new
 		initializeWithBoxes: someBoxes players: somePlayers dice: someDice laps: someLaps andDeck: deck
 ]

@@ -16,16 +16,6 @@ RedoCard class >> of: player on: anotherPlayer [
 ]
 
 { #category : #'as yet unclassified' }
-RedoCard >> active [
-	^active
-]
-
-{ #category : #'as yet unclassified' }
-RedoCard >> affectedPlayer [
-	^affectedPlayer
-]
-
-{ #category : #'as yet unclassified' }
 RedoCard >> applyEffectFrom: cardManager [
 	active
 		ifTrue:
@@ -58,9 +48,4 @@ RedoCard >> redoPreviousCardEffect: cardManager [
 	(newCard instant)
 	ifTrue:[^newCard applyEffectFrom: cardManager]
 	ifFalse:[cardManager addCardFromRedoCard: newCard.]
-]
-
-{ #category : #'as yet unclassified' }
-RedoCard >> usedOn: player [
-	^(player = affectedPlayer)
 ]

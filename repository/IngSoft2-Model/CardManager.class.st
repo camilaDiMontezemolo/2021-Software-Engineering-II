@@ -68,7 +68,7 @@ CardManager >> createNewCard: card withAffectedPlayer: target [
 { #category : #'as yet unclassified' }
 CardManager >> createNewCard: card withOwner: aPlayer [
 	((card class) = CancellationCard)
-	ifTrue:[^(card class of: aPlayer on: EmptyCard new).]
+	ifTrue:[^(card class of: aPlayer on: EmptyObject new).]
 	ifFalse:[^(card class of: aPlayer on:'').]
 ]
 

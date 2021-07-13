@@ -1,20 +1,20 @@
 Class {
-	#name : #EmptyCard,
-	#superclass : #Card,
+	#name : #EmptyObject,
+	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'as yet unclassified' }
-EmptyCard >> active [
+EmptyObject >> active [
 	^true
 ]
 
 { #category : #'as yet unclassified' }
-EmptyCard >> instant [
+EmptyObject >> instant [
 	^false
 ]
 
 { #category : #'as yet unclassified' }
-EmptyCard >> isAnEmptyCard [
+EmptyObject >> isAnEmptyObject [
 	^true.
 ]

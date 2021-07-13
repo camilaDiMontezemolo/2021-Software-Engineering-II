@@ -40,7 +40,7 @@ CementerioDePizzas_Game_Tests >> testACardGeneratorShouldntBeAbleToGiveZeroCards
 	| block |
 	block:=[DeckGenerator with: 0.].
 
-	self should: block raise: Error withMessage: 'Un deck no puede tener menos de 1 carta.'
+	self should: block raise: Error withMessage: 'Un deck no puede tener menos de 2 carta.'
 	
 	
 	
@@ -145,4 +145,27 @@ CementerioDePizzas_Game_Tests >> testCreateARandomMultiPlayerGame [
 	
 	self assert: (game isFinished).
 	
+]
+
+{ #category : #tests }
+CementerioDePizzas_Game_Tests >> testYouShouldBeAbleToGetYourLapAndLocation [
+	
+	| myBoxes testPlayers myDie game cards deck |
+
+    myBoxes := OrderedCollection 
+        with: NoEffectBox new 
+        with: NoEffectBox new
+        with: NoEffectBox new 
+        with: NoEffectBox new.
+
+   cards := DeckGenerator with: 50.
+	deck := Deck withCards: cards. 
+   testPlayers := OrderedCollection with:#margarita with: #napolitana.
+   myDie := OrderedCollection with: (LoadedDice withTosses: #(6)).
+   game := PizzaGame withBoxes: myBoxes players: testPlayers dice: myDie laps: 2 andDeck: deck.
+	game playNextTurn.
+	
+	self assert: ((game ranking) first) lap equals: 1.
+	self assert: ((game ranking) second) location equals: 0.
+	 
 ]
