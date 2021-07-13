@@ -46,7 +46,7 @@ OverloadCard >> instant [
 	^instant.
 ]
 
-{ #category : #initialize }
+{ #category : #'as yet unclassified' }
 OverloadCard >> isAnEmptyCard [
 	^false.
 ]

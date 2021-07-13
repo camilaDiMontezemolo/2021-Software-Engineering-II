@@ -11,45 +11,45 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #instanceCreation }
+{ #category : #'instance creation' }
 Position class >> of: aPlayer at: anAbsoluteLocation on: aBoard [
 	^self new initializeWith: aPlayer at: anAbsoluteLocation on: aBoard.
 ]
 
-{ #category : #initialize }
+{ #category : #'as yet unclassified' }
 Position >> > otherPosition [
 	^(absoluteLocation > (otherPosition absoluteLocation)).
 	
 ]
 
-{ #category : #initialize }
+{ #category : #'as yet unclassified' }
 Position >> absoluteLocation [
 	^absoluteLocation.
 ]
 
-{ #category : #initialization }
+{ #category : #initialize }
 Position >> initializeWith: aPlayer at: anAbsoluteLocation on: aBoard [
 	myPlayer := aPlayer.
 	absoluteLocation := anAbsoluteLocation.
 	myBoard:= aBoard.
 ]
 
-{ #category : #initialize }
+{ #category : #'as yet unclassified' }
 Position >> isOfSamePlayerAs: anotherPosition [
 	^(myPlayer = (anotherPosition player))
 ]
 
-{ #category : #initialize }
+{ #category : #'as yet unclassified' }
 Position >> lap [
 	^myBoard giveMeTheLapsOfThisPosition: absoluteLocation.
 ]
 
-{ #category : #initialize }
+{ #category : #'as yet unclassified' }
 Position >> location [
 	^myBoard giveMeTheLocationOfThisPosition: absoluteLocation.
 ]
 
-{ #category : #initialize }
+{ #category : #'as yet unclassified' }
 Position >> player [
 	^myPlayer.
 ]

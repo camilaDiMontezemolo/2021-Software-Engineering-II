@@ -7,7 +7,6 @@ Class {
 		'positions',
 		'mylaps',
 		'lastBoxUsed',
-		'cardsForGame',
 		'myPlayers',
 		'myGame'
 	],
@@ -42,11 +41,6 @@ Board >> calculateNewLocationFor: position [
 	(laps ==0)
 	ifTrue:[^0.]
 	ifFalse:[^(mySize*laps)+1.].
-]
-
-{ #category : #'as yet unclassified' }
-Board >> cardsForGame [
-	^cardsForGame.
 ]
 
 { #category : #'as yet unclassified' }
@@ -92,6 +86,11 @@ Board >> generatePositionFor: aPosition at: absoluteLocation [
 ]
 
 { #category : #'as yet unclassified' }
+Board >> getACardFor: playerWhoGetsTheCard [
+	myGame getACardFor: playerWhoGetsTheCard.
+]
+
+{ #category : #'as yet unclassified' }
 Board >> giveMeTheLapsOfThisPosition: absoluteLocation [.
 	^absoluteLocation//mySize.
 ]
@@ -101,7 +100,7 @@ Board >> giveMeTheLocationOfThisPosition: absoluteLocation [.
 	^absoluteLocation -((absoluteLocation//mySize)*mySize).
 ]
 
-{ #category : #testing }
+{ #category : #'as yet unclassified' }
 Board >> hasAnyPlayerSurpassed: someLaps [
 	^(self positions) anySatisfy: [ :position | ((position absoluteLocation)//mySize) >= someLaps].
 ]
@@ -113,7 +112,6 @@ Board >> initializeWithBoxes: aCollectionOfBoxes andSomePlayers: somePlayers for
 	myBoxes addFirst: (NoEffectBox new).
 	mySize := ( (myBoxes size)-1 ).
 	lastBoxUsed := (NoEffectBox new).
-	cardsForGame := OrderedCollection new.
 	myPlayers:= somePlayers.
 	myGame:=aGame.
 ]
@@ -134,11 +132,6 @@ Board >> moveAllPlayersToFirstBoxSlot [
 ]
 
 { #category : #'as yet unclassified' }
-Board >> newCardsWereAdded: newCards [
-	cardsForGame:= newCards. 
-]
-
-{ #category : #'as yet unclassified' }
 Board >> positions [
 	^positions.
 ]
@@ -146,9 +139,4 @@ Board >> positions [
 { #category : #'as yet unclassified' }
 Board >> replacePosition: position with: newPosition [
 	positions at:(positions indexOf: position) put: newPosition.
-]
-
-{ #category : #'as yet unclassified' }
-Board >> resetBoxCards [
-	cardsForGame removeAll.
 ]

@@ -26,10 +26,10 @@ RedoCard >> affectedPlayer [
 ]
 
 { #category : #'as yet unclassified' }
-RedoCard >> applyEffectFrom: aDeck [
+RedoCard >> applyEffectFrom: cardManager [
 	active
 		ifTrue:
-			[ ^ self redoPreviousCardEffect: aDeck ]
+			[ ^ self redoPreviousCardEffect: cardManager ]
 		ifFalse: [ ^ 0 ]
 ]
 
@@ -52,11 +52,12 @@ RedoCard >> owner [
 ]
 
 { #category : #'as yet unclassified' }
-RedoCard >> redoPreviousCardEffect: aDeck [
+RedoCard >> redoPreviousCardEffect: cardManager [
 	|newCard|
-	newCard := aDeck redoTheLastCardUsed: affectedPlayer.
-	aDeck addCards: (OrderedCollection with: newCard).
-	^newCard applyEffectFrom: aDeck
+	newCard := cardManager redoTheLastCardUsedBy:owner for: affectedPlayer.
+	(newCard instant)
+	ifTrue:[^newCard applyEffectFrom: cardManager]
+	ifFalse:[cardManager addCardFromRedoCard: newCard.]
 ]
 
 { #category : #'as yet unclassified' }

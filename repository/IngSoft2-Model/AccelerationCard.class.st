@@ -15,7 +15,7 @@ AccelerationCard class >> of: player on: affectedPlayer [
 	^self new initializeWithPlayer: player andAffectedPlayer: affectedPlayer.
 ]
 
-{ #category : #accessing }
+{ #category : #'as yet unclassified' }
 AccelerationCard >> active [
 	^active
 ]
@@ -41,7 +41,7 @@ AccelerationCard >> initializeWithPlayer: player andAffectedPlayer: anotherPlaye
 	instant:=false.
 ]
 
-{ #category : #accessing }
+{ #category : #'as yet unclassified' }
 AccelerationCard >> instant [
 	^instant.
 ]
@@ -51,7 +51,7 @@ AccelerationCard >> isAnEmptyCard [
 	^false.
 ]
 
-{ #category : #accessing }
+{ #category : #'as yet unclassified' }
 AccelerationCard >> owner [
 	^owner.
 ]
