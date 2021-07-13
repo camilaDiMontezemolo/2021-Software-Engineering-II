@@ -2,10 +2,8 @@ Class {
 	#name : #AccelerationCard,
 	#superclass : #Card,
 	#instVars : [
-		'owner',
 		'affectedPlayer',
-		'active',
-		'instant'
+		'active'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -37,18 +35,8 @@ AccelerationCard >> initializeWithPlayer: player andAffectedPlayer: anotherPlaye
 ]
 
 { #category : #'as yet unclassified' }
-AccelerationCard >> instant [
-	^instant.
-]
-
-{ #category : #'as yet unclassified' }
 AccelerationCard >> isAnEmptyObject [
 	^false.
-]
-
-{ #category : #'as yet unclassified' }
-AccelerationCard >> owner [
-	^owner.
 ]
 
 { #category : #'as yet unclassified' }

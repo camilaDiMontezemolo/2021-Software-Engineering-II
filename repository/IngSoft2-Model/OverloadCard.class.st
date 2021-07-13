@@ -2,10 +2,8 @@ Class {
 	#name : #OverloadCard,
 	#superclass : #Card,
 	#instVars : [
-		'owner',
 		'affectedPlayer',
-		'active',
-		'instant'
+		'active'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -37,18 +35,8 @@ OverloadCard >> initializeWithPlayer: player andAffectedPlayer: anotherPlayer [
 ]
 
 { #category : #'as yet unclassified' }
-OverloadCard >> instant [
-	^instant.
-]
-
-{ #category : #'as yet unclassified' }
 OverloadCard >> isAnEmptyObject [
 	^false.
-]
-
-{ #category : #'as yet unclassified' }
-OverloadCard >> owner [
-	^owner.
 ]
 
 { #category : #'as yet unclassified' }

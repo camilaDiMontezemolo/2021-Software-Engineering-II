@@ -2,10 +2,8 @@ Class {
 	#name : #CancellationCard,
 	#superclass : #Card,
 	#instVars : [
-		'owner',
 		'affectedPlayer',
 		'active',
-		'instant',
 		'affectedCard'
 	],
 	#category : #'IngSoft2-Model'
@@ -34,14 +32,4 @@ CancellationCard >> initializeWithPlayer: player andAffectedCard: anotherCard [
 	affectedCard :=anotherCard.
 	active := (anotherCard isAnEmptyObject) not.
 	instant :=true.
-]
-
-{ #category : #'as yet unclassified' }
-CancellationCard >> instant [
-	^instant.
-]
-
-{ #category : #'as yet unclassified' }
-CancellationCard >> owner [
-	^owner.
 ]

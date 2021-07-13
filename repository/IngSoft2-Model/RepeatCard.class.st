@@ -2,10 +2,8 @@ Class {
 	#name : #RepeatCard,
 	#superclass : #Card,
 	#instVars : [
-		'owner',
 		'affectedPlayer',
-		'active',
-		'instant'
+		'active'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -30,14 +28,4 @@ RepeatCard >> initializeWithPlayer: player andAffectedPlayer: anotherPlayer [
 	affectedPlayer :=anotherPlayer.
 	active := (affectedPlayer isNotEmpty).
 	instant := true.
-]
-
-{ #category : #'as yet unclassified' }
-RepeatCard >> instant [
-	^instant.
-]
-
-{ #category : #'as yet unclassified' }
-RepeatCard >> owner [
-	^owner.
 ]

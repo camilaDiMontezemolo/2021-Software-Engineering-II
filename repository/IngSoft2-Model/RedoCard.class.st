@@ -2,10 +2,8 @@ Class {
 	#name : #RedoCard,
 	#superclass : #Card,
 	#instVars : [
-		'owner',
 		'affectedPlayer',
-		'active',
-		'instant'
+		'active'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -29,16 +27,6 @@ RedoCard >> initializeWithPlayer: player andAffectedPlayer: anotherPlayer [
 	affectedPlayer :=anotherPlayer.
 	active := (affectedPlayer isNotNil).
 	instant := true.
-]
-
-{ #category : #'as yet unclassified' }
-RedoCard >> instant [
-	^instant.
-]
-
-{ #category : #'as yet unclassified' }
-RedoCard >> owner [
-	^owner.
 ]
 
 { #category : #'as yet unclassified' }
