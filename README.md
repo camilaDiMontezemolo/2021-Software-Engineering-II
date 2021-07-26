@@ -1,6 +1,6 @@
 # Ingenieria del Software II - Template
 
-[![Build Status](https://travis-ci.com/uca-is2/2021-cementerio-de-pizzas.svg?branch=master)](https://travis-ci.com/uca-is2/2021-cementerio-de-pizzas)
+![GHA Status](https://github.com/uca-is2/2021-cementerio-de-pizzas/actions/workflows/GHA.yml/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/uca-is2/2021-cementerio-de-pizzas/badge.svg?branch=master)](https://coveralls.io/github/uca-is2/2021-cementerio-de-pizzas?branch=master)
 
 ## Metacello
