@@ -2,10 +2,8 @@ Class {
 	#name : #RedoCard,
 	#superclass : #Card,
 	#instVars : [
-		'owner',
 		'affectedPlayer',
-		'active',
-		'instant'
+		'active'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -13,16 +11,6 @@ Class {
 { #category : #'instance creation' }
 RedoCard class >> of: player on: anotherPlayer [
 	^self new initializeWithPlayer: player andAffectedPlayer: anotherPlayer.
-]
-
-{ #category : #'as yet unclassified' }
-RedoCard >> active [
-	^active
-]
-
-{ #category : #'as yet unclassified' }
-RedoCard >> affectedPlayer [
-	^affectedPlayer
 ]
 
 { #category : #'as yet unclassified' }
@@ -42,25 +30,10 @@ RedoCard >> initializeWithPlayer: player andAffectedPlayer: anotherPlayer [
 ]
 
 { #category : #'as yet unclassified' }
-RedoCard >> instant [
-	^instant.
-]
-
-{ #category : #'as yet unclassified' }
-RedoCard >> owner [
-	^owner.
-]
-
-{ #category : #'as yet unclassified' }
 RedoCard >> redoPreviousCardEffect: cardManager [
 	|newCard|
 	newCard := cardManager redoTheLastCardUsedBy:owner for: affectedPlayer.
 	(newCard instant)
 	ifTrue:[^newCard applyEffectFrom: cardManager]
 	ifFalse:[cardManager addCardFromRedoCard: newCard.]
-]
-
-{ #category : #'as yet unclassified' }
-RedoCard >> usedOn: player [
-	^(player = affectedPlayer)
 ]

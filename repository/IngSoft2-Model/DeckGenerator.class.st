@@ -9,8 +9,8 @@ Class {
 
 { #category : #'instance creation' }
 DeckGenerator class >> with: aNumberOfCards [
-	aNumberOfCards < 1
-		ifTrue: [ Error signal: 'Un deck no puede tener menos de 1 carta.' ].
+	aNumberOfCards < 2
+		ifTrue: [ Error signal: 'Un deck no puede tener menos de 2 carta.' ].
 	^ self new initializeWithANumberOfCards: aNumberOfCards.
 ]
 

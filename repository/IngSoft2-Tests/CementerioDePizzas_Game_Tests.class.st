@@ -25,12 +25,12 @@ CementerioDePizzas_Game_Tests >> testACardGeneratorGivesACollectionOfCardsWithPr
 	cantidadDeAccelerationCard := cards count: [ :card | card isMemberOf: AccelerationCard ].
 	cantidadDeRedoCard := cards count: [ :card | card isMemberOf: RedoCard ].
 	
-	self assert: (cantidadDeOverloads between: 700 and: 900).	
-	self assert: (cantidadDeCancellationCard between: 700 and: 900).
-	self assert: (cantidadDeRepeatCart between: 700 and: 900).
-	self assert: (cantidadDeAccelerationCard between: 700 and: 900).
-	self assert: (cantidadDeRedoCard between: 700 and: 900).
-	self assert: (cantidadDeSpeedUps between: 700 and: 900).
+	self assert: (cantidadDeOverloads between: 650 and: 950).	
+	self assert: (cantidadDeCancellationCard between: 650 and: 950).
+	self assert: (cantidadDeRepeatCart between: 650 and: 950).
+	self assert: (cantidadDeAccelerationCard between: 650 and: 950).
+	self assert: (cantidadDeRedoCard between: 650 and: 950).
+	self assert: (cantidadDeSpeedUps between: 650 and: 950).
 	
 ]
 
@@ -40,7 +40,7 @@ CementerioDePizzas_Game_Tests >> testACardGeneratorShouldntBeAbleToGiveZeroCards
 	| block |
 	block:=[DeckGenerator with: 0.].
 
-	self should: block raise: Error withMessage: 'Un deck no puede tener menos de 1 carta.'
+	self should: block raise: Error withMessage: 'Un deck no puede tener menos de 2 carta.'
 	
 	
 	
@@ -145,4 +145,27 @@ CementerioDePizzas_Game_Tests >> testCreateARandomMultiPlayerGame [
 	
 	self assert: (game isFinished).
 	
+]
+
+{ #category : #tests }
+CementerioDePizzas_Game_Tests >> testYouShouldBeAbleToGetYourLapAndLocation [
+	
+	| myBoxes testPlayers myDie game cards deck |
+
+    myBoxes := OrderedCollection 
+        with: NoEffectBox new 
+        with: NoEffectBox new
+        with: NoEffectBox new 
+        with: NoEffectBox new.
+
+   cards := DeckGenerator with: 50.
+	deck := Deck withCards: cards. 
+   testPlayers := OrderedCollection with:#margarita with: #napolitana.
+   myDie := OrderedCollection with: (LoadedDice withTosses: #(6)).
+   game := PizzaGame withBoxes: myBoxes players: testPlayers dice: myDie laps: 2 andDeck: deck.
+	game playNextTurn.
+	
+	self assert: ((game ranking) first) lap equals: 1.
+	self assert: ((game ranking) second) location equals: 0.
+	 
 ]

@@ -2,10 +2,8 @@ Class {
 	#name : #SpeedUpCard,
 	#superclass : #Card,
 	#instVars : [
-		'owner',
 		'affectedPlayer',
-		'active',
-		'instant'
+		'active'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -18,11 +16,6 @@ SpeedUpCard class >> of: player on: affectedPlayer [
 { #category : #'as yet unclassified' }
 SpeedUpCard >> active [
 	^active
-]
-
-{ #category : #'as yet unclassified' }
-SpeedUpCard >> affectedPlayer [
-	^affectedPlayer
 ]
 
 { #category : #'as yet unclassified' }
@@ -42,18 +35,8 @@ SpeedUpCard >> initializeWithPlayer: player andAffectedPlayer: anotherPlayer [
 ]
 
 { #category : #'as yet unclassified' }
-SpeedUpCard >> instant [
-	^instant.
-]
-
-{ #category : #'as yet unclassified' }
-SpeedUpCard >> isAnEmptyCard [
+SpeedUpCard >> isAnEmptyObject [
 	^false.
-]
-
-{ #category : #'as yet unclassified' }
-SpeedUpCard >> owner [
-	^owner.
 ]
 
 { #category : #'as yet unclassified' }

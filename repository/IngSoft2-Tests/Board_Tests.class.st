@@ -132,7 +132,7 @@ Board_Tests >> testACardBoxGivesCards [
 	game playTurnForAllPlayers.
 	ranking := game ranking.
 	
-	self assert: (ranking at: 1) absoluteLocation equals: 3.
+	self assert: (ranking first) location equals: 3.
 ]
 
 { #category : #tests }
@@ -151,7 +151,7 @@ Board_Tests >> testAMoonWalkBoxJumpsAPlayerBoxesBack [
 	game := PizzaGame withBoxes: myBoxes players: testPlayers dice: myDie laps: 1 andDeck: deck.
 	game playTurnForAllPlayers.
 
-	self assert: (game ranking second) absoluteLocation equals: 1.
+	self assert: (game ranking second) location equals: 1.
 	
 ]
 
@@ -162,6 +162,8 @@ Board_Tests >> testANoEffectBoxHasNoEffects [
 	
 	myBoxes := OrderedCollection 
 		with: NoEffectBox new 
+		with: NoEffectBox new
+		with: NoEffectBox new
 		with: NoEffectBox new.
 	testPlayers := OrderedCollection with: #napolitana.
 	myDie := OrderedCollection with: (LoadedDice withTosses: #(2)).
@@ -171,7 +173,7 @@ Board_Tests >> testANoEffectBoxHasNoEffects [
 	game playTurnForAllPlayers.
 	positions := game ranking.
 
-	self assert: (positions at:1)absoluteLocation equals: 2.
+	self assert: (positions first) location equals: 2.
 	
 ]
 
@@ -184,6 +186,7 @@ Board_Tests >> testASpeedupBoxJumpsYouFourBoxes [
 		with: NoEffectBox new
 		with: NoEffectBox new
 		with: NoEffectBox new
+		with: NoEffectBox new
 		with: NoEffectBox new.
 
 	testPlayers := OrderedCollection with: #napolitana.
@@ -193,7 +196,7 @@ Board_Tests >> testASpeedupBoxJumpsYouFourBoxes [
 	game := PizzaGame withBoxes: myBoxes players: testPlayers dice: myDie laps: 1 andDeck: deck.
 	game playTurnForAllPlayers.
 	ranking := game ranking.
-	self assert: (ranking at: 1) absoluteLocation equals: 5.
+	self assert: (ranking first) location equals: 5.
 
 ]
 
@@ -220,8 +223,8 @@ Board_Tests >> testAnAtomicBombBoxSendsEveryoneBackToZero [
 	game playTurnForAllPlayers.
 	game playTurnForAllPlayers.
 	ranking := game ranking.
-	self assert: (ranking first) absoluteLocation equals: 6.
-	self assert: (ranking second) absoluteLocation equals: 4.
-	self assert: (ranking third) absoluteLocation equals: 4.
+	self assert: (ranking first) location equals: 1.
+	self assert: (ranking second) location equals: 4.
+	self assert: (ranking third) location equals: 4.
 	
 ]
