@@ -2,10 +2,8 @@ Class {
 	#name : #CancellationCard,
 	#superclass : #Card,
 	#instVars : [
-		'owner',
 		'affectedPlayer',
 		'active',
-		'instant',
 		'affectedCard'
 	],
 	#category : #'IngSoft2-Model'
@@ -21,16 +19,6 @@ CancellationCard class >> of: player on: anotherCard [
 ]
 
 { #category : #'as yet unclassified' }
-CancellationCard >> active [
-	^active
-]
-
-{ #category : #'as yet unclassified' }
-CancellationCard >> affectedCard [
-	^affectedCard
-]
-
-{ #category : #'as yet unclassified' }
 CancellationCard >> applyEffectFrom: aDeck [ 
 	(active) 
 	ifTrue:[aDeck lastCardUsed:self.
@@ -42,21 +30,6 @@ CancellationCard >> applyEffectFrom: aDeck [
 CancellationCard >> initializeWithPlayer: player andAffectedCard: anotherCard [ 
 	owner :=player.
 	affectedCard :=anotherCard.
-	active := (anotherCard isAnEmptyCard) not.
+	active := (anotherCard isAnEmptyObject) not.
 	instant :=true.
-]
-
-{ #category : #'as yet unclassified' }
-CancellationCard >> instant [
-	^instant.
-]
-
-{ #category : #'as yet unclassified' }
-CancellationCard >> owner [
-	^owner.
-]
-
-{ #category : #'as yet unclassified' }
-CancellationCard >> usedOn: player [
-	^(player = affectedCard)
 ]

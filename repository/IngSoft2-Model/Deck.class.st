@@ -9,15 +9,10 @@ Class {
 
 { #category : #'instance creation' }
 Deck class >> withCards: aCollectionOfCards [
-(aCollectionOfCards size) < 1
-		ifTrue: [ Error signal: 'Un deck no puede tener menos de 1 carta.' ].
+(aCollectionOfCards size) < 2
+		ifTrue: [ Error signal: 'Un deck no puede tener menos de 2 carta.' ].
 	^ self new initializeWithCards: aCollectionOfCards
 	
-]
-
-{ #category : #'as yet unclassified' }
-Deck >> cards [
-	^myCards
 ]
 
 { #category : #'as yet unclassified' }
@@ -33,4 +28,9 @@ Deck >> drawACard [
 Deck >> initializeWithCards: aCollectionOfCards [
 	myCards:= aCollectionOfCards.
 
+]
+
+{ #category : #initialize }
+Deck >> numberOfCards [
+	^(myCards size).
 ]
