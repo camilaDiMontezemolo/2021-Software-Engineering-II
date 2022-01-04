@@ -7,7 +7,8 @@ Class {
 		'myGame',
 		'myDeck',
 		'dealtCards',
-		'usedCards'
+		'usedCards',
+		'movementsDone'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -15,6 +16,15 @@ Class {
 { #category : #'instance creation' }
 CardManager class >> with: initialCards in: aGame [
 	^self new initializeWithCards: initialCards in: aGame.
+]
+
+{ #category : #'as yet unclassified' }
+CardManager >> activateInstant: card toDo: moveWithTarget [
+	self throwA: card andDoA: moveWithTarget.
+	moveWithTarget applyEffectFrom: self.
+	self removeMove: moveWithTarget.
+	
+"Creado para reemplazar replaceInstand:"
 ]
 
 { #category : #'as yet unclassified' }
@@ -32,6 +42,7 @@ CardManager >> assign: aCard to: onePlayer [
 
 { #category : #'as yet unclassified' }
 CardManager >> assignCard: card to: affectedPlayer with: currentTurnPlayer [
+"
 	| newCard |
 	newCard := self createNewCard: card withAffectedPlayer: affectedPlayer.
 	newCard instant
@@ -40,7 +51,13 @@ CardManager >> assignCard: card to: affectedPlayer with: currentTurnPlayer [
 				checkMplayerOf: card
 				withCurrentTurn: currentTurnPlayer
 				generating: newCard ]
-			
+			"
+"
+	| aMove |
+	aMove := self doAMove: card withAffectedPlayer: affectedPlayer.
+	aMove withInstant
+		ifTrue: [ self activateInstant: card toDo: moveWithTarget]
+		ifFalse: [ self compare: card and:currentTurnPlayer toMake:moveWithTarget.]"
 ]
 
 { #category : #'as yet unclassified' }
@@ -57,6 +74,24 @@ CardManager >> checkMplayerOf: card withCurrentTurn: currentTurnPlayer generatin
 		ifTrue: [ self replace: card with: newCard ]
 		ifFalse: [ Error
 				signal: 'Un jugador no puede tirar una carta fuera de su turno.' ]
+]
+
+{ #category : #'as yet unclassified' }
+CardManager >> compare: card and: currentTurnPlayer toMake: moveWithTarget [
+	card owner = currentTurnPlayer
+	owner = currentTurnPlayer 
+		ifTrue: [ self throwA: card andDoA: moveWithTarget ]
+		ifFalse: [ Error signal: 'Un jugador no puede tirar una carta fuera de su turno.' ]
+
+"
+
+checkMplayerOf: card withCurrentTurn:  currentTurnPlayer generating: newCard
+	card owner = currentTurnPlayer
+		ifTrue: [ self replace: card with: newCard ]
+		ifFalse: [ Error
+				signal: 'Un jugador no puede tirar una carta fuera de su turno.' ]
+			
+		"
 ]
 
 { #category : #'as yet unclassified' }
@@ -148,9 +183,22 @@ CardManager >> removeCard: aCard [
 ]
 
 { #category : #'as yet unclassified' }
+CardManager >> removeMove: moveWithTarget [
+	movementsDone remove: moveWithTarget ifAbsent: [ Error signal: 'No se puede cancelar una carta que no haya sido usada en un movimiento'].
+	
+
+" solia ser
+removeCard: aCard
+	usedCards remove: aCard ifAbsent: [ Error signal: 'No se puede cancelar una carta que no está en deck']."
+]
+
+{ #category : #'as yet unclassified' }
 CardManager >> replace: card with: newCard [  
 	usedCards add: newCard.
 	dealtCards remove: card.
+	
+
+"Se manda a volar por self throw: card andDo: moveWithTarget."
 ]
 
 { #category : #'as yet unclassified' }
@@ -158,6 +206,18 @@ CardManager >> replaceInstantCard: card withCard: newCard [
 	self replace: card with: newCard.
 	newCard applyEffectFrom: self.
 	self removeCard: newCard.
+	
+
+"Esto lo mandamos a volar!!! cree activateInstanr: withMove: en vez"
+]
+
+{ #category : #'as yet unclassified' }
+CardManager >> throwA: card andDoA: moveWithTarget [
+	movementsDone add: moveWithTarget.
+	dealtCards remove: card.
+	
+
+"Se hizo para reemplazar replace: with:"
 ]
 
 { #category : #'as yet unclassified' }
