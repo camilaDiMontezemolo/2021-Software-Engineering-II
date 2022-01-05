@@ -6,9 +6,8 @@ Class {
 		'cardRegister',
 		'myGame',
 		'myDeck',
-		'dealtCards',
-		'usedCards',
-		'movementsDone'
+		'playerHands',
+		'usedCards'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -19,45 +18,29 @@ CardManager class >> with: initialCards in: aGame [
 ]
 
 { #category : #'as yet unclassified' }
-CardManager >> activateInstant: card toDo: moveWithTarget [
-	self throwA: card andDoA: moveWithTarget.
-	moveWithTarget applyEffectFrom: self.
-	self removeMove: moveWithTarget.
-	
-"Creado para reemplazar replaceInstand:"
-]
-
-{ #category : #'as yet unclassified' }
 CardManager >> addCardFromRedoCard: newCards [
 	usedCards add: newCards.
 	"dealtCards addAll: myNewCards."
 ]
 
 { #category : #'as yet unclassified' }
-CardManager >> assign: aCard to: onePlayer [ 
-	| newCard |
-	newCard := self createNewCard: aCard withOwner: onePlayer.
-	dealtCards add: newCard.
+CardManager >> assign: aCard to: oneHand [ 
+	"| newCard |
+	newCard := self createNewCard: aCard.
+	dealtCards add: newCard."
+	oneHand add: aCard.
+
 ]
 
 { #category : #'as yet unclassified' }
 CardManager >> assignCard: card to: affectedPlayer with: currentTurnPlayer [
-"
+
 	| newCard |
 	newCard := self createNewCard: card withAffectedPlayer: affectedPlayer.
 	newCard instant
 		ifTrue: [ self replaceInstantCard: card withCard: newCard ]
-		ifFalse: [ self
-				checkMplayerOf: card
-				withCurrentTurn: currentTurnPlayer
-				generating: newCard ]
-			"
-"
-	| aMove |
-	aMove := self doAMove: card withAffectedPlayer: affectedPlayer.
-	aMove withInstant
-		ifTrue: [ self activateInstant: card toDo: moveWithTarget]
-		ifFalse: [ self compare: card and:currentTurnPlayer toMake:moveWithTarget.]"
+		ifFalse: [ self compareOwnerOfCard: card withThePayerOfCurrentTurn: currentTurnPlayer 	generating: newCard ]
+	
 ]
 
 { #category : #'as yet unclassified' }
@@ -69,7 +52,7 @@ CardManager >> check: card andRaiseErrorOf: target [
 ]
 
 { #category : #'as yet unclassified' }
-CardManager >> checkMplayerOf: card withCurrentTurn: currentTurnPlayer generating: newCard [
+CardManager >> compareOwnerOfCard: card withThePayerOfCurrentTurn: currentTurnPlayer generating: newCard [
 	card owner = currentTurnPlayer
 		ifTrue: [ self replace: card with: newCard ]
 		ifFalse: [ Error
@@ -77,27 +60,18 @@ CardManager >> checkMplayerOf: card withCurrentTurn: currentTurnPlayer generatin
 ]
 
 { #category : #'as yet unclassified' }
-CardManager >> compare: card and: currentTurnPlayer toMake: moveWithTarget [
-	card owner = currentTurnPlayer
-	owner = currentTurnPlayer 
-		ifTrue: [ self throwA: card andDoA: moveWithTarget ]
-		ifFalse: [ Error signal: 'Un jugador no puede tirar una carta fuera de su turno.' ]
-
-"
-
-checkMplayerOf: card withCurrentTurn:  currentTurnPlayer generating: newCard
-	card owner = currentTurnPlayer
-		ifTrue: [ self replace: card with: newCard ]
-		ifFalse: [ Error
-				signal: 'Un jugador no puede tirar una carta fuera de su turno.' ]
-			
-		"
+CardManager >> createHandsFor: thePlayersOfThisGame [
+	| n |
+	n:=0.
+	thePlayersOfThisGame do:
+		[ :onePlayer | playerHands add: (Stocktaking for: onePlayer). ].
 ]
 
 { #category : #'as yet unclassified' }
 CardManager >> createNewCard: card withAffectedPlayer: target [
 	self check: card andRaiseErrorOf: target.
 	^ card class of: card owner on: target
+	
 ]
 
 { #category : #'as yet unclassified' }
@@ -123,37 +97,29 @@ CardManager >> findLastTypeOfBoxForPlayer: aPlayer [
 ]
 
 { #category : #'as yet unclassified' }
-CardManager >> giveACardTo: onePlayer [
+CardManager >> giveACardTo: oneHand [
 	| newCard |
 	newCard := myDeck drawACard.
-	self assign: newCard to: onePlayer.
-]
-
-{ #category : #'as yet unclassified' }
-CardManager >> handOutASingleCardFor: thePlayerOfThisTurn [
-	self giveACardTo: thePlayerOfThisTurn.
-
-"Lo malo de que existe giveACardTo es que tecnicamente puedo darme una carta desde fuera del juego, lo que rompe el enclapsulamiento. Quizas es mejor ELIMINAR este metodo y hacer todo dentro del do? el problema de eso es que queda feo"
+	self assign: newCard to: oneHand.
 ]
 
 { #category : #'as yet unclassified' }
 CardManager >> handOutInitialCardsFor: thePlayersOfThisGame [
 	| n |
+	self createHandsFor: thePlayersOfThisGame.
 	n:=0.
-	thePlayersOfThisGame do:
-		[ :onePlayer | [n<2] whileTrue: [self giveACardTo: onePlayer.
+	playerHands do:
+		[ :oneHand | [n<2] whileTrue: [self giveACardTo: oneHand.
 		n:= n+1.].
 		n:=0.
 	].
-
-"Lo malo de que existe giveACardTo es que tecnicamente puedo darme una carta desde fuera del juego, lo que rompe el enclapsulamiento. Quizas es mejor ELIMINAR este metodo y hacer todo dentro del do? el problema de eso es que queda feo"
 ]
 
 { #category : #initialize }
 CardManager >> initializeWithCards: initialDeck in: aGame [
 	myDeck := initialDeck.
 	myGame := aGame.
-	dealtCards := OrderedCollection new.
+	playerHands := OrderedCollection new.
 	usedCards := OrderedCollection new.
 ]
 
@@ -183,22 +149,11 @@ CardManager >> removeCard: aCard [
 ]
 
 { #category : #'as yet unclassified' }
-CardManager >> removeMove: moveWithTarget [
-	movementsDone remove: moveWithTarget ifAbsent: [ Error signal: 'No se puede cancelar una carta que no haya sido usada en un movimiento'].
-	
-
-" solia ser
-removeCard: aCard
-	usedCards remove: aCard ifAbsent: [ Error signal: 'No se puede cancelar una carta que no está en deck']."
-]
-
-{ #category : #'as yet unclassified' }
 CardManager >> replace: card with: newCard [  
 	usedCards add: newCard.
 	dealtCards remove: card.
 	
 
-"Se manda a volar por self throw: card andDo: moveWithTarget."
 ]
 
 { #category : #'as yet unclassified' }
@@ -208,16 +163,6 @@ CardManager >> replaceInstantCard: card withCard: newCard [
 	self removeCard: newCard.
 	
 
-"Esto lo mandamos a volar!!! cree activateInstanr: withMove: en vez"
-]
-
-{ #category : #'as yet unclassified' }
-CardManager >> throwA: card andDoA: moveWithTarget [
-	movementsDone add: moveWithTarget.
-	dealtCards remove: card.
-	
-
-"Se hizo para reemplazar replace: with:"
 ]
 
 { #category : #'as yet unclassified' }

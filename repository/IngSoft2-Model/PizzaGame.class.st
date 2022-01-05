@@ -75,7 +75,7 @@ PizzaGame >> firstPlace [
 
 { #category : #'as yet unclassified' }
 PizzaGame >> getACardFor: playerWhoGetsTheCard [
-	myCardManager handOutASingleCardFor: playerWhoGetsTheCard.
+	myCardManager giveACardTo: playerWhoGetsTheCard.
 ]
 
 { #category : #initialize }
