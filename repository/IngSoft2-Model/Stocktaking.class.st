@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'owner',
 		'hand',
-		'affectedByCards'
+		'cardsAffectingPlayer'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -15,14 +15,33 @@ Stocktaking class >> for: player [
 ]
 
 { #category : #'as yet unclassified' }
-Stocktaking >> AddToAffectedByCards: card [
+Stocktaking >> AddToCardsAffectingPlayer: card [
+	cardsAffectingPlayer add: card.
 ]
 
 { #category : #adding }
 Stocktaking >> addToHand: card [
+	hand add: card.
+]
+
+{ #category : #'as yet unclassified' }
+Stocktaking >> getCardsAffecting [
+	^cardsAffectingPlayer.
+]
+
+{ #category : #'as yet unclassified' }
+Stocktaking >> getHand [
+	^hand.
 ]
 
 { #category : #'as yet unclassified' }
 Stocktaking >> initializeForPlayer: player [
 	owner :=player.
+	hand:= OrderedCollection new.
+	cardsAffectingPlayer:= OrderedCollection new.
+]
+
+{ #category : #'as yet unclassified' }
+Stocktaking >> owner [
+	^owner.
 ]

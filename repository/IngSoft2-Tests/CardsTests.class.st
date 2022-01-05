@@ -164,7 +164,7 @@ CardsTests >> testUseACancelationCardOnAnAccelerationCard [
 	game player: #margarita wantsToApplyCard: (margaritaHand first) to: testPlayers.
 	usedCards := game usedCards.
 	napolitanaHand := game playerHand: #napolitana.
-	game applyCard: (napolitanaHand first) to: (usedCards first). 
+	game applyCard: (napolitanaHand first) toCard: (usedCards first). 
 	game playNextTurn.
 	self assert: ((game ranking) second) location equals: 2.
 	self assert: ((game ranking) first) location equals: 2.
@@ -251,7 +251,7 @@ CardsTests >> testUseACancelationCardOnAnOverloadCard [
 	game playNextTurn.
 	margaritaHand := game playerHand: #margarita.
 	napolitanaHand := game playerHand: #napolitana.
-	game applyCard: (margaritaHand first) to: #margarita.
+	game applyCard: (margaritaHand first) toCard: #margarita.
 	usedCards := game usedCards.
 	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: (usedCards first). 
 	game playNextTurn.

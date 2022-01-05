@@ -42,8 +42,8 @@ PizzaGame class >> withBoxes: someBoxes players: somePlayers dice: someDice laps
 ]
 
 { #category : #'as yet unclassified' }
-PizzaGame >> applyCard: theIndexOfCard to: affectedPlayer [
-	myCardManager assignCard: theIndexOfCard to: affectedPlayer with: (myPlayers at: currentTurn).
+PizzaGame >> applyCard: card toCard: affectedPlayer [
+	myCardManager assignCard: card to: affectedPlayer with: (myPlayers at: currentTurn).
 
 "applyCard: card to: affectedPlayer
 	myCardManager assignCard: card to: affectedPlayer with: (myPlayers at: currentTurn)."
@@ -76,6 +76,16 @@ PizzaGame >> firstPlace [
 { #category : #'as yet unclassified' }
 PizzaGame >> getACardFor: playerWhoGetsTheCard [
 	myCardManager giveACardTo: playerWhoGetsTheCard.
+]
+
+{ #category : #'as yet unclassified' }
+PizzaGame >> getCardsAffecting: player [ 
+	^(myCardManager getCardsAffecting: player).
+]
+
+{ #category : #'as yet unclassified' }
+PizzaGame >> getHandOf: player [
+	^(myCardManager getHandOf: player).
 ]
 
 { #category : #initialize }
@@ -118,18 +128,28 @@ PizzaGame >> playTurnForAllPlayers [
 
 { #category : #'as yet unclassified' }
 PizzaGame >> player: player wantsToApplyCard: card to: target [
+	
+	(((myPlayers at: currentTurn) = player| (card instant)) & (myPlayers includes: player))
+	ifTrue:[
+	myCardManager affect: target with: card]
+	ifFalse:[
+		self sendCardErrorFor: player.
+	]
+	
+
+"player: player wantsToApplyCard: card to: target
 	(((myPlayers at: currentTurn) = player| (card instant)) & (myPlayers includes: player))
 	ifTrue:[
 	myCardManager assignCard: card to: target with: player.]
 	ifFalse:[
 		self sendCardErrorFor: player.
-	]
-	
+	]"
 ]
 
 { #category : #'as yet unclassified' }
 PizzaGame >> playerHand: player [ 
 	^(myCardManager findCardsBelonging: player).
+	"Se manda a volar por getHandOf!!!!"
 ]
 
 { #category : #initialize }

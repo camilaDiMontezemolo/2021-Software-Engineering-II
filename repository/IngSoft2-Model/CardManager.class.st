@@ -6,8 +6,8 @@ Class {
 		'cardRegister',
 		'myGame',
 		'myDeck',
-		'playerHands',
-		'usedCards'
+		'usedCards',
+		'playersStockTakings'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -24,16 +24,41 @@ CardManager >> addCardFromRedoCard: newCards [
 ]
 
 { #category : #'as yet unclassified' }
-CardManager >> assign: aCard to: oneHand [ 
+CardManager >> affect: target with: card [
+
+	| neededStocks |
+
+	neededStocks := playersStockTakings select: [:stock| stock owner = target].
+	
+	neededStocks do:
+		[ :oneStock | oneStock AddToCardsAffectingPlayer: card. ].
+
+	
+	
+	
+	
+"assignCard: card to: affectedPlayer with: currentTurnPlayer
+
+	| newCard |
+	newCard := self createNewCard: card withAffectedPlayer: affectedPlayer.
+	newCard instant
+		ifTrue: [ self replaceInstantCard: card withCard: newCard ]
+		ifFalse: [ self compareOwnerOfCard: card withThePayerOfCurrentTurn: currentTurnPlayer 	generating: newCard ]"
+	
+]
+
+{ #category : #'as yet unclassified' }
+CardManager >> assign: aCard to: playerStock [
 	"| newCard |
 	newCard := self createNewCard: aCard.
 	dealtCards add: newCard."
-	oneHand add: aCard.
+	playerStock addToHand: aCard.
 
 ]
 
 { #category : #'as yet unclassified' }
 CardManager >> assignCard: card to: affectedPlayer with: currentTurnPlayer [
+"Se reemplaza con affect: with:"
 
 	| newCard |
 	newCard := self createNewCard: card withAffectedPlayer: affectedPlayer.
@@ -64,7 +89,7 @@ CardManager >> createHandsFor: thePlayersOfThisGame [
 	| n |
 	n:=0.
 	thePlayersOfThisGame do:
-		[ :onePlayer | playerHands add: (Stocktaking for: onePlayer). ].
+		[ :onePlayer | playersStockTakings add: (Stocktaking for: onePlayer). ].
 ]
 
 { #category : #'as yet unclassified' }
@@ -83,12 +108,18 @@ CardManager >> createNewCard: card withOwner: aPlayer [
 
 { #category : #'as yet unclassified' }
 CardManager >> findCardsAffecting: player [
+	"Revisar todas las manos hasta encontrar la que es de player, y ahi fijarme las cartas que lo afectan y si tiene"
+	
 	^usedCards select: [:card| card usedOn: player].
+	
+"se manda a volar por  getCardsAffecting"
 ]
 
 { #category : #'as yet unclassified' }
 CardManager >> findCardsBelonging: player [
-	^dealtCards select: [:card| card owner = player].
+"	^dealtCards select: [:card| card owner = player]."
+	
+"Se va a volar opr getHandsOf:"
 ]
 
 { #category : #'as yet unclassified' }
@@ -97,10 +128,24 @@ CardManager >> findLastTypeOfBoxForPlayer: aPlayer [
 ]
 
 { #category : #'as yet unclassified' }
-CardManager >> giveACardTo: oneHand [
+CardManager >> getCardsAffecting: player [
+	| neededList |
+	neededList := (playersStockTakings select: [:stock| stock owner = player]) first.
+	^(neededList getCardsAffecting).
+]
+
+{ #category : #'as yet unclassified' }
+CardManager >> getHandOf: player [ 
+	| neededStock |
+	neededStock := (playersStockTakings select: [:stock| stock owner = player]) first.
+	^(neededStock getHand).
+]
+
+{ #category : #'as yet unclassified' }
+CardManager >> giveACardTo: oneStock [
 	| newCard |
 	newCard := myDeck drawACard.
-	self assign: newCard to: oneHand.
+	self assign: newCard to: oneStock.
 ]
 
 { #category : #'as yet unclassified' }
@@ -108,8 +153,8 @@ CardManager >> handOutInitialCardsFor: thePlayersOfThisGame [
 	| n |
 	self createHandsFor: thePlayersOfThisGame.
 	n:=0.
-	playerHands do:
-		[ :oneHand | [n<2] whileTrue: [self giveACardTo: oneHand.
+	playersStockTakings do:
+		[ :oneStock | [n<2] whileTrue: [self giveACardTo: oneStock.
 		n:= n+1.].
 		n:=0.
 	].
@@ -119,7 +164,7 @@ CardManager >> handOutInitialCardsFor: thePlayersOfThisGame [
 CardManager >> initializeWithCards: initialDeck in: aGame [
 	myDeck := initialDeck.
 	myGame := aGame.
-	playerHands := OrderedCollection new.
+	playersStockTakings := OrderedCollection new.
 	usedCards := OrderedCollection new.
 ]
 
