@@ -14,11 +14,11 @@ RepeatCard class >> of: player on: anotherPlayer [
 ]
 
 { #category : #'as yet unclassified' }
-RepeatCard >> applyEffectFrom: aDeck [
+RepeatCard >> applyEffectFrom: aCardManager [
 	active
 		ifTrue:
-			[aDeck lastCardUsed: self. 
-			aDeck findLastTypeOfBoxForPlayer: affectedPlayer.]
+			[aCardManager lastCardUsed: self. 
+			aCardManager findLastTypeOfBoxForPlayer: affectedPlayer.]
 		ifFalse: [ ^ 0 ]
 ]
 

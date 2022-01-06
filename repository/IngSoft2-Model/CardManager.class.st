@@ -27,12 +27,9 @@ CardManager >> addCardFromRedoCard: newCards [
 CardManager >> affect: target with: card [
 
 	| neededStocks |
-
-	neededStocks := playersStockTakings select: [:stock| stock owner = target].
-	
+	neededStocks := playersStockTakings select: [:stock| (target includes: (stock owner)) | (stock owner = target)].
 	neededStocks do:
 		[ :oneStock | oneStock AddToCardsAffectingPlayer: card. ].
-
 	
 	
 	
@@ -45,15 +42,6 @@ CardManager >> affect: target with: card [
 		ifTrue: [ self replaceInstantCard: card withCard: newCard ]
 		ifFalse: [ self compareOwnerOfCard: card withThePayerOfCurrentTurn: currentTurnPlayer 	generating: newCard ]"
 	
-]
-
-{ #category : #'as yet unclassified' }
-CardManager >> assign: aCard to: playerStock [
-	"| newCard |
-	newCard := self createNewCard: aCard.
-	dealtCards add: newCard."
-	playerStock addToHand: aCard.
-
 ]
 
 { #category : #'as yet unclassified' }
@@ -93,36 +81,6 @@ CardManager >> createHandsFor: thePlayersOfThisGame [
 ]
 
 { #category : #'as yet unclassified' }
-CardManager >> createNewCard: card withAffectedPlayer: target [
-	self check: card andRaiseErrorOf: target.
-	^ card class of: card owner on: target
-	
-]
-
-{ #category : #'as yet unclassified' }
-CardManager >> createNewCard: card withOwner: aPlayer [
-	((card class) = CancellationCard)
-	ifTrue:[^(card class of: aPlayer on: EmptyObject new).]
-	ifFalse:[^(card class of: aPlayer on:'').]
-]
-
-{ #category : #'as yet unclassified' }
-CardManager >> findCardsAffecting: player [
-	"Revisar todas las manos hasta encontrar la que es de player, y ahi fijarme las cartas que lo afectan y si tiene"
-	
-	^usedCards select: [:card| card usedOn: player].
-	
-"se manda a volar por  getCardsAffecting"
-]
-
-{ #category : #'as yet unclassified' }
-CardManager >> findCardsBelonging: player [
-"	^dealtCards select: [:card| card owner = player]."
-	
-"Se va a volar opr getHandsOf:"
-]
-
-{ #category : #'as yet unclassified' }
 CardManager >> findLastTypeOfBoxForPlayer: aPlayer [
 	myGame findLastTypeOfBoxForPlayer: aPlayer.
 ]
@@ -145,7 +103,7 @@ CardManager >> getHandOf: player [
 CardManager >> giveACardTo: oneStock [
 	| newCard |
 	newCard := myDeck drawACard.
-	self assign: newCard to: oneStock.
+	oneStock addToHand: newCard.
 ]
 
 { #category : #'as yet unclassified' }
@@ -178,7 +136,8 @@ CardManager >> lastCardUsed: newCard [
 CardManager >> modifyDistanceOf: player [ 
 	| playerCards finalDistance|
 	finalDistance:=0.
-	playerCards := (self findCardsAffecting: player).
+	"playerCards := (self findCardsAffecting: player)."
+	playerCards := (self getCardsAffecting: player).
 	playerCards do: [:card| finalDistance:= finalDistance +(card applyEffectFrom: self).].
 	^finalDistance.
 ]

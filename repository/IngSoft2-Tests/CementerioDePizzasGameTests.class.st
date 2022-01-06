@@ -37,7 +37,20 @@ CementerioDePizzasGameTests >> testACardGeneratorGivesACollectionOfCardsWithProb
 { #category : #tests }
 CementerioDePizzasGameTests >> testACardGeneratorShouldntBeAbleToGiveZeroCards [
 
-	self should: [DeckGenerator with: 0.] raise: Error withMessage: 'Un deck no puede tener menos de 2 carta.'
+| game dice positions napolitana boxes testPlayers cards deck |
+	
+	napolitana:= #napolitana.
+	
+	dice := OrderedCollection with: (Die withSides: 5).
+	boxes:= BoxGenerator give: 5 andProbabilitiesForNoEffectBox: 0.38 andSpeed: 0.2 andWormm: 0.2 andMoon: 0.1 andAtomic: 0.02 andCardBox: 0.1.
+	
+	testPlayers:= OrderedCollection with: napolitana.
+	
+	cards := DeckGenerator with: 0.
+	deck := Deck withCards: cards. 
+
+	self should: [PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck] 
+				raise: Error withMessage: 'Un juego no puede tener menos de 2 cartas por jugador.'
 	
 	
 	

@@ -25,8 +25,8 @@ PizzaGame class >> validateLaps: someLaps boxes: someBoxes players: somePlayers 
 		ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 vuelta.' ].
 	someBoxes size < 1
 		ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 casillero.' ].
-	(aDeck numberOfCards < 2)
-		ifTrue: [ Error signal: 'Un juego no puede tener menos de 2 cartas.' ].
+	(aDeck numberOfCards < (2* (somePlayers size)))
+		ifTrue: [ Error signal: 'Un juego no puede tener menos de 2 cartas por jugador.' ]. "Ojo que cambié esto"
 ]
 
 { #category : #'instance creation' }
@@ -128,14 +128,16 @@ PizzaGame >> playTurnForAllPlayers [
 
 { #category : #'as yet unclassified' }
 PizzaGame >> player: player wantsToApplyCard: card to: target [
+	((target class) = Card)
+	ifTrue:[ self applyInstant: target.]
+	ifFalse:[
+	
 	
 	(((myPlayers at: currentTurn) = player| (card instant)) & (myPlayers includes: player))
 	ifTrue:[
 	myCardManager affect: target with: card]
-	ifFalse:[
-		self sendCardErrorFor: player.
+	ifFalse:[ self sendCardErrorFor: player. ]
 	]
-	
 
 "player: player wantsToApplyCard: card to: target
 	(((myPlayers at: currentTurn) = player| (card instant)) & (myPlayers includes: player))
@@ -144,12 +146,6 @@ PizzaGame >> player: player wantsToApplyCard: card to: target [
 	ifFalse:[
 		self sendCardErrorFor: player.
 	]"
-]
-
-{ #category : #'as yet unclassified' }
-PizzaGame >> playerHand: player [ 
-	^(myCardManager findCardsBelonging: player).
-	"Se manda a volar por getHandOf!!!!"
 ]
 
 { #category : #initialize }

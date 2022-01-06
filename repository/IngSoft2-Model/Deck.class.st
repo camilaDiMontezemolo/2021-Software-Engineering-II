@@ -9,8 +9,6 @@ Class {
 
 { #category : #'instance creation' }
 Deck class >> withCards: aCollectionOfCards [
-(aCollectionOfCards size) < 2
-		ifTrue: [ Error signal: 'Un deck no puede tener menos de 2 carta.' ].
 	^ self new initializeWithCards: aCollectionOfCards
 	
 ]
