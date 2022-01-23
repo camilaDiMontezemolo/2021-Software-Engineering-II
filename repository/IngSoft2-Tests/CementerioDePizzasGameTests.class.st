@@ -94,7 +94,7 @@ CementerioDePizzasGameTests >> testCreateAGameMultiPlayer [
 		with: #margarita
 		with: #mozzarella.
 	dice := OrderedCollection
-		with: (LoadedDice withTosses: #(4 4 4 2 2 2 2 2 2 6 6 6 2 2 2)).
+		with: (LoadedDie withTosses: #(4 4 4 2 2 2 2 2 2 6 6 6 2 2 2)).
 	cards := DeckGenerator with: 100.
 	deck := Deck withCards: cards. 
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
@@ -168,7 +168,7 @@ CementerioDePizzasGameTests >> testYouShouldBeAbleToGetYourLapAndLocation [
    cards := DeckGenerator with: 50.
 	deck := Deck withCards: cards. 
    testPlayers := OrderedCollection with:#margarita with: #napolitana.
-   myDie := OrderedCollection with: (LoadedDice withTosses: #(6)).
+   myDie := OrderedCollection with: (LoadedDie withTosses: #(6)).
    game := PizzaGame withBoxes: boxes players: testPlayers dice: myDie laps: 2 andDeck: deck.
 	game playNextTurn.
 	

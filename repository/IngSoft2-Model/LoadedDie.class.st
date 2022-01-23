@@ -1,5 +1,5 @@
 Class {
-	#name : #LoadedDice,
+	#name : #LoadedDie,
 	#superclass : #Object,
 	#instVars : [
 		'myTosses',
@@ -9,20 +9,20 @@ Class {
 }
 
 { #category : #'instance creation' }
-LoadedDice class >> withTosses: someTosses [ 
+LoadedDie class >> withTosses: someTosses [ 
 
 	^self new initializeWithTheFollowingTosses: someTosses.
 ]
 
 { #category : #initalize }
-LoadedDice >> initializeWithTheFollowingTosses: someTosses [ 
+LoadedDie >> initializeWithTheFollowingTosses: someTosses [ 
 	myTosses := OrderedCollection new.
 	myTosses:= someTosses.
 	indice:=0.
 ]
 
 { #category : #'as yet unclassified' }
-LoadedDice >> spin [
+LoadedDie >> spin [
 	 (indice >= (myTosses size))
 		ifTrue: [ indice:=0 .].
 	indice := indice +1.

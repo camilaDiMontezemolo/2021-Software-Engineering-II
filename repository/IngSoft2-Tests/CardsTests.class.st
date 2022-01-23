@@ -35,7 +35,7 @@ CardsTests >> testACardCanNotBeUsedOutsideYourTurn [
 	).
 	
 	testPlayers := OrderedCollection with:#margarita with: #napolitana.
-	myDie := OrderedCollection with: (LoadedDice withTosses: #(1)).
+	myDie := OrderedCollection with: (LoadedDie withTosses: #(1)).
 	game := PizzaGame 	withBoxes: boxes players: testPlayers dice: myDie laps: 1 andDeck: cards.
 	game playTurnForAllPlayers.
 	napolitanaCards := game playerHand: #napolitana.
@@ -62,7 +62,7 @@ CardsTests >> testAPlayerOutsideOfTheGameCanNotUseAnInstantCard [
 	deck := Deck withCards: cards. 
 		
 	testPlayers := OrderedCollection with: #napolitana with: #margarita.
-	dice := OrderedCollection with: (LoadedDice withTosses: #(2)).
+	dice := OrderedCollection with: (LoadedDie withTosses: #(2)).
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	game playNextTurn.
 	napolitanaHand := game playerHand: #napolitana.
@@ -94,7 +94,7 @@ CardsTests >> testAccelerationCardMustBeUsedAgainstAllPlayers [
 	
 	deck := Deck withCards: cards. 	
 	testPlayers := OrderedCollection with:#napolitana with: #margarita with: #hawaiana.
-	dice := OrderedCollection with: (LoadedDice withTosses: #(1)).
+	dice := OrderedCollection with: (LoadedDie withTosses: #(1)).
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	napolitanaHand := game playerHand: #napolitana.
 	self should: [game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: #hawaiana.] raise: Error withMessage: 'La acceleration card debe tener a todos los otros jugadores como target.'. 
@@ -122,7 +122,7 @@ CardsTests >> testUseACancelationCardOnASpeedupCard [
 	deck := Deck withCards: cards. 
 		
 	testPlayers := OrderedCollection with: #napolitana with: #margarita.
-	dice := OrderedCollection with: (LoadedDice withTosses: #(2)).
+	dice := OrderedCollection with: (LoadedDie withTosses: #(2)).
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	game playNextTurn.
 	napolitanaHand := game playerHand: #napolitana.
@@ -157,7 +157,7 @@ CardsTests >> testUseACancelationCardOnAnAccelerationCard [
 	deck := Deck withCards: cards. 
 		
 	testPlayers := OrderedCollection with: #napolitana with: #margarita.
-	dice := OrderedCollection with: (LoadedDice withTosses: #(2)).
+	dice := OrderedCollection with: (LoadedDie withTosses: #(2)).
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	game playNextTurn.
 	margaritaHand := game playerHand: #margarita.
@@ -190,7 +190,7 @@ CardsTests >> testUseACancelationCardOnAnInactiveCardRaiseError [
 		with: OverloadCard new.
 	deck := Deck withCards: cards. 	
 	testPlayers := OrderedCollection with: #napolitana with: #margarita.
-	dice := OrderedCollection with: (LoadedDice withTosses: #(2)).
+	dice := OrderedCollection with: (LoadedDie withTosses: #(2)).
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	game playNextTurn.
 	napolitanaHand := game playerHand: #napolitana.
@@ -218,7 +218,7 @@ CardsTests >> testUseACancelationCardOnAnInstantCardRaiseAnError [
 		with: OverloadCard new.
 	deck := Deck withCards: cards. 	
 	testPlayers := OrderedCollection with: #napolitana with: #margarita.
-	dice := OrderedCollection with: (LoadedDice withTosses: #(2)).
+	dice := OrderedCollection with: (LoadedDie withTosses: #(2)).
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	napolitanaCards := game playerHand: #napolitana.
 	margaritaCards := game playerHand: #margarita.
@@ -246,7 +246,7 @@ CardsTests >> testUseACancelationCardOnAnOverloadCard [
 		with: OverloadCard new.
 	deck := Deck withCards: cards. 	
 	testPlayers := OrderedCollection with: #napolitana with: #margarita.
-	dice := OrderedCollection with: (LoadedDice withTosses: #(2)).
+	dice := OrderedCollection with: (LoadedDie withTosses: #(2)).
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	game playNextTurn.
 	margaritaHand := game playerHand: #margarita.
@@ -280,7 +280,7 @@ CardsTests >> testUseARedoCard [
 		with: OverloadCard new.
 	deck := Deck withCards: cards. 
    testPlayers := OrderedCollection with:#margarita with: #napolitana.
-   dice := OrderedCollection with: (LoadedDice withTosses: #(2)).
+   dice := OrderedCollection with: (LoadedDie withTosses: #(2)).
    game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	margaritaHand := game playerHand: #margarita.
 	napolitanaHand := game playerHand: #napolitana.
@@ -317,7 +317,7 @@ CardsTests >> testUseARedoCardOverCancelation [
 		with: RedoCard new.
 	deck := Deck withCards: cards. 
 	testPlayers := OrderedCollection with:#margarita with: #napolitana.
-	dice := OrderedCollection with: (LoadedDice withTosses: #(2)).
+	dice := OrderedCollection with: (LoadedDie withTosses: #(2)).
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 10 andDeck: deck.
 	margaritaHand := game playerHand: #margarita.
 	napolitanaHand := game playerHand: #napolitana.
@@ -355,7 +355,7 @@ CardsTests >> testUseARepeatCard [
 		with: OverloadCard new.
 	deck := Deck withCards: cards. 	
 	testPlayers := OrderedCollection with:#margarita with: #napolitana.
-	dice := OrderedCollection with: (LoadedDice withTosses: #(1)).
+	dice := OrderedCollection with: (LoadedDie withTosses: #(1)).
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	game playNextTurn.
 	napolitanaHand := game playerHand: #napolitana.
@@ -388,7 +388,7 @@ CardsTests >> testUseARepeatCardWhenNoDieWasRolledYet [
 		with: OverloadCard new.
 	deck := Deck withCards: cards. 
 	testPlayers := OrderedCollection with:#margarita with: #napolitana.
-	dice := OrderedCollection with: (LoadedDice withTosses: #(1)).
+	dice := OrderedCollection with: (LoadedDie withTosses: #(1)).
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	margaritaHand := game playerHand: #margarita.
 	game player: #margarita wantsToApplyCard: (margaritaHand first) to: #margarita.
@@ -416,7 +416,7 @@ CardsTests >> testUseASpeedUpCard [
 		with: OverloadCard new.
 	deck := Deck withCards: cards. 	
 	testPlayers := OrderedCollection with: #napolitana.
-	dice := OrderedCollection with: (LoadedDice withTosses: #(2)).
+	dice := OrderedCollection with: (LoadedDie withTosses: #(2)).
 	game := PizzaGame withBoxes: board players: testPlayers dice: dice laps: 1 andDeck: deck.
 	napolitanaHand := game playerHand: #napolitana.
 	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: #napolitana.
@@ -445,7 +445,7 @@ CardsTests >> testUseASpeedUpCardOnTwoRounds [
 		with: OverloadCard new.
 	deck := Deck withCards: cards. 
 	testPlayers := OrderedCollection with: #napolitana.
-	dice := OrderedCollection with: (LoadedDice withTosses: #(2)).
+	dice := OrderedCollection with: (LoadedDie withTosses: #(2)).
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	napolitanaHand := game playerHand: #napolitana.
 	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: #napolitana.
@@ -480,7 +480,7 @@ CardsTests >> testUseAnAccelerationCard [
 	
 	deck := Deck withCards: cards. 	
 	testPlayers := OrderedCollection with:#napolitana with: #margarita.
-	dice := OrderedCollection with: (LoadedDice withTosses: #(1)).
+	dice := OrderedCollection with: (LoadedDie withTosses: #(1)).
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	napolitanaHand := game playerHand: #napolitana.
 	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: testPlayers.
@@ -514,7 +514,7 @@ CardsTests >> testUseAnOverloadCard [
 		with: OverloadCard new.
 	deck := Deck withCards: cards. 
 	testPlayers := OrderedCollection with: #margarita with: #napolitana.
-	dice := OrderedCollection with: (LoadedDice withTosses: #(2)).
+	dice := OrderedCollection with: (LoadedDie withTosses: #(2)).
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	margaritaHand := game playerHand: #margarita.
 	game player: #margarita wantsToApplyCard: (margaritaHand first) to: #napolitana.
@@ -545,7 +545,7 @@ CardsTests >> testUseAnOverloadCardAndEndUpWithNegativeNumbers [
 		with: OverloadCard new.
 	deck := Deck withCards: cards. 	
 	testPlayers := OrderedCollection with: #napolitana with: #margarita.
-	dice := OrderedCollection with: (LoadedDice withTosses: #(1)).
+	dice := OrderedCollection with: (LoadedDie withTosses: #(1)).
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	napolitanaHand := game playerHand: #napolitana.
 	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: #napolitana.

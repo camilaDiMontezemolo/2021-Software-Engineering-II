@@ -31,7 +31,7 @@ StocktakingTests >> testEveryPlayerHasAHandWithCards [
 		
 	deck := Deck withCards: cards. 	
 	testPlayers := OrderedCollection with:#margarita with: #napolitana.
-	dice := OrderedCollection with: (LoadedDice withTosses: #(1)).
+	dice := OrderedCollection with: (LoadedDie withTosses: #(1)).
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	game playNextTurn.
 	
@@ -60,7 +60,7 @@ StocktakingTests >> testUseACancelationCardOnASpeedupCard [
 	deck := Deck withCards: cards. 
 		
 	testPlayers := OrderedCollection with: #napolitana with: #margarita.
-	dice := OrderedCollection with: (LoadedDice withTosses: #(2)).
+	dice := OrderedCollection with: (LoadedDie withTosses: #(2)).
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	game playNextTurn.
 	napolitanaHand := game getHandOf: #napolitana.
@@ -91,7 +91,7 @@ StocktakingTests >> testUseASpeedUpCard [
 		with: OverloadCard new.
 	deck := Deck withCards: cards. 	
 	testPlayers := OrderedCollection with: #napolitana.
-	dice := OrderedCollection with: (LoadedDice withTosses: #(2)).
+	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(2))).
 	game := PizzaGame withBoxes: board players: testPlayers dice: dice laps: 1 andDeck: deck.
 	napolitanaHand := game getHandOf: #napolitana.
 	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: #napolitana.
@@ -120,7 +120,7 @@ StocktakingTests >> testUseASpeedUpCardOnTwoRounds [
 		with: OverloadCard new.
 	deck := Deck withCards: cards. 
 	testPlayers := OrderedCollection with: #napolitana.
-	dice := OrderedCollection with: (LoadedDice withTosses: #(2)).
+	dice := LoadedDie withTosses: #(2).
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	napolitanaHand := game getHandOf: #napolitana.
 	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: #napolitana.
@@ -153,7 +153,7 @@ StocktakingTests >> testUseAnAccelerationCard [
 	
 	deck := Deck withCards: cards. 	
 	testPlayers := OrderedCollection with:#napolitana with: #margarita.
-	dice := OrderedCollection with: (LoadedDice withTosses: #(1)).
+	dice := LoadedDie withTosses: #(1).
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	napolitanaHand := game getHandOf: #napolitana.
 	
@@ -186,7 +186,7 @@ StocktakingTests >> testUseAnOverCard [
 		with: OverloadCard new.
 	deck := Deck withCards: cards. 
 	testPlayers := OrderedCollection with: #margarita with: #napolitana.
-	dice := OrderedCollection with: (LoadedDice withTosses: #(2)).
+	dice := LoadedDie withTosses: #(2).
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	
 	margaritaHand := game getHandOf: #margarita.
@@ -220,7 +220,7 @@ StocktakingTests >> testUseAnOverloadCardWithStock [
 	
 	deck := Deck withCards: cards. 
 	testPlayers := OrderedCollection with: #margarita with: #napolitana.
-	dice := OrderedCollection with: (LoadedDice withTosses: #(2)).
+	dice := OrderedCollection with: (LoadedDie withTosses: #(2)).
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	
 	margaritaHand := game getHandOf: #margarita.

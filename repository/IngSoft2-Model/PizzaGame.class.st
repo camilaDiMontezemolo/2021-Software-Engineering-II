@@ -19,8 +19,8 @@ Class {
 PizzaGame class >> validateLaps: someLaps boxes: someBoxes players: somePlayers dice: someDice andDeck: aDeck [
 	somePlayers isEmpty
 		ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 jugador.' ].
-	someDice isEmpty
-		ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 dado.' ].
+	"someDice isEmpty
+		ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 dado.' ]."
 	someLaps < 1
 		ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 vuelta.' ].
 	someBoxes size < 1
@@ -161,8 +161,7 @@ PizzaGame >> ranking [
 { #category : #'as yet unclassified' }
 PizzaGame >> rollFor: aPlayer [
 	| distance |
-	distance := 0.
-	myDice do: [ :dice | distance := distance + dice spin ].
+	distance := myDice spin.
 	distance:= distance + (myCardManager modifyDistanceOf: aPlayer).
 	myBoard changePositionOf: aPlayer by: distance playing: self.
 ]
