@@ -128,7 +128,13 @@ PizzaGame >> playTurnForAllPlayers [
 
 { #category : #'as yet unclassified' }
 PizzaGame >> player: player wantsToApplyCard: card to: target [
-	((target class) = Card)
+
+	((myPlayers at: currentTurn) = player & (myPlayers includes: player))
+	ifTrue:[
+	myCardManager affect: target with: card]
+	ifFalse:[ self sendCardErrorFor: player. ]
+	
+	"((target class) = Card)
 	ifTrue:[ self applyInstant: target.]
 	ifFalse:[
 	
@@ -139,13 +145,23 @@ PizzaGame >> player: player wantsToApplyCard: card to: target [
 	ifFalse:[ self sendCardErrorFor: player. ]
 	]
 
-"player: player wantsToApplyCard: card to: target
+player: player wantsToApplyCard: card to: target
 	(((myPlayers at: currentTurn) = player| (card instant)) & (myPlayers includes: player))
 	ifTrue:[
 	myCardManager assignCard: card to: target with: player.]
 	ifFalse:[
 		self sendCardErrorFor: player.
 	]"
+]
+
+{ #category : #'as yet unclassified' }
+PizzaGame >> player: player wantsToApplyCard: card toCard: target [
+	"para cancellation card"
+
+	(myPlayers includes: player)
+	ifTrue:[
+	myCardManager affectCard: target with: card]
+	ifFalse:[ self sendCardErrorFor: player. ]
 ]
 
 { #category : #initialize }

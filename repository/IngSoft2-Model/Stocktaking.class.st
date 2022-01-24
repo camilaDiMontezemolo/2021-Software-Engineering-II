@@ -45,3 +45,8 @@ Stocktaking >> initializeForPlayer: player [
 Stocktaking >> owner [
 	^owner.
 ]
+
+{ #category : #'as yet unclassified' }
+Stocktaking >> removeCardAffectingPlayer: card [
+	cardsAffectingPlayer remove: card.
+]

@@ -1,11 +1,6 @@
 Class {
 	#name : #CancellationCard,
 	#superclass : #Card,
-	#instVars : [
-		'affectedPlayer',
-		'active',
-		'affectedCard'
-	],
 	#category : #'IngSoft2-Model'
 }
 
@@ -19,12 +14,7 @@ CancellationCard class >> of: player on: anotherCard [
 ]
 
 { #category : #'as yet unclassified' }
-CancellationCard >> applyEffectFrom: aCardManager [ 
+CancellationCard >> cancellateCard: affectedCard  from: aCardManager [
 	aCardManager lastCardUsed:self.
-	aCardManager removeCard: affectedCard.
-]
-
-{ #category : #initialize }
-CancellationCard >> instant [ 
-	^true.
+	aCardManager cancellateCard: affectedCard.
 ]

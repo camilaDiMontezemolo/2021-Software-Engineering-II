@@ -29,7 +29,30 @@ CardManager >> affect: target with: card [
 	| neededStocks |
 	neededStocks := playersStockTakings select: [:stock| (target includes: (stock owner)) | (stock owner = target)].
 	neededStocks do:
-		[ :oneStock | oneStock AddToCardsAffectingPlayer: card. ].
+		[ :oneStock | oneStock AddToCardsAffectingPlayer: card. 
+							self usedCards add: card].
+	
+	
+	
+	
+"assignCard: card to: affectedPlayer with: currentTurnPlayer
+
+	| newCard |
+	newCard := self createNewCard: card withAffectedPlayer: affectedPlayer.
+	newCard instant
+		ifTrue: [ self replaceInstantCard: card withCard: newCard ]
+		ifFalse: [ self compareOwnerOfCard: card withThePayerOfCurrentTurn: currentTurnPlayer 	generating: newCard ]"
+	
+]
+
+{ #category : #'as yet unclassified' }
+CardManager >> affectCard: target with: card [
+	card cancellateCard: target from: self. 
+	
+	"| neededStocks |
+	neededStocks := playersStockTakings select: [:stock| (target includes: (stock owner)) | (stock owner = target)].
+	neededStocks do:
+		[ :oneStock | oneStock AddToCardsAffectingPlayer: card. ]."
 	
 	
 	
@@ -54,6 +77,15 @@ CardManager >> assignCard: card to: affectedPlayer with: currentTurnPlayer [
 		ifTrue: [ self replaceInstantCard: card withCard: newCard ]
 		ifFalse: [ self compareOwnerOfCard: card withThePayerOfCurrentTurn: currentTurnPlayer 	generating: newCard ]
 	
+]
+
+{ #category : #'as yet unclassified' }
+CardManager >> cancellateCard: aCard [
+	| neededStocks|
+	neededStocks := playersStockTakings select: [:stock| (stock getCardsAffecting) includes: aCard].
+	neededStocks do:
+		[ :oneStock | oneStock removeCardAffectingPlayer: aCard.].
+	"usedCards remove: aCard ifAbsent: [ Error signal: 'No se puede cancelar una carta que no está en deck']."
 ]
 
 { #category : #'as yet unclassified' }
@@ -148,11 +180,6 @@ CardManager >> redoTheLastCardUsedBy:owner for: affectedPlayer [
 ]
 
 { #category : #'as yet unclassified' }
-CardManager >> removeCard: aCard [
-	usedCards remove: aCard ifAbsent: [ Error signal: 'No se puede cancelar una carta que no está en deck'].
-]
-
-{ #category : #'as yet unclassified' }
 CardManager >> replace: card with: newCard [  
 	usedCards add: newCard.
 	dealtCards remove: card.
@@ -164,7 +191,7 @@ CardManager >> replace: card with: newCard [
 CardManager >> replaceInstantCard: card withCard: newCard [
 	self replace: card with: newCard.
 	newCard applyEffectFrom: self.
-	self removeCard: newCard.
+	self cancellateCard: newCard.
 	
 
 ]

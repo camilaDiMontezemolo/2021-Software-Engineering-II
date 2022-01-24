@@ -1,10 +1,6 @@
 Class {
 	#name : #RepeatCard,
 	#superclass : #Card,
-	#instVars : [
-		'affectedPlayer',
-		'active'
-	],
 	#category : #'IngSoft2-Model'
 }
 

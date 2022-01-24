@@ -60,14 +60,14 @@ StocktakingTests >> testUseACancelationCardOnASpeedupCard [
 	deck := Deck withCards: cards. 
 		
 	testPlayers := OrderedCollection with: #napolitana with: #margarita.
-	dice := OrderedCollection with: (LoadedDie withTosses: #(2)).
+	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(2))).
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	game playNextTurn.
 	napolitanaHand := game getHandOf: #napolitana.
 	margaritaHand := game getHandOf: #margarita.
 	game player: #margarita wantsToApplyCard: (margaritaHand at: 1) to: #margarita.
 	usedCards := game usedCards.
-	game player: #napolitana wantsToApplyCard: (napolitanaHand at: 1) to: (usedCards first).
+	game player: #napolitana wantsToApplyCard: (napolitanaHand at: 1) toCard: (usedCards first).
 	game playNextTurn.
 	self assert: ((game ranking) second) location equals: 2.
 	self assert: ((game ranking) first) location equals: 2.
@@ -78,7 +78,7 @@ StocktakingTests >> testUseACancelationCardOnASpeedupCard [
 { #category : #tests }
 StocktakingTests >> testUseASpeedUpCard [
 	
-	| board testPlayers dice game cards rankingOne deck napolitanaHand |
+	| board testPlayers dice game cards rankingOne deck napolitanaHand usedCards|
 	
 	board := OrderedCollection 
 		with: NoEffectBox new 
@@ -97,8 +97,11 @@ StocktakingTests >> testUseASpeedUpCard [
 	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: #napolitana.
 	game playTurnForAllPlayers.
 	rankingOne:= game ranking.
+	usedCards := game usedCards.
+	
 	
 	self assert: (rankingOne first) location equals: 3.
+	self assert: (usedCards first) equals: (napolitanaHand first).
 	 
 	
 	
