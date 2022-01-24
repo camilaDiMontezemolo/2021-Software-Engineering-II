@@ -18,22 +18,13 @@ CardManager class >> with: initialCards in: aGame [
 ]
 
 { #category : #'as yet unclassified' }
-CardManager >> addCardFromRedoCard: newCards [
-	usedCards add: newCards.
-	"dealtCards addAll: myNewCards."
-]
-
-{ #category : #'as yet unclassified' }
 CardManager >> affect: target with: card [
 
-	| neededStocks |
+	| neededStocks validCard |
+	validCard := self checkIfTheCardIsARedo: card.
 	neededStocks := playersStockTakings select: [:stock| (target includes: (stock owner)) | (stock owner = target)].
-	neededStocks do:
-		[ :oneStock | oneStock AddToCardsAffectingPlayer: card. 
-							self usedCards add: card].
-	
-	
-	
+	neededStocks do: [ :oneStock | oneStock AddToCardsAffectingPlayer: validCard. 
+							self usedCards add: validCard].
 	
 "assignCard: card to: affectedPlayer with: currentTurnPlayer
 
@@ -47,7 +38,9 @@ CardManager >> affect: target with: card [
 
 { #category : #'as yet unclassified' }
 CardManager >> affectCard: target with: card [
-	card cancellateCard: target from: self. 
+	| validCard |
+	validCard := self checkIfTheCardIsARedo: card.
+	validCard triggerInstantaneousEffect: target from: self. 
 	
 	"| neededStocks |
 	neededStocks := playersStockTakings select: [:stock| (target includes: (stock owner)) | (stock owner = target)].
@@ -68,18 +61,6 @@ CardManager >> affectCard: target with: card [
 ]
 
 { #category : #'as yet unclassified' }
-CardManager >> assignCard: card to: affectedPlayer with: currentTurnPlayer [
-"Se reemplaza con affect: with:"
-
-	| newCard |
-	newCard := self createNewCard: card withAffectedPlayer: affectedPlayer.
-	newCard instant
-		ifTrue: [ self replaceInstantCard: card withCard: newCard ]
-		ifFalse: [ self compareOwnerOfCard: card withThePayerOfCurrentTurn: currentTurnPlayer 	generating: newCard ]
-	
-]
-
-{ #category : #'as yet unclassified' }
 CardManager >> cancellateCard: aCard [
 	| neededStocks|
 	neededStocks := playersStockTakings select: [:stock| (stock getCardsAffecting) includes: aCard].
@@ -94,6 +75,14 @@ CardManager >> check: card andRaiseErrorOf: target [
 		ifTrue: [
 			(target = myGame players)
 				ifFalse: [ Error signal: 'La acceleration card debe tener a todos los otros jugadores como target.' ]. ]
+]
+
+{ #category : #'as yet unclassified' }
+CardManager >> checkIfTheCardIsARedo: card [
+	((card class) = RedoCard)
+	ifTrue: [ ^(card triggerRedoEffectFrom: self).  ]
+	ifFalse: [ ^card. ].
+	
 ]
 
 { #category : #'as yet unclassified' }
@@ -139,6 +128,13 @@ CardManager >> giveACardTo: oneStock [
 ]
 
 { #category : #'as yet unclassified' }
+CardManager >> giveLastCardUsed [
+	| card |
+	card := (lastCardUsed class) new.
+	^card.
+]
+
+{ #category : #'as yet unclassified' }
 CardManager >> handOutInitialCardsFor: thePlayersOfThisGame [
 	| n |
 	self createHandsFor: thePlayersOfThisGame.
@@ -172,28 +168,6 @@ CardManager >> modifyDistanceOf: player [
 	playerCards := (self getCardsAffecting: player).
 	playerCards do: [:card| finalDistance:= finalDistance +(card applyEffectFrom: self).].
 	^finalDistance.
-]
-
-{ #category : #'as yet unclassified' }
-CardManager >> redoTheLastCardUsedBy:owner for: affectedPlayer [
-	^((lastCardUsed class) of: owner on: affectedPlayer).
-]
-
-{ #category : #'as yet unclassified' }
-CardManager >> replace: card with: newCard [  
-	usedCards add: newCard.
-	dealtCards remove: card.
-	
-
-]
-
-{ #category : #'as yet unclassified' }
-CardManager >> replaceInstantCard: card withCard: newCard [
-	self replace: card with: newCard.
-	newCard applyEffectFrom: self.
-	self cancellateCard: newCard.
-	
-
 ]
 
 { #category : #'as yet unclassified' }

@@ -76,6 +76,75 @@ StocktakingTests >> testUseACancelationCardOnASpeedupCard [
 ]
 
 { #category : #tests }
+StocktakingTests >> testUseARedoCard [
+	
+	| boxes testPlayers dice game cards deck margaritaHand napolitanaHand |
+
+    boxes := OrderedCollection 
+        with: NoEffectBox new 
+        with: NoEffectBox new
+        with: NoEffectBox new 
+        with: NoEffectBox new.
+
+    cards := OrderedCollection
+		with: SpeedUpCard new
+		with: OverloadCard new
+		with: RedoCard new
+		with: OverloadCard new.
+	deck := Deck withCards: cards. 
+   testPlayers := OrderedCollection with:#margarita with: #napolitana.
+   dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(2))).
+   game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
+	napolitanaHand := game getHandOf: #napolitana.
+	margaritaHand := game getHandOf: #margarita.
+	game player: #margarita wantsToApplyCard: (margaritaHand first) to: #margarita.
+   game playNextTurn.
+
+	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: #napolitana.
+	game playNextTurn.
+	
+	self assert: ((game ranking) first) location equals: 3.
+	self assert: ((game ranking) second) location equals: 3.
+	 
+]
+
+{ #category : #tests }
+StocktakingTests >> testUseARedoCardOverCancelation [
+	
+	| boxes testPlayers dice game cards deck margaritaHand napolitanaHand usedCards |
+	
+	boxes := OrderedCollection 
+		with: NoEffectBox new
+		with: NoEffectBox new 
+		with: NoEffectBox new 
+		with: NoEffectBox new
+		with: NoEffectBox new 
+		with: NoEffectBox new.
+	
+	cards := OrderedCollection
+		with: SpeedUpCard new
+		with: SpeedUpCard new
+		with: CancellationCard new
+		with: RedoCard new.
+	deck := Deck withCards: cards. 
+	testPlayers := OrderedCollection with:#margarita with: #napolitana.
+	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(2))).
+	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 10 andDeck: deck.
+	napolitanaHand := game getHandOf: #napolitana.
+	margaritaHand := game getHandOf: #margarita.
+	game player: #margarita wantsToApplyCard: (margaritaHand first) to: #margarita.
+	game player: #margarita wantsToApplyCard: (margaritaHand second) to: #margarita.
+	usedCards := game usedCards.
+	game player: #napolitana wantsToApplyCard: (napolitanaHand first) toCard: (usedCards second).
+	game player: #napolitana wantsToApplyCard: (napolitanaHand second) toCard: (usedCards first).
+	game playTurnForAllPlayers.
+	
+	self assert: ((game ranking) second) location equals: 2.
+	self assert: ((game ranking) first) location equals: 2.
+	 
+]
+
+{ #category : #tests }
 StocktakingTests >> testUseASpeedUpCard [
 	
 	| board testPlayers dice game cards rankingOne deck napolitanaHand usedCards|

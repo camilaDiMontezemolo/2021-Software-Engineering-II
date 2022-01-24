@@ -42,22 +42,6 @@ PizzaGame class >> withBoxes: someBoxes players: somePlayers dice: someDice laps
 ]
 
 { #category : #'as yet unclassified' }
-PizzaGame >> applyCard: card toCard: affectedPlayer [
-	myCardManager assignCard: card to: affectedPlayer with: (myPlayers at: currentTurn).
-
-"applyCard: card to: affectedPlayer
-	myCardManager assignCard: card to: affectedPlayer with: (myPlayers at: currentTurn)."
-	
-	
-	
-]
-
-{ #category : #'as yet unclassified' }
-PizzaGame >> board [
-	^myBoard.
-]
-
-{ #category : #'as yet unclassified' }
 PizzaGame >> changeTurn [
 	(currentTurn == (myPlayers size)) ifTrue:[currentTurn:=0].
 	currentTurn := currentTurn +1.

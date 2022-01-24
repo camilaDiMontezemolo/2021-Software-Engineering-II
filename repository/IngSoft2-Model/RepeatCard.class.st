@@ -4,11 +4,6 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'instance creation' }
-RepeatCard class >> of: player on: anotherPlayer [
-	^self new initializeWithPlayer: player andAffectedPlayer: anotherPlayer.
-]
-
 { #category : #'as yet unclassified' }
 RepeatCard >> applyEffectFrom: aCardManager [
 	active
