@@ -42,21 +42,6 @@ CardManager >> affectCard: target with: card [
 	validCard := self checkIfTheCardIsARedo: card.
 	validCard triggerInstantaneousEffect: target from: self. 
 	
-	"| neededStocks |
-	neededStocks := playersStockTakings select: [:stock| (target includes: (stock owner)) | (stock owner = target)].
-	neededStocks do:
-		[ :oneStock | oneStock AddToCardsAffectingPlayer: card. ]."
-	
-	
-	
-	
-"assignCard: card to: affectedPlayer with: currentTurnPlayer
-
-	| newCard |
-	newCard := self createNewCard: card withAffectedPlayer: affectedPlayer.
-	newCard instant
-		ifTrue: [ self replaceInstantCard: card withCard: newCard ]
-		ifFalse: [ self compareOwnerOfCard: card withThePayerOfCurrentTurn: currentTurnPlayer 	generating: newCard ]"
 	
 ]
 

@@ -145,6 +145,36 @@ StocktakingTests >> testUseARedoCardOverCancelation [
 ]
 
 { #category : #tests }
+StocktakingTests >> testUseARepeatCard [
+	
+	| boxes testPlayers dice game cards deck napolitanaHand |
+	
+	boxes := OrderedCollection 
+		with: SpeedupBox new
+		with: NoEffectBox new 
+		with: NoEffectBox new 
+		with: NoEffectBox new
+		with: NoEffectBox new 
+		with: NoEffectBox new.
+		
+	cards := OrderedCollection
+		with: OverloadCard new
+		with: OverloadCard new
+		with: RepeatCard new
+		with: OverloadCard new.
+	deck := Deck withCards: cards. 	
+	testPlayers := OrderedCollection with:#margarita with: #napolitana.
+	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(1))).
+	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
+	game playNextTurn.
+	napolitanaHand := game getHandOf: #napolitana.
+	game player: #napolitana wantsToApplyCard: (napolitanaHand first) toCard: #napolitana.
+	
+	self assert: ((game ranking) first) location equals: 5.
+	self assert: ((game ranking) second) location equals: 4.
+]
+
+{ #category : #tests }
 StocktakingTests >> testUseASpeedUpCard [
 	
 	| board testPlayers dice game cards rankingOne deck napolitanaHand usedCards|
