@@ -31,7 +31,7 @@ StocktakingTests >> testEveryPlayerHasAHandWithCards [
 		
 	deck := Deck withCards: cards. 	
 	testPlayers := OrderedCollection with:#margarita with: #napolitana.
-	dice := OrderedCollection with: (LoadedDie withTosses: #(1)).
+	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(1))).
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	game playNextTurn.
 	
@@ -322,7 +322,7 @@ StocktakingTests >> testUseAnOverloadCardWithStock [
 	
 	deck := Deck withCards: cards. 
 	testPlayers := OrderedCollection with: #margarita with: #napolitana.
-	dice := OrderedCollection with: (LoadedDie withTosses: #(2)).
+	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(2))).
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	
 	margaritaHand := game getHandOf: #margarita.

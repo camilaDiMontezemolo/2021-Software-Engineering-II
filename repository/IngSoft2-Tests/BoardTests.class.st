@@ -47,7 +47,7 @@ BoardTests >> testABoardShouldHaveMoreThanZeroDie [
 		dice: OrderedCollection new
 		laps: 1
 		andDeck: cards.
-		] raise: Error withMessage: 'Un juego no puede tener menos de 1 dado.'.
+		] raise: Error withMessage: 'Un beaker no puede tener menos de 1 dado(s).'
 ]
 
 { #category : #tests }
@@ -111,13 +111,11 @@ BoardTests >> testACardBoxGivesCards [
 	
 	testPlayers := OrderedCollection with: #napolitana.
 	deck := Deck withCards: (OrderedCollection with: (RepeatCard new) with: (AccelerationCard new) with: (SpeedUpCard new)).
-		
-	dice := OrderedCollection with: (LoadedDie withTosses: #(1)).
-	
+	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(1))).
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
-		
 	game playTurnForAllPlayers.
-	napolitanaHand := game playerHand: #napolitana.
+	napolitanaHand := game getHandOf: #napolitana.
+	
 	game player: #napolitana wantsToApplyCard: (napolitanaHand at: 3) to: #napolitana.
 	game playTurnForAllPlayers.
 	ranking := game ranking.
@@ -135,7 +133,7 @@ BoardTests >> testAMoonWalkBoxJumpsAPlayerBoxesBack [
 		with: (MoonWalkBox loadedWith: 1) 
 		with: NoEffectBox with: NoEffectBox.
 	testPlayers := OrderedCollection with: #napolitana with: #hawaiana.
-	dice := OrderedCollection with: (LoadedDie withTosses: #(2)).
+	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(2))).
 	cards := DeckGenerator with: 100.
 	deck := Deck withCards: cards. 
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
@@ -156,7 +154,7 @@ BoardTests >> testANoEffectBoxHasNoEffects [
 		with: NoEffectBox new
 		with: NoEffectBox new.
 	testPlayers := OrderedCollection with: #napolitana.
-	dice := OrderedCollection with: (LoadedDie withTosses: #(2)).
+	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(2))).
 	cards := DeckGenerator with: 100.
 	deck := Deck withCards: cards. 
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
@@ -180,7 +178,7 @@ BoardTests >> testASpeedupBoxJumpsYouFourBoxes [
 		with: NoEffectBox new.
 
 	testPlayers := OrderedCollection with: #napolitana.
-	dice := OrderedCollection with: (LoadedDie withTosses: #(1)).
+	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(1))).
 	cards := DeckGenerator with: 100.
 	deck := Deck withCards: cards. 
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
@@ -205,8 +203,7 @@ BoardTests >> testAnAtomicBombBoxSendsEveryoneBackToZero [
 		with: #napolitana
 		with: #margarita
 		with: #hawaiana.
-	dice := OrderedCollection
-		with: (LoadedDie withTosses: #(4)).
+	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(4))).
 	cards := DeckGenerator with: 100.
 	deck := Deck withCards: cards. 
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 2 andDeck: deck.

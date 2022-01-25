@@ -9,7 +9,6 @@ Class {
 
 { #category : #'instance creation' }
 DeckGenerator class >> with: aNumberOfCards [
-
 	^ self new initializeWithANumberOfCards: aNumberOfCards.
 ]
 

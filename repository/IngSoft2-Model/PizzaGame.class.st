@@ -19,14 +19,12 @@ Class {
 PizzaGame class >> validateLaps: someLaps boxes: someBoxes players: somePlayers dice: someDice andDeck: aDeck [
 	somePlayers isEmpty
 		ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 jugador.' ].
-	"someDice isEmpty
-		ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 dado.' ]."
 	someLaps < 1
 		ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 vuelta.' ].
 	someBoxes size < 1
 		ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 casillero.' ].
 	(aDeck numberOfCards < (2* (somePlayers size)))
-		ifTrue: [ Error signal: 'Un juego no puede tener menos de 2 cartas por jugador.' ]. "Ojo que cambié esto"
+		ifTrue: [ Error signal: 'Un juego no puede tener menos de 2 cartas por jugador.' ]. 
 ]
 
 { #category : #'instance creation' }
@@ -59,7 +57,9 @@ PizzaGame >> firstPlace [
 
 { #category : #'as yet unclassified' }
 PizzaGame >> getACardFor: playerWhoGetsTheCard [
-	myCardManager giveACardTo: playerWhoGetsTheCard.
+	| stock |
+	stock := myCardManager getStockOf: playerWhoGetsTheCard.
+	myCardManager giveACardTo: stock.
 ]
 
 { #category : #'as yet unclassified' }
@@ -117,31 +117,11 @@ PizzaGame >> player: player wantsToApplyCard: card to: target [
 	ifTrue:[
 	myCardManager affect: target with: card]
 	ifFalse:[ self sendCardErrorFor: player. ]
-	
-	"((target class) = Card)
-	ifTrue:[ self applyInstant: target.]
-	ifFalse:[
-	
-	
-	(((myPlayers at: currentTurn) = player| (card instant)) & (myPlayers includes: player))
-	ifTrue:[
-	myCardManager affect: target with: card]
-	ifFalse:[ self sendCardErrorFor: player. ]
-	]
 
-player: player wantsToApplyCard: card to: target
-	(((myPlayers at: currentTurn) = player| (card instant)) & (myPlayers includes: player))
-	ifTrue:[
-	myCardManager assignCard: card to: target with: player.]
-	ifFalse:[
-		self sendCardErrorFor: player.
-	]"
 ]
 
 { #category : #'as yet unclassified' }
 PizzaGame >> player: player wantsToApplyCard: card toCard: target [
-	"para cancellation card"
-
 	(myPlayers includes: player)
 	ifTrue:[
 	myCardManager affectCard: target with: card]

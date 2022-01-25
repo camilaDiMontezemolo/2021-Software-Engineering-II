@@ -93,8 +93,8 @@ CementerioDePizzasGameTests >> testCreateAGameMultiPlayer [
 		with: #napolitana
 		with: #margarita
 		with: #mozzarella.
-	dice := OrderedCollection
-		with: (LoadedDie withTosses: #(4 4 4 2 2 2 2 2 2 6 6 6 2 2 2)).
+
+	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(4 4 4 2 2 2 2 2 2 6 6 6 2 2 2))).
 	cards := DeckGenerator with: 100.
 	deck := Deck withCards: cards. 
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
@@ -114,7 +114,7 @@ CementerioDePizzasGameTests >> testCreateAGameSinglePlayer [
 	
 	napolitana:= #napolitana.
 	
-	dice := OrderedCollection with: (Die withSides: 5).
+	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(5))).
 	boxes:= BoxGenerator give: 5 andProbabilitiesForNoEffectBox: 0.38 andSpeed: 0.2 andWormm: 0.2 andMoon: 0.1 andAtomic: 0.02 andCardBox: 0.1.
 	
 	testPlayers:= OrderedCollection with: napolitana.
@@ -157,7 +157,7 @@ CementerioDePizzasGameTests >> testCreateARandomMultiPlayerGame [
 { #category : #tests }
 CementerioDePizzasGameTests >> testYouShouldBeAbleToGetYourLapAndLocation [
 	
-	| boxes testPlayers myDie game cards deck |
+	| boxes testPlayers dice game cards deck |
 
     boxes := OrderedCollection 
         with: NoEffectBox new 
@@ -168,8 +168,8 @@ CementerioDePizzasGameTests >> testYouShouldBeAbleToGetYourLapAndLocation [
    cards := DeckGenerator with: 50.
 	deck := Deck withCards: cards. 
    testPlayers := OrderedCollection with:#margarita with: #napolitana.
-   myDie := OrderedCollection with: (LoadedDie withTosses: #(6)).
-   game := PizzaGame withBoxes: boxes players: testPlayers dice: myDie laps: 2 andDeck: deck.
+	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(6))).
+   game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 2 andDeck: deck.
 	game playNextTurn.
 	
 	self assert: ((game ranking) first) lap equals: 1.

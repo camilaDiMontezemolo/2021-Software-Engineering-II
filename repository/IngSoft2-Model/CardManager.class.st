@@ -26,14 +26,6 @@ CardManager >> affect: target with: card [
 	neededStocks do: [ :oneStock | oneStock AddToCardsAffectingPlayer: validCard. 
 							self usedCards add: validCard].
 	
-"assignCard: card to: affectedPlayer with: currentTurnPlayer
-
-	| newCard |
-	newCard := self createNewCard: card withAffectedPlayer: affectedPlayer.
-	newCard instant
-		ifTrue: [ self replaceInstantCard: card withCard: newCard ]
-		ifFalse: [ self compareOwnerOfCard: card withThePayerOfCurrentTurn: currentTurnPlayer 	generating: newCard ]"
-	
 ]
 
 { #category : #'as yet unclassified' }
@@ -71,14 +63,6 @@ CardManager >> checkIfTheCardIsARedo: card [
 ]
 
 { #category : #'as yet unclassified' }
-CardManager >> compareOwnerOfCard: card withThePayerOfCurrentTurn: currentTurnPlayer generating: newCard [
-	card owner = currentTurnPlayer
-		ifTrue: [ self replace: card with: newCard ]
-		ifFalse: [ Error
-				signal: 'Un jugador no puede tirar una carta fuera de su turno.' ]
-]
-
-{ #category : #'as yet unclassified' }
 CardManager >> createHandsFor: thePlayersOfThisGame [
 	| n |
 	n:=0.
@@ -94,15 +78,20 @@ CardManager >> findLastTypeOfBoxForPlayer: aPlayer [
 { #category : #'as yet unclassified' }
 CardManager >> getCardsAffecting: player [
 	| neededList |
-	neededList := (playersStockTakings select: [:stock| stock owner = player]) first.
+	neededList := (self getStockOf: player).
 	^(neededList getCardsAffecting).
 ]
 
 { #category : #'as yet unclassified' }
 CardManager >> getHandOf: player [ 
+	^(self getStockOf: player) getHand.
+]
+
+{ #category : #'as yet unclassified' }
+CardManager >> getStockOf: player [ 
 	| neededStock |
 	neededStock := (playersStockTakings select: [:stock| stock owner = player]) first.
-	^(neededStock getHand).
+	^neededStock.
 ]
 
 { #category : #'as yet unclassified' }
