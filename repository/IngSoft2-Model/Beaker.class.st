@@ -8,14 +8,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-Beaker class >> validateDice: dice [
-	dice < 1
-		ifTrue: [ Error signal: 'Un beaker no puede tener menos de 1 dado(s).' ]
-]
-
-{ #category : #'instance creation' }
 Beaker class >> with: dice [
-	self validateDice: dice.
 	^self new intializeWithDice: dice
 ]
 
