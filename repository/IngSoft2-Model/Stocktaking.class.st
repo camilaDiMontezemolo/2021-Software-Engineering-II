@@ -50,3 +50,13 @@ Stocktaking >> owner [
 Stocktaking >> removeCardAffectingPlayer: card [
 	cardsAffectingPlayer remove: card.
 ]
+
+{ #category : #adding }
+Stocktaking >> removeOfHand: card [
+	hand remove: card.
+]
+
+{ #category : #adding }
+Stocktaking >> verifyBelongsToPlayerHand: card [
+	^(hand includes: card).
+]

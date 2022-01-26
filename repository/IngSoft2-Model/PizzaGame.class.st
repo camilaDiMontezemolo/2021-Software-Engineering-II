@@ -115,8 +115,9 @@ PizzaGame >> playTurnForAllPlayers [
 { #category : #'as yet unclassified' }
 PizzaGame >> player: player wantsToApplyCard: card to: target [
 
-	((players at: currentTurn) = player & (players includes: player))
+	((players at: currentTurn) = player & (players includes: player) & (cardManager verify: card belongsTo: player))
 	ifTrue:[
+	cardManager remove: card fromTheHandOf: player.
 	cardManager affect: target with: card]
 	ifFalse:[ self sendCardErrorFor: player. ]
 
@@ -124,8 +125,9 @@ PizzaGame >> player: player wantsToApplyCard: card to: target [
 
 { #category : #'as yet unclassified' }
 PizzaGame >> player: player wantsToApplyCard: card toCard: target [
-	(players includes: player)
+	((players includes: player) & (cardManager verify: card belongsTo: player))
 	ifTrue:[
+	cardManager remove: card fromTheHandOf: player.
 	cardManager affectCard: target with: card]
 	ifFalse:[ self sendCardErrorFor: player. ]
 ]

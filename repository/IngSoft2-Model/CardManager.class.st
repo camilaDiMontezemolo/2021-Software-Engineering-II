@@ -132,6 +132,13 @@ CardManager >> modifyDistanceOf: player [
 ]
 
 { #category : #'as yet unclassified' }
+CardManager >> remove: card fromTheHandOf: player [
+	| neededStock |
+	neededStock := self stockOf: player.
+	neededStock removeOfHand: card.
+]
+
+{ #category : #'as yet unclassified' }
 CardManager >> stockOf: player [ 
 	| neededStock |
 	neededStock := (playersStockTakings select: [:stock| stock owner = player]) first.
@@ -164,4 +171,11 @@ CardManager >> validateCancellationFor: target [
 		
 		(  ((target class) = (CancellationCard class)) | ((target class) = (RepeatCard class)) | ((target class) = (RedoCard class)))
 		ifTrue:[Error signal: 'No se puede cancelar una carta instantanea.'].
+]
+
+{ #category : #'as yet unclassified' }
+CardManager >> verify: card belongsTo: player [
+	| neededStock |
+	neededStock := self stockOf: player.
+	^(neededStock verifyBelongsToPlayerHand: card).
 ]
