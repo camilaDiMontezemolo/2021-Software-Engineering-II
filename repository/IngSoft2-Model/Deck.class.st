@@ -2,7 +2,7 @@ Class {
 	#name : #Deck,
 	#superclass : #Object,
 	#instVars : [
-		'myCards'
+		'cards'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -17,18 +17,18 @@ Deck class >> withCards: aCollectionOfCards [
 Deck >> drawACard [
 	| card |
 	"myCards isEmpty ifTrue: [ Error signal: 'Ya no hay más cartas a repartir.' ]."
-	card := myCards first.
-	myCards removeFirst.
+	card := cards first.
+	cards removeFirst.
 	^card.
 ]
 
 { #category : #initialize }
 Deck >> initializeWithCards: aCollectionOfCards [
-	myCards:= aCollectionOfCards.
+	cards:= aCollectionOfCards.
 
 ]
 
 { #category : #initialize }
 Deck >> numberOfCards [
-	^(myCards size).
+	^(cards size).
 ]

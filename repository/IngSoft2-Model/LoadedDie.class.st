@@ -2,7 +2,7 @@ Class {
 	#name : #LoadedDie,
 	#superclass : #Object,
 	#instVars : [
-		'myTosses',
+		'tosses',
 		'indice'
 	],
 	#category : #'IngSoft2-Model'
@@ -16,8 +16,8 @@ LoadedDie class >> withTosses: someTosses [
 
 { #category : #initalize }
 LoadedDie >> initializeWithTheFollowingTosses: someTosses [ 
-	myTosses := OrderedCollection new.
-	myTosses:= someTosses.
+	tosses := OrderedCollection new.
+	tosses:= someTosses.
 	indice:=0.
 ]
 
@@ -28,8 +28,8 @@ LoadedDie >> size [
 
 { #category : #'as yet unclassified' }
 LoadedDie >> spin [
-	 (indice >= (myTosses size))
+	 (indice >= (tosses size))
 		ifTrue: [ indice:=0 .].
 	indice := indice +1.
-	^(myTosses at: indice).
+	^(tosses at: indice).
 ]

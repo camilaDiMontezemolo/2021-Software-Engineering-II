@@ -2,13 +2,13 @@ Class {
 	#name : #Board,
 	#superclass : #Object,
 	#instVars : [
-		'mySize',
-		'myBoxes',
+		'size',
+		'boxes',
 		'positions',
-		'mylaps',
+		'laps',
 		'lastBoxUsed',
-		'myPlayers',
-		'myGame'
+		'players',
+		'game'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -35,23 +35,23 @@ Board >> applyLastTypeOfBoxFor: aPlayer [
 
 { #category : #'as yet unclassified' }
 Board >> boxFor: aPosition [
-	^ myBoxes at:
-			((aPosition absoluteLocation) - (mySize*((aPosition absoluteLocation)//mySize)))+1.
+	^ boxes at:
+			((aPosition absoluteLocation) - (size*((aPosition absoluteLocation)//size)))+1.
 ]
 
 { #category : #'as yet unclassified' }
 Board >> calculateNewLocationFor: position [
-	|laps|
-	laps:= ((position absoluteLocation)//(mySize)).
+	|newLaps|
+	newLaps := ((position absoluteLocation)//(size)).
 	
-	(laps ==0)
+	(newLaps ==0)
 	ifTrue:[^0.]
-	ifFalse:[^(mySize*laps)+1.].
+	ifFalse:[^(size*newLaps)+1.].
 ]
 
 { #category : #'as yet unclassified' }
 Board >> cardFor: playerWhoGetsTheCard [
-	myGame cardFor: playerWhoGetsTheCard.
+	game cardFor: playerWhoGetsTheCard.
 ]
 
 { #category : #'as yet unclassified' }
@@ -77,7 +77,7 @@ Board >> changePositionOf: aPlayer by: distance playing: game [
 
 { #category : #'as yet unclassified' }
 Board >> createPositions [
-	positions:= myPlayers collect: [ :player | (Position of: player at: 0 on: self)].
+	positions:= players collect: [ :player | (Position of: player at: 0 on: self)].
 ]
 
 { #category : #'as yet unclassified' }
@@ -87,23 +87,23 @@ Board >> generatePositionFor: aPosition at: absoluteLocation [
 
 { #category : #initialize }
 Board >> initializeWithBoxes: aCollectionOfBoxes andSomePlayers: somePlayers forAGame: aGame [
-	myBoxes := OrderedCollection new.
-	myBoxes := aCollectionOfBoxes.
-	myBoxes addFirst: (NoEffectBox new).
-	mySize := ( (myBoxes size)-1 ).
+	boxes := OrderedCollection new.
+	boxes := aCollectionOfBoxes.
+	boxes addFirst: (NoEffectBox new).
+	size := ( (boxes size)-1 ).
 	lastBoxUsed := (NoEffectBox new).
-	myPlayers:= somePlayers.
-	myGame:=aGame.
+	players:= somePlayers.
+	game:=aGame.
 ]
 
 { #category : #'as yet unclassified' }
 Board >> lapsOfPosition: absoluteLocation [.
-	^absoluteLocation//mySize.
+	^absoluteLocation//size.
 ]
 
 { #category : #'as yet unclassified' }
 Board >> locationOfPosition: absoluteLocation [.
-	^absoluteLocation -((absoluteLocation//mySize)*mySize).
+	^absoluteLocation -((absoluteLocation//size)*size).
 ]
 
 { #category : #'as yet unclassified' }
@@ -123,7 +123,7 @@ Board >> moveAllPlayersToFirstBoxSlot [
 
 { #category : #'as yet unclassified' }
 Board >> playerSurpassed: someLaps [
-	^(self positions) anySatisfy: [ :position | ((position absoluteLocation)//mySize) >= someLaps].
+	^(self positions) anySatisfy: [ :position | ((position absoluteLocation)//size) >= someLaps].
 ]
 
 { #category : #'as yet unclassified' }

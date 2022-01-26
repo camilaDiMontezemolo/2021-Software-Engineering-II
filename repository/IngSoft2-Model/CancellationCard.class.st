@@ -6,6 +6,6 @@ Class {
 
 { #category : #'as yet unclassified' }
 CancellationCard >> triggerInstantaneousEffect: affectedCard  from: aCardManager [
-	aCardManager lastCardUsed: self.
 	aCardManager cancellateCard: affectedCard.
+	aCardManager lastCardUsed: self.
 ]

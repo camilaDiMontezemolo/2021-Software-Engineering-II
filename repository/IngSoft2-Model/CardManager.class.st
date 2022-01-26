@@ -4,8 +4,8 @@ Class {
 	#instVars : [
 		'lastCardUsed',
 		'cardRegister',
-		'myGame',
-		'myDeck',
+		'game',
+		'deck',
 		'usedCards',
 		'playersStockTakings'
 	],
@@ -20,7 +20,7 @@ CardManager class >> with: initialCards in: aGame [
 { #category : #'as yet unclassified' }
 CardManager >> addCardTo: oneStock [
 	| newCard |
-	newCard := myDeck drawACard.
+	newCard := deck drawACard.
 	oneStock addToHand: newCard.
 ]
 
@@ -29,10 +29,11 @@ CardManager >> affect: target with: card [
 
 	| neededStocks validCard |
 	validCard := self checkIfTheCardIsARedo: card.
+	self validate: target forAcceleration: card.
 	self lastCardUsed: card.
+	self usedCards add: validCard.
 	neededStocks := playersStockTakings select: [:stock| (target includes: (stock owner)) | (stock owner = target)].
-	neededStocks do: [ :oneStock | oneStock AddToCardsAffectingPlayer: validCard. 
-							self usedCards add: validCard].
+	neededStocks do: [ :oneStock | oneStock AddToCardsAffectingPlayer: validCard. ].
 	
 ]
 
@@ -41,6 +42,8 @@ CardManager >> affectCard: target with: card [
 	| validCard |
 	validCard := self checkIfTheCardIsARedo: card.
 	validCard triggerInstantaneousEffect: target from: self.
+	self usedCards add: validCard.
+	"Hay alguna razon por la que no usabamos usedCrds en las instantaneas?"
 	
 	
 ]
@@ -48,10 +51,7 @@ CardManager >> affectCard: target with: card [
 { #category : #'as yet unclassified' }
 CardManager >> cancellateCard: aCard [
 	| neededStocks|
-	(usedCards includes: aCard)
-		ifFalse: [ (self useOfInstantCard: aCard >1)
-				ifTrue:[Error signal: 'No se puede cancelar una carta instantanea']
-				ifFalse:[Error signal: 'No se puede cancelar una carta inactiva' ]].
+	self validateCancellationFor: aCard.
 	neededStocks := playersStockTakings select: [:stock| (stock cardsAffecting) includes: aCard].
 	neededStocks do:
 		[ :oneStock | oneStock removeCardAffectingPlayer: aCard.].
@@ -65,17 +65,10 @@ CardManager >> cardsAffecting: player [
 ]
 
 { #category : #'as yet unclassified' }
-CardManager >> check: card andRaiseErrorOf: target [
-	card class = AccelerationCard
-		ifTrue: [
-			(target = myGame players)
-				ifFalse: [ Error signal: 'La acceleration card debe tener a todos los otros jugadores como target.' ]. ]
-]
-
-{ #category : #'as yet unclassified' }
 CardManager >> checkIfTheCardIsARedo: card [
 	((card class) = RedoCard)
-	ifTrue: [ ^(card triggerRedoEffectFrom: self).  ]
+	ifTrue: [ self usedCards add: card.
+				^(card triggerRedoEffectFrom: self).  ]
 	ifFalse: [ ^card. ].
 	
 ]
@@ -107,8 +100,8 @@ CardManager >> handOutInitialCardsFor: thePlayersOfThisGame [
 
 { #category : #initialize }
 CardManager >> initializeWithCards: initialDeck in: aGame [
-	myDeck := initialDeck.
-	myGame := aGame.
+	deck := initialDeck.
+	game := aGame.
 	playersStockTakings := OrderedCollection new.
 	usedCards := OrderedCollection new.
 ]
@@ -126,14 +119,13 @@ CardManager >> lastCardUsed: newCard [
 
 { #category : #'as yet unclassified' }
 CardManager >> lastTypeOfBoxForPlayer: aPlayer [
-	myGame lastTypeOfBoxForPlayer: aPlayer.
+	game lastTypeOfBoxForPlayer: aPlayer.
 ]
 
 { #category : #'as yet unclassified' }
 CardManager >> modifyDistanceOf: player [ 
 	| playerCards finalDistance|
 	finalDistance:=0.
-	"playerCards := (self findCardsAffecting: player)."
 	playerCards := (self cardsAffecting: player).
 	playerCards do: [:card| finalDistance:= finalDistance +(card applyEffectFrom: self).].
 	^finalDistance.
@@ -155,4 +147,21 @@ CardManager >> useOfInstantCard: card [
 { #category : #'as yet unclassified' }
 CardManager >> usedCards [
 	^usedCards
+]
+
+{ #category : #'as yet unclassified' }
+CardManager >> validate: target forAcceleration: card [
+	((card class) = AccelerationCard)
+	ifTrue: [ (game players = target) 
+		ifFalse: [Error signal: 'La acceleration card debe tener a todos los otros jugadores como target.']].
+]
+
+{ #category : #'as yet unclassified' }
+CardManager >> validateCancellationFor: target [
+
+		(usedCards includes: target)
+		ifFalse:[Error signal: 'No se puede cancelar una carta inactiva' ].
+		
+		(  ((target class) = (CancellationCard class)) | ((target class) = (RepeatCard class)) | ((target class) = (RedoCard class)))
+		ifTrue:[Error signal: 'No se puede cancelar una carta instantanea.'].
 ]

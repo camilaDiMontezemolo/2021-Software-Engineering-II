@@ -2,7 +2,7 @@ Class {
 	#name : #DeckGenerator,
 	#superclass : #Object,
 	#classVars : [
-		'myCards'
+		'cards'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -24,17 +24,16 @@ DeckGenerator >> createCard [
 		with:(SpeedUpCard new).
 	
 	randomCards := randomCards shuffled.
-	myCards add: (randomCards first).
+	cards add: (randomCards first).
 ]
 
 { #category : #initialization }
 DeckGenerator >> initializeWithANumberOfCards: aNumberOfCards [
 	| n |
-	myCards := OrderedCollection new.
+	cards := OrderedCollection new.
 	n:=0.
 	[n< aNumberOfCards] whileTrue: [self createCard. 
 	n:= n+1.].
-	^myCards.
+	^cards.
 
-"creo que do hace algo así. ver?"
 ]

@@ -2,15 +2,15 @@ Class {
 	#name : #PizzaGame,
 	#superclass : #Object,
 	#instVars : [
-		'myPlayers',
-		'myBoard',
-		'myLaps',
-		'myPositions',
-		'myDice',
-		'myCards',
+		'players',
+		'board',
+		'laps',
+		'positions',
+		'dice',
+		'cards',
 		'currentTurn',
-		'myCardManager',
-		'myDeck'
+		'cardManager',
+		'deck'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -44,18 +44,18 @@ PizzaGame class >> withBoxes: someBoxes players: somePlayers dice: someDice laps
 { #category : #'as yet unclassified' }
 PizzaGame >> cardFor: playerWhoGetsTheCard [
 	| stock |
-	stock := myCardManager stockOf: playerWhoGetsTheCard.
-	myCardManager addCardTo: stock.
+	stock := cardManager stockOf: playerWhoGetsTheCard.
+	cardManager addCardTo: stock.
 ]
 
 { #category : #'as yet unclassified' }
 PizzaGame >> cardsAffecting: player [ 
-	^(myCardManager cardsAffecting: player).
+	^(cardManager cardsAffecting: player).
 ]
 
 { #category : #'as yet unclassified' }
 PizzaGame >> changeTurn [
-	(currentTurn == (myPlayers size)) ifTrue:[currentTurn:=0].
+	(currentTurn == (players size)) ifTrue:[currentTurn:=0].
 	currentTurn := currentTurn +1.
 ]
 
@@ -66,31 +66,31 @@ PizzaGame >> firstPlace [
 
 { #category : #'as yet unclassified' }
 PizzaGame >> handOf: player [
-	^(myCardManager handOf: player).
+	^(cardManager handOf: player).
 ]
 
 { #category : #initialize }
-PizzaGame >> initializeWithBoxes: someBoxes players: somePlayers dice: someDie laps: someLaps andDeck: deck [
-	myBoard:=Board withBoxes: someBoxes andSomePlayers: somePlayers forAGame: self.
-	myPlayers:=somePlayers.
-	myPositions:= OrderedCollection new.
-	myBoard createPositions.
-	myDice:=someDie.
-	myLaps:=someLaps.
+PizzaGame >> initializeWithBoxes: someBoxes players: somePlayers dice: someDie laps: someLaps andDeck: aDeck [
+	board:=Board withBoxes: someBoxes andSomePlayers: somePlayers forAGame: self.
+	players:=somePlayers.
+	positions:= OrderedCollection new.
+	board createPositions.
+	dice:=someDie.
+	laps:=someLaps.
 	currentTurn:=1.
-	myDeck := deck.
-	myCardManager := CardManager with: deck in: self.
-	myCardManager handOutInitialCardsFor: somePlayers.
+	deck := aDeck.
+	cardManager := CardManager with: deck in: self.
+	cardManager handOutInitialCardsFor: somePlayers.
 ]
 
 { #category : #'as yet unclassified' }
 PizzaGame >> isFinished [
-	^myBoard playerSurpassed: myLaps.
+	^board playerSurpassed: laps.
 ]
 
 { #category : #'as yet unclassified' }
 PizzaGame >> lastTypeOfBoxForPlayer: aPlayer [
-	myBoard applyLastTypeOfBoxFor: aPlayer.
+	board applyLastTypeOfBoxFor: aPlayer.
 ]
 
 { #category : #'as yet unclassified' }
@@ -103,54 +103,54 @@ PizzaGame >> play [
 PizzaGame >> playNextTurn [
 	self isFinished
 		ifTrue: [ ^ self ].
-	self rollFor: (myPlayers at: currentTurn).
+	self rollFor: (players at: currentTurn).
 	self changeTurn.
 ]
 
 { #category : #'as yet unclassified' }
 PizzaGame >> playTurnForAllPlayers [
-	myPlayers do: [:player | self playNextTurn ].
+	players do: [:player | self playNextTurn ].
 ]
 
 { #category : #'as yet unclassified' }
 PizzaGame >> player: player wantsToApplyCard: card to: target [
 
-	((myPlayers at: currentTurn) = player & (myPlayers includes: player))
+	((players at: currentTurn) = player & (players includes: player))
 	ifTrue:[
-	myCardManager affect: target with: card]
+	cardManager affect: target with: card]
 	ifFalse:[ self sendCardErrorFor: player. ]
 
 ]
 
 { #category : #'as yet unclassified' }
 PizzaGame >> player: player wantsToApplyCard: card toCard: target [
-	(myPlayers includes: player)
+	(players includes: player)
 	ifTrue:[
-	myCardManager affectCard: target with: card]
+	cardManager affectCard: target with: card]
 	ifFalse:[ self sendCardErrorFor: player. ]
 ]
 
 { #category : #initialize }
 PizzaGame >> players [
-	^myPlayers.
+	^players.
 ]
 
 { #category : #'as yet unclassified' }
 PizzaGame >> ranking [
-	^(myBoard positions) asSortedCollection: [:position1 :position2 | position1 > position2].
+	^(board positions) asSortedCollection: [:position1 :position2 | position1 > position2].
 ]
 
 { #category : #'as yet unclassified' }
 PizzaGame >> rollFor: aPlayer [
 	| distance |
-	distance := myDice spin.
-	distance:= distance + (myCardManager modifyDistanceOf: aPlayer).
-	myBoard changePositionOf: aPlayer by: distance playing: self.
+	distance := dice spin.
+	distance:= distance + (cardManager modifyDistanceOf: aPlayer).
+	board changePositionOf: aPlayer by: distance playing: self.
 ]
 
 { #category : #'as yet unclassified' }
 PizzaGame >> sendCardErrorFor: player [
-	(myPlayers includes: player)
+	(players includes: player)
 	ifTrue: [ Error signal: 'Un jugador no puede tirar una carta fuera de su turno.' ]
 	ifFalse: [ Error signal: 'Esta persona no es un jugador del juego.' ].
 	
@@ -158,5 +158,5 @@ PizzaGame >> sendCardErrorFor: player [
 
 { #category : #'as yet unclassified' }
 PizzaGame >> usedCards [
-	^(myCardManager usedCards)
+	^(cardManager usedCards)
 ]

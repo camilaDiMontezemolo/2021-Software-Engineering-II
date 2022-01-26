@@ -204,7 +204,7 @@ CardsTests >> testUseACancelationCardOnAnInactiveCardRaiseError [
 { #category : #tests }
 CardsTests >> testUseACancelationCardOnAnInstantCardRaiseAnError [
 	
-	| boxes testPlayers dice game cards deck napolitanaHand margaritaHand |
+	| boxes testPlayers dice game cards deck napolitanaHand margaritaHand usedCards |
 	
 	boxes := OrderedCollection 
 		with: NoEffectBox new 
@@ -222,10 +222,14 @@ CardsTests >> testUseACancelationCardOnAnInstantCardRaiseAnError [
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	napolitanaHand := game handOf: #napolitana.
 	margaritaHand := game handOf: #margarita.
+	game playNextTurn.
+	usedCards := game usedCards.
+	game player: #margarita wantsToApplyCard: (margaritaHand at: 2) to: #margarita.
+	game player: #margarita wantsToApplyCard: (margaritaHand first) toCard: (margaritaHand second).
 	
-	self should: [game player: #napolitana wantsToApplyCard: (napolitanaHand first) toCard: (margaritaHand first).] raise: Error withMessage: 'No se puede cancelar una carta instantanea.'
+	self should: [game player: #napolitana wantsToApplyCard: (napolitanaHand first) toCard: (usedCards second).] raise: Error withMessage: 'No se puede cancelar una carta instantanea.'
 
-	
+
 ]
 
 { #category : #tests }
