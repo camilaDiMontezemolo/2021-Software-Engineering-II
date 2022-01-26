@@ -35,21 +35,21 @@ Position >> initializeWith: aPlayer at: anAbsoluteLocation on: aBoard [
 ]
 
 { #category : #'as yet unclassified' }
-Position >> isOfSamePlayerAs: anotherPosition [
-	^(myPlayer = (anotherPosition player))
-]
-
-{ #category : #'as yet unclassified' }
 Position >> lap [
-	^myBoard giveMeTheLapsOfThisPosition: absoluteLocation.
+	^myBoard lapsOfPosition: absoluteLocation.
 ]
 
 { #category : #'as yet unclassified' }
 Position >> location [
-	^myBoard giveMeTheLocationOfThisPosition: absoluteLocation.
+	^myBoard locationOfPosition: absoluteLocation.
 ]
 
 { #category : #'as yet unclassified' }
 Position >> player [
 	^myPlayer.
+]
+
+{ #category : #'as yet unclassified' }
+Position >> samePlayerAs: anotherPosition [
+	^(myPlayer = (anotherPosition player))
 ]

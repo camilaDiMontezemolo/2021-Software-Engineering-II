@@ -7,7 +7,7 @@ Class {
 { #category : #'as yet unclassified' }
 RedoCard >> triggerRedoEffectFrom: aCardManager [
 	| card |
-	card := (aCardManager giveLastCardUsed).
+	card := (aCardManager lastCardUsed).
 	^card.
 
 ]

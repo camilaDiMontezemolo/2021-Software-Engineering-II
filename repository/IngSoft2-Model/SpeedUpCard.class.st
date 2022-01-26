@@ -6,6 +6,5 @@ Class {
 
 { #category : #'as yet unclassified' }
 SpeedUpCard >> applyEffectFrom: aCardManager [ 
-	aCardManager lastCardUsed: self.
 	^1.
 ]

@@ -25,12 +25,12 @@ Stocktaking >> addToHand: card [
 ]
 
 { #category : #'as yet unclassified' }
-Stocktaking >> getCardsAffecting [
+Stocktaking >> cardsAffecting [
 	^cardsAffectingPlayer.
 ]
 
 { #category : #'as yet unclassified' }
-Stocktaking >> getHand [
+Stocktaking >> hand [
 	^hand.
 ]
 

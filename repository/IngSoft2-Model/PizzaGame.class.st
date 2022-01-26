@@ -17,6 +17,8 @@ Class {
 
 { #category : #'instance creation' }
 PizzaGame class >> validateLaps: someLaps boxes: someBoxes players: somePlayers dice: someDice andDeck: aDeck [
+	someDice size< 1
+		ifTrue: [ Error signal: 'Un juego no puede tener menos de un dado' ].
 	somePlayers isEmpty
 		ifTrue: [ Error signal: 'Un juego no puede tener menos de 1 jugador.' ].
 	someLaps < 1
@@ -40,14 +42,21 @@ PizzaGame class >> withBoxes: someBoxes players: somePlayers dice: someDice laps
 ]
 
 { #category : #'as yet unclassified' }
-PizzaGame >> changeTurn [
-	(currentTurn == (myPlayers size)) ifTrue:[currentTurn:=0].
-	currentTurn := currentTurn +1.
+PizzaGame >> cardFor: playerWhoGetsTheCard [
+	| stock |
+	stock := myCardManager stockOf: playerWhoGetsTheCard.
+	myCardManager addCardTo: stock.
 ]
 
 { #category : #'as yet unclassified' }
-PizzaGame >> findLastTypeOfBoxForPlayer: aPlayer [
-	myBoard applyLastTypeOfBoxFor: aPlayer.
+PizzaGame >> cardsAffecting: player [ 
+	^(myCardManager cardsAffecting: player).
+]
+
+{ #category : #'as yet unclassified' }
+PizzaGame >> changeTurn [
+	(currentTurn == (myPlayers size)) ifTrue:[currentTurn:=0].
+	currentTurn := currentTurn +1.
 ]
 
 { #category : #'as yet unclassified' }
@@ -56,20 +65,8 @@ PizzaGame >> firstPlace [
 ]
 
 { #category : #'as yet unclassified' }
-PizzaGame >> getACardFor: playerWhoGetsTheCard [
-	| stock |
-	stock := myCardManager getStockOf: playerWhoGetsTheCard.
-	myCardManager giveACardTo: stock.
-]
-
-{ #category : #'as yet unclassified' }
-PizzaGame >> getCardsAffecting: player [ 
-	^(myCardManager getCardsAffecting: player).
-]
-
-{ #category : #'as yet unclassified' }
-PizzaGame >> getHandOf: player [
-	^(myCardManager getHandOf: player).
+PizzaGame >> handOf: player [
+	^(myCardManager handOf: player).
 ]
 
 { #category : #initialize }
@@ -88,7 +85,12 @@ PizzaGame >> initializeWithBoxes: someBoxes players: somePlayers dice: someDie l
 
 { #category : #'as yet unclassified' }
 PizzaGame >> isFinished [
-	^myBoard hasAnyPlayerSurpassed: myLaps.
+	^myBoard playerSurpassed: myLaps.
+]
+
+{ #category : #'as yet unclassified' }
+PizzaGame >> lastTypeOfBoxForPlayer: aPlayer [
+	myBoard applyLastTypeOfBoxFor: aPlayer.
 ]
 
 { #category : #'as yet unclassified' }

@@ -25,6 +25,11 @@ Die >> initializeWithSides: aNumberOfSides [
 ]
 
 { #category : #'as yet unclassified' }
+Die >> size [
+	^1.
+]
+
+{ #category : #'as yet unclassified' }
 Die >> spin [
 	^(sides atRandom).
 ]

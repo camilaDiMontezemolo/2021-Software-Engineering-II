@@ -143,7 +143,7 @@ CementerioDePizzasGameTests >> testCreateARandomMultiPlayerGame [
 	
 	testPlayers:= OrderedCollection with: napolitana with: margarita with: mozzarella.
 	
-	dice := OrderedCollection with: (Die withSides: 5) with: (Die withSides: 4).
+	dice := Beaker with: (OrderedCollection with: (Die withSides: 5) with: (Die withSides: 4)).
 	cards := DeckGenerator with: 100.
 	deck := Deck withCards: cards. 
 	game:= PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.

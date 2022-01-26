@@ -8,7 +8,7 @@ Class {
 CardBox >> affect: positions triggeredOn: aPosition with: board [ 
 	| playerWhoGetsTheCard |
 	playerWhoGetsTheCard := (aPosition player).
-	board getACardFor: playerWhoGetsTheCard.
+	board cardFor: playerWhoGetsTheCard.
 	
 
 ]

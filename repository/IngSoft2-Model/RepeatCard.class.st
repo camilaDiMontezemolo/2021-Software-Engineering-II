@@ -6,6 +6,6 @@ Class {
 
 { #category : #'as yet unclassified' }
 RepeatCard >> triggerInstantaneousEffect: affectedPlayer  from: aCardManager [
-	aCardManager lastCardUsed:self. 
-	aCardManager findLastTypeOfBoxForPlayer: affectedPlayer.
+	aCardManager lastCardUsed: self.
+	aCardManager lastTypeOfBoxForPlayer: affectedPlayer.
 ]

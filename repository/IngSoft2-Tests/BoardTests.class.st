@@ -21,13 +21,7 @@ BoardTests >> testABoardShouldHaveMoreThanZeroBoxes [
     dice := OrderedCollection with: (Die withSides: 3).
     cards := Deck withCards: (DeckGenerator with: 2).
 
-    self should: [ PizzaGame
-        withBoxes: OrderedCollection new
-        players: (OrderedCollection with: #Margarita)
-        dice: dice
-        laps: 1
-        andDeck: cards.
-        ] raise: Error withMessage: 'Un juego no puede tener menos de 1 casillero.'.
+    self should: [ PizzaGame withBoxes: OrderedCollection new players: (OrderedCollection with: #Margarita) dice: dice laps: 1 andDeck: cards.] raise: Error withMessage: 'Un juego no puede tener menos de 1 casillero.'.
 		
 ]
 
@@ -41,13 +35,7 @@ BoardTests >> testABoardShouldHaveMoreThanZeroDie [
 	cards := Deck withCards: (DeckGenerator with: 2).
 
 		
-	self should: [PizzaGame
-		withBoxes: someBoxes
-		players: testPlayers
-		dice: OrderedCollection new
-		laps: 1
-		andDeck: cards.
-		] raise: Error withMessage: 'Un beaker no puede tener menos de 1 dado(s).'
+	self should: [PizzaGame withBoxes: someBoxes players: testPlayers dice: OrderedCollection new laps: 1 andDeck: cards.] raise: Error withMessage: 'Un juego no puede tener menos de un dado'
 ]
 
 { #category : #tests }
@@ -60,13 +48,7 @@ BoardTests >> testABoardShouldHaveMoreThanZeroPlayers [
 	cards := Deck withCards: (DeckGenerator with: 2).
 
 	
-	self should: [ PizzaGame
-		withBoxes: boxes
-		players: OrderedCollection new
-		dice: dice
-		laps: 1
-		andDeck: cards.
-		] raise: Error withMessage: 'Un juego no puede tener menos de 1 jugador.'.
+	self should: [ PizzaGame withBoxes: boxes players: OrderedCollection new dice: dice laps: 1 andDeck: cards.] raise: Error withMessage: 'Un juego no puede tener menos de 1 jugador.'.
 		
 ]
 
@@ -114,7 +96,7 @@ BoardTests >> testACardBoxGivesCards [
 	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(1))).
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	game playTurnForAllPlayers.
-	napolitanaHand := game getHandOf: #napolitana.
+	napolitanaHand := game handOf: #napolitana.
 	
 	game player: #napolitana wantsToApplyCard: (napolitanaHand at: 3) to: #napolitana.
 	game playTurnForAllPlayers.

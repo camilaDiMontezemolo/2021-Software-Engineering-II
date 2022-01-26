@@ -17,7 +17,7 @@ MoonWalkBox class >> loadedWith: aNumber [
 { #category : #'as yet unclassified' }
 MoonWalkBox >> affect: positions triggeredOn: aPosition with: board [
 	| affectedPositions|
-	affectedPositions :=(positions reject: [:position| position isOfSamePlayerAs: aPosition]).
+	affectedPositions :=(positions reject: [:position| position samePlayerAs: aPosition]).
 	affectedPositions do: [:position |board move: position by: n].
 	
 ]

@@ -18,8 +18,8 @@ Beaker >> intializeWithDice: gameDice [
 ]
 
 { #category : #'as yet unclassified' }
-Beaker >> isEmpty [
-	^false.
+Beaker >> size [
+	^(dice size)
 ]
 
 { #category : #'as yet unclassified' }

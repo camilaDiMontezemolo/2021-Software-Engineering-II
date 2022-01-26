@@ -18,10 +18,18 @@ CardManager class >> with: initialCards in: aGame [
 ]
 
 { #category : #'as yet unclassified' }
+CardManager >> addCardTo: oneStock [
+	| newCard |
+	newCard := myDeck drawACard.
+	oneStock addToHand: newCard.
+]
+
+{ #category : #'as yet unclassified' }
 CardManager >> affect: target with: card [
 
 	| neededStocks validCard |
 	validCard := self checkIfTheCardIsARedo: card.
+	self lastCardUsed: card.
 	neededStocks := playersStockTakings select: [:stock| (target includes: (stock owner)) | (stock owner = target)].
 	neededStocks do: [ :oneStock | oneStock AddToCardsAffectingPlayer: validCard. 
 							self usedCards add: validCard].
@@ -32,7 +40,7 @@ CardManager >> affect: target with: card [
 CardManager >> affectCard: target with: card [
 	| validCard |
 	validCard := self checkIfTheCardIsARedo: card.
-	validCard triggerInstantaneousEffect: target from: self. 
+	validCard triggerInstantaneousEffect: target from: self.
 	
 	
 ]
@@ -40,10 +48,20 @@ CardManager >> affectCard: target with: card [
 { #category : #'as yet unclassified' }
 CardManager >> cancellateCard: aCard [
 	| neededStocks|
-	neededStocks := playersStockTakings select: [:stock| (stock getCardsAffecting) includes: aCard].
+	(usedCards includes: aCard)
+		ifFalse: [ (self useOfInstantCard: aCard >1)
+				ifTrue:[Error signal: 'No se puede cancelar una carta instantanea']
+				ifFalse:[Error signal: 'No se puede cancelar una carta inactiva' ]].
+	neededStocks := playersStockTakings select: [:stock| (stock cardsAffecting) includes: aCard].
 	neededStocks do:
 		[ :oneStock | oneStock removeCardAffectingPlayer: aCard.].
-	"usedCards remove: aCard ifAbsent: [ Error signal: 'No se puede cancelar una carta que no está en deck']."
+]
+
+{ #category : #'as yet unclassified' }
+CardManager >> cardsAffecting: player [
+	| neededList |
+	neededList := (self stockOf: player).
+	^(neededList cardsAffecting).
 ]
 
 { #category : #'as yet unclassified' }
@@ -71,41 +89,8 @@ CardManager >> createHandsFor: thePlayersOfThisGame [
 ]
 
 { #category : #'as yet unclassified' }
-CardManager >> findLastTypeOfBoxForPlayer: aPlayer [
-	myGame findLastTypeOfBoxForPlayer: aPlayer.
-]
-
-{ #category : #'as yet unclassified' }
-CardManager >> getCardsAffecting: player [
-	| neededList |
-	neededList := (self getStockOf: player).
-	^(neededList getCardsAffecting).
-]
-
-{ #category : #'as yet unclassified' }
-CardManager >> getHandOf: player [ 
-	^(self getStockOf: player) getHand.
-]
-
-{ #category : #'as yet unclassified' }
-CardManager >> getStockOf: player [ 
-	| neededStock |
-	neededStock := (playersStockTakings select: [:stock| stock owner = player]) first.
-	^neededStock.
-]
-
-{ #category : #'as yet unclassified' }
-CardManager >> giveACardTo: oneStock [
-	| newCard |
-	newCard := myDeck drawACard.
-	oneStock addToHand: newCard.
-]
-
-{ #category : #'as yet unclassified' }
-CardManager >> giveLastCardUsed [
-	| card |
-	card := (lastCardUsed class) new.
-	^card.
+CardManager >> handOf: player [ 
+	^(self stockOf: player) hand.
 ]
 
 { #category : #'as yet unclassified' }
@@ -114,7 +99,7 @@ CardManager >> handOutInitialCardsFor: thePlayersOfThisGame [
 	self createHandsFor: thePlayersOfThisGame.
 	n:=0.
 	playersStockTakings do:
-		[ :oneStock | [n<2] whileTrue: [self giveACardTo: oneStock.
+		[ :oneStock | [n<2] whileTrue: [self addCardTo: oneStock.
 		n:= n+1.].
 		n:=0.
 	].
@@ -129,9 +114,19 @@ CardManager >> initializeWithCards: initialDeck in: aGame [
 ]
 
 { #category : #'as yet unclassified' }
+CardManager >> lastCardUsed [
+	^lastCardUsed.
+]
+
+{ #category : #'as yet unclassified' }
 CardManager >> lastCardUsed: newCard [
 	lastCardUsed:= newCard.
 	
+]
+
+{ #category : #'as yet unclassified' }
+CardManager >> lastTypeOfBoxForPlayer: aPlayer [
+	myGame lastTypeOfBoxForPlayer: aPlayer.
 ]
 
 { #category : #'as yet unclassified' }
@@ -139,9 +134,22 @@ CardManager >> modifyDistanceOf: player [
 	| playerCards finalDistance|
 	finalDistance:=0.
 	"playerCards := (self findCardsAffecting: player)."
-	playerCards := (self getCardsAffecting: player).
+	playerCards := (self cardsAffecting: player).
 	playerCards do: [:card| finalDistance:= finalDistance +(card applyEffectFrom: self).].
 	^finalDistance.
+]
+
+{ #category : #'as yet unclassified' }
+CardManager >> stockOf: player [ 
+	| neededStock |
+	neededStock := (playersStockTakings select: [:stock| stock owner = player]) first.
+	^neededStock.
+]
+
+{ #category : #'as yet unclassified' }
+CardManager >> useOfInstantCard: card [
+	^((playersStockTakings select: [:stock| (stock hand includes: card)]) size)
+	
 ]
 
 { #category : #'as yet unclassified' }

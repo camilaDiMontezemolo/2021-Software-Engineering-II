@@ -6,6 +6,5 @@ Class {
 
 { #category : #'as yet unclassified' }
 OverloadCard >> applyEffectFrom: aCardManager [ 
-	aCardManager lastCardUsed: self.
 	^-2.
 ]
