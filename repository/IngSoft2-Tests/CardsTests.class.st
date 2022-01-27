@@ -43,29 +43,62 @@ CardsTests >> testACardCanNotBeUsedOutsideYourTurn [
 ]
 
 { #category : #'as yet unclassified' }
-CardsTests >> testAPlayerCantPlayACardThatIsntTheirs [
+CardsTests >> testAPlayerCantPlayAPermanentCardThatIsntTheirs [
 	
-	| boxes testPlayers dice game cards deck napolitanaHand  |
-
+	| boxes testPlayers dice game cards deck napolitanaHand |
+	
 	boxes := OrderedCollection 
+		with: NoEffectBox new 
+		with: NoEffectBox new
 		with: NoEffectBox new 
 		with: NoEffectBox new
 		with: NoEffectBox new 
 		with: NoEffectBox new.
 		
 	cards := OrderedCollection
-		with: CancellationCard new
-		with: OverloadCard new
-		with: OverloadCard new
-		with: OverloadCard new.
+	with: AccelerationCard new
+	with: OverloadCard new
+	with: OverloadCard new
+	with: OverloadCard new.
+	
 	deck := Deck withCards: cards. 	
-	testPlayers := OrderedCollection with: #napolitana with: #margarita.
-	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(2))).
+	testPlayers := OrderedCollection with: #margarita with:#napolitana.
+	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(1))).
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
-	game playNextTurn.
 	napolitanaHand := game handOf: #napolitana.
-	self should: [game player: #margarita wantsToApplyCard: (napolitanaHand at: 1) to: #margarita.] raise: Error withMessage: 'Un jugador no puede tirar una carta que no es suya'.
 
+	self should: [game player: #margarita wantsToApplyCard: (napolitanaHand first) to: testPlayers.] raise: Error withMessage: 'Un jugador no puede tirar una que no es suya'.
+
+]
+
+{ #category : #tests }
+CardsTests >> testAPlayerCantPlayARedoCardThatIsntTheirs [
+	
+	| boxes testPlayers dice game cards deck margaritaHand napolitanaHand |
+
+    boxes := OrderedCollection 
+        with: NoEffectBox new 
+        with: NoEffectBox new
+        with: NoEffectBox new 
+        with: NoEffectBox new.
+
+    cards := OrderedCollection
+		with: SpeedUpCard new
+		with: OverloadCard new
+		with: RedoCard new
+		with: OverloadCard new.
+	deck := Deck withCards: cards. 
+   testPlayers := OrderedCollection with:#margarita with: #napolitana.
+   dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(2))).
+   game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
+	napolitanaHand := game handOf: #napolitana.
+	margaritaHand := game handOf: #margarita.
+	game player: #margarita wantsToApplyCard: (margaritaHand first) to: #margarita.
+   game playNextTurn.
+	
+self should: [game player: #margarita wantsToApplyCard: (napolitanaHand first) to: #napolitana.] raise: Error withMessage: 'Un jugador no puede tirar una que no es suya'.
+	
+	
 ]
 
 { #category : #tests }
@@ -283,40 +316,9 @@ CardsTests >> testUseACancelationCardOnAnInactiveCardRaiseError [
 	napolitanaHand := game handOf: #napolitana.
 	margaritaHand := game handOf: #margarita.
 
-	self should: [game player: #napolitana wantsToApplyCard: (napolitanaHand first) toCard: (margaritaHand first).] raise: Error withMessage: 'No se puede cancelar una carta inactiva'
+	self should: [game player: #napolitana wantsToApplyCard: (napolitanaHand first) toCard: (margaritaHand first).] raise: Error withMessage: 'No es una carta válida para cancelar.'
 
 	
-]
-
-{ #category : #tests }
-CardsTests >> testUseACancelationCardOnAnInstantCardRaiseAnError [
-	
-	| boxes testPlayers dice game cards deck napolitanaHand margaritaHand usedCards |
-	
-	boxes := OrderedCollection 
-		with: NoEffectBox new 
-		with: NoEffectBox new
-		with: NoEffectBox new 
-		with: NoEffectBox new.
-	cards := OrderedCollection
-		with: CancellationCard new
-		with: RepeatCard new
-		with: CancellationCard new
-		with: OverloadCard new.
-	deck := Deck withCards: cards. 	
-	testPlayers := OrderedCollection with: #napolitana with: #margarita.
-	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(2))).
-	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
-	napolitanaHand := game handOf: #napolitana.
-	margaritaHand := game handOf: #margarita.
-	game playNextTurn.
-	usedCards := game usedCards.
-	game player: #margarita wantsToApplyCard: (margaritaHand at: 2) to: #margarita.
-	game player: #margarita wantsToApplyCard: (margaritaHand first) toCard: (margaritaHand second).
-	
-	self should: [game player: #napolitana wantsToApplyCard: (napolitanaHand first) toCard: (usedCards second).] raise: Error withMessage: 'No se puede cancelar una carta instantanea.'
-
-
 ]
 
 { #category : #tests }

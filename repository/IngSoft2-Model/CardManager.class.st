@@ -42,8 +42,6 @@ CardManager >> affectCard: target with: card [
 	| validCard |
 	validCard := self checkIfTheCardIsARedo: card.
 	validCard triggerInstantaneousEffect: target from: self.
-	self usedCards add: validCard.
-	"Hay alguna razon por la que no usabamos usedCrds en las instantaneas?"
 	
 	
 ]
@@ -167,15 +165,14 @@ CardManager >> validate: target forAcceleration: card [
 CardManager >> validateCancellationFor: target [
 
 		(usedCards includes: target)
-		ifFalse:[Error signal: 'No se puede cancelar una carta inactiva' ].
-		
-		(  ((target class) = (CancellationCard class)) | ((target class) = (RepeatCard class)) | ((target class) = (RedoCard class)))
-		ifTrue:[Error signal: 'No se puede cancelar una carta instantanea.'].
+		ifFalse:[Error signal: 'No es una carta válida para cancelar.' ].
+	
 ]
 
 { #category : #'as yet unclassified' }
 CardManager >> verify: card belongsTo: player [
 	| neededStock |
 	neededStock := self stockOf: player.
-	^(neededStock verifyBelongsToPlayerHand: card).
+	(neededStock verifyBelongsToPlayerHand: card)
+	ifFalse: [ Error signal: 'Un jugador no puede tirar una que no es suya' ].
 ]

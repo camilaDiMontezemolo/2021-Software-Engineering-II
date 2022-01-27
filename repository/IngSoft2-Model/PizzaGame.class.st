@@ -60,6 +60,13 @@ PizzaGame >> changeTurn [
 ]
 
 { #category : #'as yet unclassified' }
+PizzaGame >> check: card from: player [
+	((card class) = RedoCard)
+		ifFalse: [self sendCardErrorFor: player]
+		ifTrue:[cardManager verify: card belongsTo: player.]
+]
+
+{ #category : #'as yet unclassified' }
 PizzaGame >> firstPlace [
 	^self ranking first.
 ]
@@ -114,19 +121,21 @@ PizzaGame >> playTurnForAllPlayers [
 
 { #category : #'as yet unclassified' }
 PizzaGame >> player: player wantsToApplyCard: card to: target [
-
-	((players at: currentTurn) = player & (players includes: player) & (cardManager verify: card belongsTo: player))
-	ifTrue:[
-	cardManager remove: card fromTheHandOf: player.
-	cardManager affect: target with: card]
-	ifFalse:[ self sendCardErrorFor: player. ]
+ 
+	((players at: currentTurn) = player & (players includes: player))
+		ifTrue:[ cardManager verify: card belongsTo: player.
+					cardManager remove: card fromTheHandOf: player.
+					cardManager affect: target with: card]
+		ifFalse:[ self check: card from: player. ]
 
 ]
 
 { #category : #'as yet unclassified' }
 PizzaGame >> player: player wantsToApplyCard: card toCard: target [
-	((players includes: player) & (cardManager verify: card belongsTo: player))
+	
+	(players includes: player)
 	ifTrue:[
+	cardManager verify: card belongsTo: player.
 	cardManager remove: card fromTheHandOf: player.
 	cardManager affectCard: target with: card]
 	ifFalse:[ self sendCardErrorFor: player. ]
