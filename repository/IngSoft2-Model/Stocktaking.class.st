@@ -15,7 +15,7 @@ Stocktaking class >> for: player [
 ]
 
 { #category : #'as yet unclassified' }
-Stocktaking >> AddToCardsAffectingPlayer: card [
+Stocktaking >> addToCardsAffectingPlayer: card [
 	cardsAffectingPlayer add: card.
 ]
 

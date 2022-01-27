@@ -33,7 +33,7 @@ CardManager >> affect: target with: card [
 	self lastCardUsed: card.
 	self usedCards add: validCard.
 	neededStocks := playersStockTakings select: [:stock| (target includes: (stock owner)) | (stock owner = target)].
-	neededStocks do: [ :oneStock | oneStock AddToCardsAffectingPlayer: validCard. ].
+	neededStocks do: [ :oneStock | oneStock addToCardsAffectingPlayer: validCard. ].
 	
 ]
 
