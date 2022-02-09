@@ -83,6 +83,32 @@ CementerioDePizzasGameTests >> testADiceShouldHaveAtLeastOneSide [
 ]
 
 { #category : #tests }
+CementerioDePizzasGameTests >> testAGameDoesntStartIfTheDeckGeneratorsPercentageIsntOne [
+
+	| dice players cards someBoxes randomCards |
+	
+	dice := OrderedCollection with: (Die withSides: 3).
+	someBoxes:= BoxGenerator give: 10.
+	someBoxes add: 0.38 of: NoEffectBox.
+	someBoxes add: 0.2 of: SpeedupBox.
+	someBoxes add: 0.2 of: WormHoleBox.
+	someBoxes add: 0.1 of: MoonWalkBox.
+	someBoxes add: 0.02 of: AtomicBombBox.
+	players:= (OrderedCollection with: #hawaiana).
+	randomCards :=OrderedCollection 
+		with: (AccelerationCard new) 
+		with: (CancellationCard new) 
+		with: (OverloadCard new) 
+		with: (RedoCard new) 
+		with: (RepeatCard new) 
+		with:(SpeedUpCard new).
+
+	cards := Deck withCards: (DeckGenerator with: 2 for: randomCards).
+	self should: [PizzaGame withBoxes: someBoxes players: players dice: dice laps: 2 andDeck: cards] raise: Error withMessage: 'El tablero está incompleto.'.
+	
+]
+
+{ #category : #tests }
 CementerioDePizzasGameTests >> testAGameShouldHaveAtLeastOneLap [
 
 	| dice players cards someBoxes randomCards |
@@ -105,7 +131,7 @@ CementerioDePizzasGameTests >> testAGameShouldHaveAtLeastOneLap [
 		with:(SpeedUpCard new).
 
 	cards := Deck withCards: (DeckGenerator with: 2 for: randomCards).
-	self should: [PizzaGame withBoxes: (someBoxes boxes) players: players dice: dice laps: 0 andDeck: cards] raise: Error withMessage: 'Un juego no puede tener menos de 1 vuelta.'.
+	self should: [PizzaGame withBoxes: someBoxes players: players dice: dice laps: 0 andDeck: cards] raise: Error withMessage: 'Un juego no puede tener menos de 1 vuelta.'.
 	
 ]
 
@@ -213,7 +239,7 @@ CementerioDePizzasGameTests >> testCreateARandomMultiPlayerGame [
 		with:(SpeedUpCard new).
 	cards := DeckGenerator with: 100 for: randomCards .
 	deck := Deck withCards: cards. 
-	game:= PizzaGame withBoxes: (boxesGen boxes) players: testPlayers dice: dice laps: 1 andDeck: deck.
+	game:= PizzaGame withBoxes: boxesGen players: testPlayers dice: dice laps: 1 andDeck: deck.
 	
 	game play.
 	

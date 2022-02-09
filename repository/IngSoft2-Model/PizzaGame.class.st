@@ -16,6 +16,17 @@ Class {
 }
 
 { #category : #'instance creation' }
+PizzaGame class >> validateBoxes: someBoxes [
+	( (someBoxes class) = OrderedCollection) 
+	ifFalse: [ 
+		((someBoxes percentage) = 1)
+		ifFalse:[ Error signal: 'El tablero está incompleto.' ]
+		ifTrue: [ ^(someBoxes boxes) ]. ]
+	ifTrue: [ ^someBoxes. ]
+
+]
+
+{ #category : #'instance creation' }
 PizzaGame class >> validateLaps: someLaps boxes: someBoxes players: somePlayers dice: someDice andDeck: aDeck [
 	someDice size< 1
 		ifTrue: [ Error signal: 'Un juego no puede tener menos de un dado' ].
@@ -31,14 +42,16 @@ PizzaGame class >> validateLaps: someLaps boxes: someBoxes players: somePlayers 
 
 { #category : #'instance creation' }
 PizzaGame class >> withBoxes: someBoxes players: somePlayers dice: someDice laps: someLaps andDeck: deck [
+	| list |
+	list := self validateBoxes: someBoxes.
 	self
 		validateLaps: someLaps
-		boxes: someBoxes
+		boxes: list
 		players: somePlayers
 		dice: someDice
 		andDeck: deck.
 	^ self new
-		initializeWithBoxes: someBoxes players: somePlayers dice: someDice laps: someLaps andDeck: deck
+		initializeWithBoxes: list players: somePlayers dice: someDice laps: someLaps andDeck: deck
 ]
 
 { #category : #'as yet unclassified' }

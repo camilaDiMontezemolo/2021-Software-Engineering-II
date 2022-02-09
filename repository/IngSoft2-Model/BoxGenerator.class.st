@@ -44,6 +44,11 @@ BoxGenerator >> initializeWithSize: aSize [
 ]
 
 { #category : #'as yet unclassified' }
+BoxGenerator >> percentage [
+	^percentages 
+]
+
+{ #category : #'as yet unclassified' }
 BoxGenerator >> validatePorcenge: aPercentage [
 	percentages := percentages + aPercentage.
 	(percentages>1)
