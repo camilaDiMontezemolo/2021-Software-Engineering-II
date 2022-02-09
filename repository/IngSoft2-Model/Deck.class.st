@@ -16,7 +16,6 @@ Deck class >> withCards: aCollectionOfCards [
 { #category : #'as yet unclassified' }
 Deck >> drawACard [
 	| card |
-	"myCards isEmpty ifTrue: [ Error signal: 'Ya no hay más cartas a repartir.' ]."
 	card := cards first.
 	cards removeFirst.
 	^card.

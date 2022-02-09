@@ -1,54 +1,56 @@
 Class {
 	#name : #BoxGenerator,
 	#superclass : #Object,
-	#classVars : [
-		'myBoxes',
-		'mySize'
+	#instVars : [
+		'size',
+		'percentages',
+		'boxCol'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
-BoxGenerator class >> give: aSize andProbabilitiesForNoEffectBox: aProbForNoEf andSpeed: aProbForSpeed andWormm: aProbForWorm andMoon: aProbForMoon andAtomic: aProbForAtomic andCardBox: aProbForCardBox [
-	self validateSize: aSize andProbabilitiesForNoEffectBox: aProbForNoEf andSpeed: aProbForSpeed andWormm: aProbForWorm andMoon: aProbForMoon andAtomic: aProbForAtomic andCardBox: aProbForCardBox.
-	^ self new initializeWithSize: aSize andProbabilitiesForNoEffectBox: aProbForNoEf andSpeed: aProbForSpeed andWormm: aProbForWorm andMoon: aProbForMoon andAtomic: aProbForAtomic andCardBox: aProbForCardBox
-]
-
-{ #category : #'instance creation' }
-BoxGenerator class >> validateSize: aSize andProbabilitiesForNoEffectBox: aProbForNoEf andSpeed: aProbForSpeed andWormm: aProbForWorm andMoon: aProbForMoon andAtomic: aProbForAtomic andCardBox: aProbForCardBox [.
-	(aSize < 1) 
-	ifTrue: [ Error signal: 'Un tablero no puede tener menos de 1 casillero.' ].
-	((aProbForNoEf + aProbForSpeed + aProbForWorm + aProbForMoon + aProbForAtomic + aProbForCardBox) > 1)
-	ifTrue: [ Error signal: 'Las suma de probabilidades debe ser mayor a 1.' ].
+BoxGenerator class >> give: aSize [
+	^ self new initializeWithSize: aSize
 ]
 
 { #category : #'as yet unclassified' }
 BoxGenerator >> add: aPercentage of: aBoxType [
 	| indice |
 	indice := 1.
-	[(indice <= (mySize *aPercentage)) & (myBoxes size < mySize)]
+	[(indice <= (size *aPercentage)) & (boxCol size < size)]
 		whileTrue:[
-			myBoxes add: (aBoxType new).
+			boxCol add: (aBoxType new).
 			indice := (indice +1).
 			].
+	boxCol := boxCol shuffled.
+	self validatePorcenge: aPercentage.
+	^boxCol.
+		
+]
+
+{ #category : #'as yet unclassified' }
+BoxGenerator >> boxes [
+	^boxCol.
 		
 ]
 
 { #category : #initalize }
-BoxGenerator >> initializeWithSize: aSize andProbabilitiesForNoEffectBox: aProbForNoEf andSpeed: aProbForSpeed andWormm: aProbForWorm andMoon: aProbForMoon andAtomic: aProbForAtomic andCardBox: aProbForCardBox [
-	mySize := (aSize-1).
-	myBoxes := OrderedCollection new.
-	self add: aProbForNoEf of: NoEffectBox.
-	self add: aProbForSpeed of: SpeedupBox.
-	self add: aProbForWorm of: WormHoleBox.
-	self add: aProbForMoon of: MoonWalkBox.
-	self add: aProbForAtomic of: AtomicBombBox.
-	self add: aProbForCardBox of: CardBox.
-	(myBoxes size < mySize)
+BoxGenerator >> initializeWithSize: aSize [
+	size := (aSize-1).
+	boxCol := OrderedCollection new.
+	percentages := 0.
+
+]
+
+{ #category : #'as yet unclassified' }
+BoxGenerator >> validatePorcenge: aPercentage [
+	percentages := percentages + aPercentage.
+	(percentages>1)
+	ifTrue: [ Error signal: 'Las suma de probabilidades no puede ser mayor a 1.' ].
+	(percentages=1)
+	ifTrue:[ (boxCol size < size)
 		ifTrue: [ 
-			(myBoxes size) to: (mySize) do: [:emptyBox | myBoxes add: (NoEffectBox new) ].
-		].
-	myBoxes := myBoxes shuffled.
-	^myBoxes.
-	
+			(boxCol size) to: (size) do: [:emptyBox | boxCol add: (NoEffectBox new) ].
+		].]
 ]

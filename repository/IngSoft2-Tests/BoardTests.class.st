@@ -16,10 +16,17 @@ BoardTests >> should: block raise: kindOfError withMessage: errorMessage [
 { #category : #tests }
 BoardTests >> testABoardShouldHaveMoreThanZeroBoxes [
 
-    |  dice cards|
+    |  dice cards randomCards |
 
     dice := OrderedCollection with: (Die withSides: 3).
-    cards := Deck withCards: (DeckGenerator with: 2).
+    randomCards :=OrderedCollection 
+		with: (AccelerationCard new) 
+		with: (CancellationCard new) 
+		with: (OverloadCard new) 
+		with: (RedoCard new) 
+		with: (RepeatCard new) 
+		with:(SpeedUpCard new).
+	cards := DeckGenerator with: 2 for: randomCards .
 
     self should: [ PizzaGame withBoxes: OrderedCollection new players: (OrderedCollection with: #Margarita) dice: dice laps: 1 andDeck: cards.] raise: Error withMessage: 'Un juego no puede tener menos de 1 casillero.'.
 		
@@ -28,11 +35,24 @@ BoardTests >> testABoardShouldHaveMoreThanZeroBoxes [
 { #category : #tests }
 BoardTests >> testABoardShouldHaveMoreThanZeroDie [
 
-	| someBoxes testPlayers cards|
+	| someBoxes testPlayers cards randomCards |
 
-	someBoxes:= BoxGenerator give: 20 andProbabilitiesForNoEffectBox: 0.38 andSpeed: 0.2 andWormm: 0.2 andMoon: 0.1 andAtomic: 0.02 andCardBox: 0.1.
+	someBoxes:= BoxGenerator give: 5000.
+	someBoxes add: 0.38 of: NoEffectBox.
+	someBoxes add: 0.2 of: SpeedupBox.
+	someBoxes add: 0.2 of: WormHoleBox.
+	someBoxes add: 0.1 of: MoonWalkBox.
+	someBoxes add: 0.02 of: AtomicBombBox.
+	someBoxes add: 0.1 of: CardBox.
 	testPlayers:=(OrderedCollection with: #hawaiana).
-	cards := Deck withCards: (DeckGenerator with: 2).
+	randomCards :=OrderedCollection 
+		with: (AccelerationCard new) 
+		with: (CancellationCard new) 
+		with: (OverloadCard new) 
+		with: (RedoCard new) 
+		with: (RepeatCard new) 
+		with:(SpeedUpCard new).
+	cards := DeckGenerator with: 2 for: randomCards .
 
 		
 	self should: [PizzaGame withBoxes: someBoxes players: testPlayers dice: OrderedCollection new laps: 1 andDeck: cards.] raise: Error withMessage: 'Un juego no puede tener menos de un dado'
@@ -41,14 +61,27 @@ BoardTests >> testABoardShouldHaveMoreThanZeroDie [
 { #category : #tests }
 BoardTests >> testABoardShouldHaveMoreThanZeroPlayers [
 
-	|  dice boxes cards|
+	|  dice someBoxes cards randomCards |
 	
 	dice := OrderedCollection with: (Die withSides: 3).
-	boxes := OrderedCollection with: (BoxGenerator give: 20 andProbabilitiesForNoEffectBox: 0.38 andSpeed: 0.2 andWormm: 0.2 andMoon: 0.1 andAtomic: 0.02 andCardBox: 0.1).
-	cards := Deck withCards: (DeckGenerator with: 2).
+	someBoxes:= BoxGenerator give: 5.
+	someBoxes add: 0.38 of: NoEffectBox.
+	someBoxes add: 0.2 of: SpeedupBox.
+	someBoxes add: 0.2 of: WormHoleBox.
+	someBoxes add: 0.1 of: MoonWalkBox.
+	someBoxes add: 0.02 of: AtomicBombBox.
+	someBoxes add: 0.1 of: CardBox.
+	randomCards :=OrderedCollection 
+		with: (AccelerationCard new) 
+		with: (CancellationCard new) 
+		with: (OverloadCard new) 
+		with: (RedoCard new) 
+		with: (RepeatCard new) 
+		with:(SpeedUpCard new).
+	cards := DeckGenerator with: 2 for: randomCards .
 
 	
-	self should: [ PizzaGame withBoxes: boxes players: OrderedCollection new dice: dice laps: 1 andDeck: cards.] raise: Error withMessage: 'Un juego no puede tener menos de 1 jugador.'.
+	self should: [ PizzaGame withBoxes: (someBoxes boxes) players: OrderedCollection new dice: dice laps: 1 andDeck: cards.] raise: Error withMessage: 'Un juego no puede tener menos de 1 jugador.'.
 		
 ]
 
@@ -57,14 +90,21 @@ BoardTests >> testABoxGeneratorGivesBoxesWithProbabilities [
 
 	| someBoxes numberOfNoEffectBoxes numberOfSpeed numberOfWorm numberOfMoon numberOfAtomic cantidadCardBox |
 
-	someBoxes:= BoxGenerator give: 5000 andProbabilitiesForNoEffectBox: 0.38 andSpeed: 0.2 andWormm: 0.2 andMoon: 0.1 andAtomic: 0.02 andCardBox: 0.1.
+	someBoxes:= BoxGenerator give: 5000.
+	someBoxes add: 0.38 of: NoEffectBox.
+	someBoxes add: 0.2 of: SpeedupBox.
+	someBoxes add: 0.2 of: WormHoleBox.
+	someBoxes add: 0.1 of: MoonWalkBox.
+	someBoxes add: 0.02 of: AtomicBombBox.
+	someBoxes add: 0.1 of: CardBox.
 	
-	numberOfNoEffectBoxes := someBoxes count: [ :card | card isMemberOf: NoEffectBox ].
-	numberOfSpeed := someBoxes count: [ :card | card isMemberOf: SpeedupBox ].
-	numberOfWorm := someBoxes count: [ :card | card isMemberOf: WormHoleBox ].
-	numberOfMoon := someBoxes count: [ :card | card isMemberOf: MoonWalkBox ].
-	numberOfAtomic := someBoxes count: [ :card | card isMemberOf: AtomicBombBox ].
-	cantidadCardBox := someBoxes count: [ :card | card isMemberOf: CardBox ].
+	
+	numberOfNoEffectBoxes := (someBoxes boxes) count: [ :card | card isMemberOf: NoEffectBox ].
+	numberOfSpeed := (someBoxes boxes)  count: [ :card | card isMemberOf: SpeedupBox ].
+	numberOfWorm := (someBoxes boxes)  count: [ :card | card isMemberOf: WormHoleBox ].
+	numberOfMoon := (someBoxes boxes) count: [ :card | card isMemberOf: MoonWalkBox ].
+	numberOfAtomic := (someBoxes boxes)  count: [ :card | card isMemberOf: AtomicBombBox ].
+	cantidadCardBox := (someBoxes boxes)  count: [ :card | card isMemberOf: CardBox ].
 
 	self assert: (numberOfNoEffectBoxes between: 1800 and: 2000).	
 	self assert: (numberOfSpeed between: 900 and: 1000).
@@ -77,7 +117,14 @@ BoardTests >> testABoxGeneratorGivesBoxesWithProbabilities [
 { #category : #tests }
 BoardTests >> testABoxGeneratorShouldNotGiveBoxesIfProbabilitiesSumMoreThanOne [
 		
-	self should: [ BoxGenerator give: 20 andProbabilitiesForNoEffectBox: 0.48 andSpeed: 0.2 andWormm: 0.2 andMoon: 0.1 andAtomic: 0.02 andCardBox: 0.1.	] raise: Error withMessage: 'Las suma de probabilidades debe ser mayor a 1.'.
+	| boxGen |
+	self should: [ boxGen:= BoxGenerator give: 5000.
+	boxGen add: 0.38 of: NoEffectBox.
+	boxGen add: 0.2 of: SpeedupBox.
+	boxGen add: 0.2 of: WormHoleBox.
+	boxGen add: 0.1 of: MoonWalkBox.
+	boxGen add: 0.2 of: AtomicBombBox.
+	boxGen add: 0.1 of: CardBox.	] raise: Error withMessage: 'Las suma de probabilidades no puede ser mayor a 1.'.
 ]
 
 { #category : #tests }
@@ -108,7 +155,8 @@ BoardTests >> testACardBoxGivesCards [
 { #category : #tests }
 BoardTests >> testAMoonWalkBoxJumpsAPlayerBoxesBack [
 	
-	| boxes testPlayers dice game cards deck |
+	| boxes testPlayers dice game cards deck randomCards
+|
 	
 	boxes := OrderedCollection 
 		with: NoEffectBox new 
@@ -116,7 +164,21 @@ BoardTests >> testAMoonWalkBoxJumpsAPlayerBoxesBack [
 		with: NoEffectBox with: NoEffectBox.
 	testPlayers := OrderedCollection with: #napolitana with: #hawaiana.
 	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(2))).
-	cards := DeckGenerator with: 100.
+	randomCards :=OrderedCollection 
+		with: (AccelerationCard new) 
+		with: (CancellationCard new) 
+		with: (OverloadCard new) 
+		with: (RedoCard new) 
+		with: (RepeatCard new) 
+		with:(SpeedUpCard new).
+	randomCards :=OrderedCollection 
+		with: (AccelerationCard new) 
+		with: (CancellationCard new) 
+		with: (OverloadCard new) 
+		with: (RedoCard new) 
+		with: (RepeatCard new) 
+		with:(SpeedUpCard new).
+	cards := DeckGenerator with: 100 for: randomCards .
 	deck := Deck withCards: cards. 
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	game playTurnForAllPlayers.
@@ -128,7 +190,7 @@ BoardTests >> testAMoonWalkBoxJumpsAPlayerBoxesBack [
 { #category : #tests }
 BoardTests >> testANoEffectBoxHasNoEffects [
 	
-	| boxes  testPlayers dice game positions cards deck |
+	| boxes  testPlayers dice game positions cards deck randomCards |
 	
 	boxes := OrderedCollection 
 		with: NoEffectBox new 
@@ -137,7 +199,14 @@ BoardTests >> testANoEffectBoxHasNoEffects [
 		with: NoEffectBox new.
 	testPlayers := OrderedCollection with: #napolitana.
 	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(2))).
-	cards := DeckGenerator with: 100.
+	randomCards :=OrderedCollection 
+		with: (AccelerationCard new) 
+		with: (CancellationCard new) 
+		with: (OverloadCard new) 
+		with: (RedoCard new) 
+		with: (RepeatCard new) 
+		with:(SpeedUpCard new).
+	cards := DeckGenerator with: 100 for: randomCards .
 	deck := Deck withCards: cards. 
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	game playTurnForAllPlayers.
@@ -150,7 +219,7 @@ BoardTests >> testANoEffectBoxHasNoEffects [
 { #category : #tests }
 BoardTests >> testASpeedupBoxJumpsYouFourBoxes [
 	
-	| game dice ranking testPlayers boxes cards deck |
+	| game dice ranking testPlayers boxes cards deck randomCards |
 	boxes := OrderedCollection
 		with: SpeedupBox new
 		with: NoEffectBox new
@@ -161,7 +230,14 @@ BoardTests >> testASpeedupBoxJumpsYouFourBoxes [
 
 	testPlayers := OrderedCollection with: #napolitana.
 	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(1))).
-	cards := DeckGenerator with: 100.
+	randomCards :=OrderedCollection 
+		with: (AccelerationCard new) 
+		with: (CancellationCard new) 
+		with: (OverloadCard new) 
+		with: (RedoCard new) 
+		with: (RepeatCard new) 
+		with:(SpeedUpCard new).
+	cards := DeckGenerator with: 100 for: randomCards .
 	deck := Deck withCards: cards. 
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	game playTurnForAllPlayers.
@@ -173,7 +249,7 @@ BoardTests >> testASpeedupBoxJumpsYouFourBoxes [
 { #category : #tests }
 BoardTests >> testAnAtomicBombBoxSendsEveryoneBackToZero [
 	
-	| game dice ranking testPlayers boxes cards deck |
+	| game dice ranking testPlayers boxes cards deck randomCards |
 	boxes := OrderedCollection
 		with: NoEffectBox new
 		with: NoEffectBox new
@@ -186,7 +262,14 @@ BoardTests >> testAnAtomicBombBoxSendsEveryoneBackToZero [
 		with: #margarita
 		with: #hawaiana.
 	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(4))).
-	cards := DeckGenerator with: 100.
+	randomCards :=OrderedCollection 
+		with: (AccelerationCard new) 
+		with: (CancellationCard new) 
+		with: (OverloadCard new) 
+		with: (RedoCard new) 
+		with: (RepeatCard new) 
+		with:(SpeedUpCard new).
+	cards := DeckGenerator with: 100 for: randomCards .
 	deck := Deck withCards: cards. 
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 2 andDeck: deck.
 	game playTurnForAllPlayers.
