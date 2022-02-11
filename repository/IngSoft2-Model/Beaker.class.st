@@ -18,6 +18,17 @@ Beaker >> intializeWithDice: gameDice [
 ]
 
 { #category : #'as yet unclassified' }
+Beaker >> maxToss [
+	|toss maxim|
+	toss :=0.
+	maxim := 0.
+	dice do: [ :die | maxim:= maxim+( die maxToss) ].
+	^(maxim)
+	
+	
+]
+
+{ #category : #'as yet unclassified' }
 Beaker >> size [
 	^(dice size)
 ]

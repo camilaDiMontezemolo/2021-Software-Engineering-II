@@ -5,9 +5,10 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-RedoCard >> triggerRedoEffectFrom: aCardManager [
+RedoCard >> triggerEffectOn: target from: aCardManager by: aPlayer [
 	| card |
+	aCardManager validateinstant: self of: aPlayer. 
 	card := (aCardManager lastCardUsed).
-	^card.
-
+	aCardManager add: card toHandOf: aPlayer.
+	card triggerEffectOn: target from: aCardManager by: aPlayer. 
 ]

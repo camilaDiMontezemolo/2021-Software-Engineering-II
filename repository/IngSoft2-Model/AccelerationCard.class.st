@@ -6,6 +6,12 @@ Class {
 
 { #category : #'as yet unclassified' }
 AccelerationCard >> applyEffectFrom: aCardManager [ 
-	aCardManager lastCardUsed: self.
 	^1.
+]
+
+{ #category : #'as yet unclassified' }
+AccelerationCard >> triggerEffectOn: target from: aCardManager by: aPlayer [
+	aCardManager validateAllPlayersIn: target.
+	aCardManager validatePermanentCard: self of: aPlayer. 
+	aCardManager affect:target with: self of: aPlayer.
 ]

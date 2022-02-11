@@ -77,27 +77,35 @@ CementerioDePizzasGameTests >> testAGameShouldHaveAtLeastOneLap [
 
 { #category : #tests }
 CementerioDePizzasGameTests >> testCreateAGameMultiPlayer [
+
 	| game dice napolitana ranking margarita testPlayers mozzarella boxes cards deck |
 	napolitana := #napolitana.
 	margarita := #margarita.
 	mozzarella := #mozzarella.
 	boxes := OrderedCollection
-		with: NoEffectBox new
-		with: NoEffectBox new
-		with: WormHoleBox new
-		with: AtomicBombBox new
-		with: (MoonWalkBox loadedWith: 1)
-		with: SpeedupBox new.
+		         with: NoEffectBox new
+		         with: NoEffectBox new
+		         with: WormHoleBox new
+		         with: AtomicBombBox new
+		         with: (MoonWalkBox loadedWith: 1)
+		         with: SpeedupBox new.
 
 	testPlayers := OrderedCollection
-		with: #napolitana
-		with: #margarita
-		with: #mozzarella.
+		               with: #napolitana
+		               with: #margarita
+		               with: #mozzarella.
 
-	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(4 4 4 2 2 2 2 2 2 6 6 6 2 2 2))).
+	dice := Beaker with: (OrderedCollection with: (LoadedDie
+				          withTosses: #( 4 4 4 2 2 2 2 2 2 6 6 6 2 2 2 )
+				          andSides: 6)).
 	cards := DeckGenerator with: 100.
-	deck := Deck withCards: cards. 
-	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
+	deck := Deck withCards: cards.
+	game := PizzaGame
+		        withBoxes: boxes
+		        players: testPlayers
+		        dice: dice
+		        laps: 1
+		        andDeck: deck.
 	game play.
 	ranking := game ranking.
 	self assert: game isFinished.
@@ -109,25 +117,36 @@ CementerioDePizzasGameTests >> testCreateAGameMultiPlayer [
 
 { #category : #tests }
 CementerioDePizzasGameTests >> testCreateAGameSinglePlayer [
-	
+
 	| game dice positions napolitana boxes testPlayers cards deck |
-	
-	napolitana:= #napolitana.
-	
-	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(5))).
-	boxes:= BoxGenerator give: 5 andProbabilitiesForNoEffectBox: 0.38 andSpeed: 0.2 andWormm: 0.2 andMoon: 0.1 andAtomic: 0.02 andCardBox: 0.1.
-	
-	testPlayers:= OrderedCollection with: napolitana.
-	
+	napolitana := #napolitana.
+
+	dice := Beaker with: (OrderedCollection with:
+			         (LoadedDie withTosses: #( 5 ) andSides: 5)).
+	boxes := BoxGenerator
+		         give: 5
+		         andProbabilitiesForNoEffectBox: 0.38
+		         andSpeed: 0.2
+		         andWormm: 0.2
+		         andMoon: 0.1
+		         andAtomic: 0.02
+		         andCardBox: 0.1.
+
+	testPlayers := OrderedCollection with: napolitana.
+
 	cards := DeckGenerator with: 100.
-	deck := Deck withCards: cards. 
-	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
-	
+	deck := Deck withCards: cards.
+	game := PizzaGame
+		        withBoxes: boxes
+		        players: testPlayers
+		        dice: dice
+		        laps: 1
+		        andDeck: deck.
+
 	game play.
 	positions := game ranking.
-	self assert: (game isFinished).
-	self assert: (positions at:1) player identicalTo: napolitana.
-	
+	self assert: game isFinished.
+	self assert: (positions at: 1) player identicalTo: napolitana
 ]
 
 { #category : #tests }
@@ -156,23 +175,27 @@ CementerioDePizzasGameTests >> testCreateARandomMultiPlayerGame [
 
 { #category : #tests }
 CementerioDePizzasGameTests >> testYouShouldBeAbleToGetYourLapAndLocation [
-	
+
 	| boxes testPlayers dice game cards deck |
+	boxes := OrderedCollection
+		         with: NoEffectBox new
+		         with: NoEffectBox new
+		         with: NoEffectBox new
+		         with: NoEffectBox new.
 
-    boxes := OrderedCollection 
-        with: NoEffectBox new 
-        with: NoEffectBox new
-        with: NoEffectBox new 
-        with: NoEffectBox new.
-
-   cards := DeckGenerator with: 50.
-	deck := Deck withCards: cards. 
-   testPlayers := OrderedCollection with:#margarita with: #napolitana.
-	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(6))).
-   game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 2 andDeck: deck.
+	cards := DeckGenerator with: 50.
+	deck := Deck withCards: cards.
+	testPlayers := OrderedCollection with: #margarita with: #napolitana.
+	dice := Beaker with: (OrderedCollection with:
+			         (LoadedDie withTosses: #( 6 ) andSides: 6)).
+	game := PizzaGame
+		        withBoxes: boxes
+		        players: testPlayers
+		        dice: dice
+		        laps: 2
+		        andDeck: deck.
 	game playNextTurn.
-	
-	self assert: ((game ranking) first) lap equals: 1.
-	self assert: ((game ranking) second) location equals: 0.
-	 
+
+	self assert: game ranking first lap equals: 1.
+	self assert: game ranking second location equals: 0
 ]

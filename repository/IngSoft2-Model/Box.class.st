@@ -6,5 +6,5 @@ Class {
 
 { #category : #'as yet unclassified' }
 Box >> affect: positions triggeredOn: aPosition with: board [
-	^self subclassResponsibility.
+	^0.
 ]

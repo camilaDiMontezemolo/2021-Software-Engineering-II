@@ -5,7 +5,8 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-RepeatCard >> triggerInstantaneousEffect: affectedPlayer  from: aCardManager [
+RepeatCard >> triggerEffectOn: target from: aCardManager by: aPlayer [
+	aCardManager validateinstant: self of: aPlayer.
 	aCardManager lastCardUsed: self.
-	aCardManager lastTypeOfBoxForPlayer: affectedPlayer.
+	aCardManager lastTypeOfBoxForPlayer: target.
 ]
