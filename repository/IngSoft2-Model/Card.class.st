@@ -3,3 +3,9 @@ Class {
 	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }
+
+{ #category : #'as yet unclassified' }
+Card >> triggerEffectOn: target from: cardManager by: player [
+
+	^ self subclassResponsibility
+]

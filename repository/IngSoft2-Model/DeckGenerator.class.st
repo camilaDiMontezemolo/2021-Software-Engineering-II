@@ -12,7 +12,7 @@ DeckGenerator class >> with: aNumberOfCards for: collectionOfCards [
 	^ self new initializeWithANumberOfCards: aNumberOfCards for:collectionOfCards.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #cardsCreation }
 DeckGenerator >> createCardFor: collectionOfTypes [
 	|randomCards |
 	randomCards := collectionOfTypes shuffled.

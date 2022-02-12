@@ -280,3 +280,36 @@ BoardTests >> testAnAtomicBombBoxSendsEveryoneBackToZero [
 	self assert: (ranking third) location equals: 4.
 	
 ]
+
+{ #category : #tests }
+BoardTests >> testJailBox [
+	
+	| board testPlayers dice game cards rankingOne deck napolitanaHand |
+	
+	board := OrderedCollection 
+		with: JailBox new
+		with: NoEffectBox new 
+		with: NoEffectBox new 
+		with: NoEffectBox new
+		with: NoEffectBox new 
+		with: NoEffectBox new.
+		
+	cards := OrderedCollection
+		with: LibertyCard new
+		with: OverloadCard new
+		with: LibertyCard new
+		with: OverloadCard new.
+		
+	deck := Deck withCards: cards.
+	testPlayers := OrderedCollection with: #napolitana with: #margarita. 
+	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(1 2))).
+	game := PizzaGame withBoxes: board players: testPlayers dice: dice laps: 1 andDeck: deck.
+	napolitanaHand := game handOf: #napolitana.
+	game playTurnForAllPlayers.
+	game playTurnForAllPlayers.
+	rankingOne:= game ranking.
+	
+	self assert: (rankingOne second) location equals: 1.
+	self assert: (rankingOne first) location equals: 4.
+	
+]

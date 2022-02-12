@@ -8,3 +8,10 @@ Class {
 SpeedUpCard >> applyEffectFrom: aCardManager [ 
 	^1.
 ]
+
+{ #category : #'as yet unclassified' }
+SpeedUpCard >> triggerEffectOn: target from: cardManager by: player [
+
+	cardManager validatePermanentCard: self of: player. 
+	cardManager affect:target with: self of: player.
+]

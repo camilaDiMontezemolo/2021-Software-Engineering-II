@@ -211,7 +211,7 @@ CardsTests >> testIfYouUseACardItNoLongerIsInYourHand [
 	napolitanaHand := game handOf: #napolitana.
 	usedCards := game usedCards.
 	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: #napolitana.
-	game player: #napolitana wantsToApplyCard: (napolitanaHand at: 1) toCard: (usedCards first).
+	game player: #napolitana wantsToApplyCard: (napolitanaHand at: 1) to: (usedCards first).
 	game playTurnForAllPlayers.
 	
    napolitanaHand := game handOf: #napolitana.
@@ -249,7 +249,7 @@ CardsTests >> testUseACancelationCardOnASpeedupCard [
 	usedCards := game usedCards.
 	game player: #margarita wantsToApplyCard: (margaritaHand at: 1) to: #margarita.
 	
-	game player: #napolitana wantsToApplyCard: (napolitanaHand at: 1) toCard: (usedCards first).
+	game player: #napolitana wantsToApplyCard: (napolitanaHand at: 1) to: (usedCards first).
 	game playNextTurn.
 	self assert: ((game ranking) second) location equals: 2.
 	self assert: ((game ranking) first) location equals: 2.
@@ -284,7 +284,7 @@ CardsTests >> testUseACancelationCardOnAnAccelerationCard [
 	margaritaHand := game handOf: #margarita.
 	game player: #margarita wantsToApplyCard: (margaritaHand first) to: testPlayers.
 	usedCards := game usedCards.
-	game player: #napolitana wantsToApplyCard: (napolitanaHand at: 1) toCard: (usedCards first).
+	game player: #napolitana wantsToApplyCard: (napolitanaHand at: 1) to: (usedCards first).
 	game playNextTurn.
 	self assert: ((game ranking) second) location equals: 2.
 	self assert: ((game ranking) first) location equals: 2.
@@ -316,7 +316,7 @@ CardsTests >> testUseACancelationCardOnAnInactiveCardRaiseError [
 	napolitanaHand := game handOf: #napolitana.
 	margaritaHand := game handOf: #margarita.
 
-	self should: [game player: #napolitana wantsToApplyCard: (napolitanaHand first) toCard: (margaritaHand first).] raise: Error withMessage: 'No es una carta válida para cancelar.'
+	self should: [game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: (margaritaHand first).] raise: Error withMessage: 'No es una carta válida para cancelar.'
 
 	
 ]
@@ -347,12 +347,41 @@ CardsTests >> testUseACancelationCardOnAnOverloadCard [
 	
 	game player: #margarita wantsToApplyCard: (margaritaHand at: 1) to: #margarita.
 	usedCards := game usedCards.
-	game player: #napolitana wantsToApplyCard: (napolitanaHand at: 1) toCard: (usedCards first).
+	game player: #napolitana wantsToApplyCard: (napolitanaHand at: 1) to: (usedCards first).
 	game playNextTurn.
 	self assert: ((game ranking) second) location equals: 2.
 	self assert: ((game ranking) first) location equals: 2.
 	
 	self assert: cards size equals: 0.
+	
+]
+
+{ #category : #tests }
+CardsTests >> testUseALibertyCard [
+	
+	| board testPlayers dice game cards rankingOne deck napolitanaHand |
+	
+	board := OrderedCollection 
+		with: NoEffectBox new 
+		with: JailBox new
+		with: NoEffectBox new 
+		with: NoEffectBox new.
+		
+	cards := OrderedCollection
+		with: LibertyCard new
+		with: OverloadCard new.
+	deck := Deck withCards: cards. 	
+	testPlayers := OrderedCollection with: #napolitana.
+	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(2))).
+	game := PizzaGame withBoxes: board players: testPlayers dice: dice laps: 1 andDeck: deck.
+	napolitanaHand := game handOf: #napolitana.
+	game playTurnForAllPlayers.
+	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: #napolitana.
+	rankingOne:= game ranking.
+	
+	self assert: (rankingOne first) location equals: 3.
+	 
+	
 	
 ]
 
@@ -418,8 +447,8 @@ CardsTests >> testUseARedoCardOverCancelation [
 	game player: #margarita wantsToApplyCard: (margaritaHand second) to: #margarita.
 	game player: #margarita wantsToApplyCard: (margaritaHand first) to: #margarita.
 	usedCards := game usedCards.
-	game player: #napolitana wantsToApplyCard: (napolitanaHand at: 2) toCard: (usedCards first).
-	game player: #napolitana wantsToApplyCard: (napolitanaHand at: 1) toCard: (usedCards second).
+	game player: #napolitana wantsToApplyCard: (napolitanaHand at: 2) to: (usedCards first).
+	game player: #napolitana wantsToApplyCard: (napolitanaHand at: 1) to: (usedCards second).
 	game playTurnForAllPlayers.
 	
 	self assert: ((game ranking) second) location equals: 2.
@@ -453,7 +482,7 @@ CardsTests >> testUseARepeatCard [
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	game playNextTurn.
 	napolitanaHand := game handOf: #napolitana.
-	game player: #napolitana wantsToApplyCard: (napolitanaHand first) toCard: #napolitana.
+	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: #napolitana.
 	
 	self assert: ((game ranking) first) location equals: 5.
 	self assert: ((game ranking) second) location equals: 4.

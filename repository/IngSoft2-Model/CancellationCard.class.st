@@ -5,7 +5,9 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-CancellationCard >> triggerInstantaneousEffect: affectedCard  from: aCardManager [
-	aCardManager cancellateCard: affectedCard.
-	aCardManager lastCardUsed: self.
+CancellationCard >> triggerEffectOn: target from: cardManager by: player [
+
+	cardManager validateinstant: self of: player. 
+	cardManager cancellateTarget: target using: self from: player.
+	cardManager lastCardUsed: self.
 ]

@@ -13,7 +13,7 @@ Deck class >> withCards: aCollectionOfCards [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #cards }
 Deck >> drawACard [
 	| card |
 	card := cards first.
@@ -27,7 +27,7 @@ Deck >> initializeWithCards: aCollectionOfCards [
 
 ]
 
-{ #category : #initialize }
+{ #category : #cards }
 Deck >> numberOfCards [
 	^(cards size).
 ]

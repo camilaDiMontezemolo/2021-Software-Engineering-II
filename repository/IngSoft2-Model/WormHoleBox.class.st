@@ -6,5 +6,5 @@ Class {
 
 { #category : #'as yet unclassified' }
 WormHoleBox >> affect: positions triggeredOn: aPosition with: board [
-	board move: aPosition by:-4.
+	board change: aPosition by:-4.
 ]

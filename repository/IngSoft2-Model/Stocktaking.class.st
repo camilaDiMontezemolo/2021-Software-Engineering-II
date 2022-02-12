@@ -14,49 +14,49 @@ Stocktaking class >> for: player [
 	^self new initializeForPlayer: player.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #playerManagment }
 Stocktaking >> addToCardsAffectingPlayer: card [
 	cardsAffectingPlayer add: card.
 ]
 
-{ #category : #adding }
+{ #category : #stockManagment }
 Stocktaking >> addToHand: card [
 	hand add: card.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing - attributes' }
 Stocktaking >> cardsAffecting [
 	^cardsAffectingPlayer.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing - attributes' }
 Stocktaking >> hand [
 	^hand.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 Stocktaking >> initializeForPlayer: player [
 	owner :=player.
 	hand:= OrderedCollection new.
 	cardsAffectingPlayer:= OrderedCollection new.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing - attributes' }
 Stocktaking >> owner [
 	^owner.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #playerManagment }
 Stocktaking >> removeCardAffectingPlayer: card [
 	cardsAffectingPlayer remove: card.
 ]
 
-{ #category : #adding }
+{ #category : #stockManagment }
 Stocktaking >> removeOfHand: card [
 	hand remove: card.
 ]
 
-{ #category : #adding }
+{ #category : #stockManagment }
 Stocktaking >> verifyBelongsToPlayerHand: card [
 	^(hand includes: card).
 ]

@@ -17,36 +17,33 @@ CardManager class >> with: initialCards in: aGame [
 	^self new initializeWithCards: initialCards in: aGame.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #stocking }
+CardManager >> add: card toHandOf: player [
+	| neededStock |
+	neededStock := self stockOf: player.
+	neededStock addToHand: card.
+]
+
+{ #category : #stocking }
 CardManager >> addCardTo: oneStock [
 	| newCard |
 	newCard := deck drawACard.
 	oneStock addToHand: newCard.
 ]
 
-{ #category : #'as yet unclassified' }
-CardManager >> affect: target with: card [
+{ #category : #gameCollaborations }
+CardManager >> affect: target with: card of: player [
 
-	| neededStocks validCard |
-	validCard := self checkIfTheCardIsARedo: card.
-	self validate: target forAcceleration: card.
-	self lastCardUsed: card.
-	self usedCards add: validCard.
+	| neededStocks |
 	neededStocks := playersStockTakings select: [:stock| (target includes: (stock owner)) | (stock owner = target)].
-	neededStocks do: [ :oneStock | oneStock addToCardsAffectingPlayer: validCard. ].
+	neededStocks do: [ :oneStock | oneStock addToCardsAffectingPlayer: card.].
+	self usedCards add: card.
+	self lastCardUsed: card.
+	self remove: card fromHandOf: player.
 	
 ]
 
-{ #category : #'as yet unclassified' }
-CardManager >> affectCard: target with: card [
-	| validCard |
-	validCard := self checkIfTheCardIsARedo: card.
-	validCard triggerInstantaneousEffect: target from: self.
-	
-	
-]
-
-{ #category : #'as yet unclassified' }
+{ #category : #cardsMethods }
 CardManager >> cancellateCard: aCard [
 	| neededStocks|
 	self validateCancellationFor: aCard.
@@ -55,23 +52,24 @@ CardManager >> cancellateCard: aCard [
 		[ :oneStock | oneStock removeCardAffectingPlayer: aCard.].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #cardsMethods }
+CardManager >> cancellateTarget: target using: card from: player [
+	| neededStocks|
+	self validateCancellationFor: target.
+	neededStocks := playersStockTakings select: [:stock| (stock cardsAffecting) includes: target].
+	neededStocks do:
+		[ :oneStock | oneStock removeCardAffectingPlayer: target.].
+	self remove: card fromHandOf: player.
+]
+
+{ #category : #stocking }
 CardManager >> cardsAffecting: player [
 	| neededList |
 	neededList := (self stockOf: player).
 	^(neededList cardsAffecting).
 ]
 
-{ #category : #'as yet unclassified' }
-CardManager >> checkIfTheCardIsARedo: card [
-	((card class) = RedoCard)
-	ifTrue: [ self usedCards add: card.
-				^(card triggerRedoEffectFrom: self).  ]
-	ifFalse: [ ^card. ].
-	
-]
-
-{ #category : #'as yet unclassified' }
+{ #category : #stocking }
 CardManager >> createHandsFor: thePlayersOfThisGame [
 	| n |
 	n:=0.
@@ -79,12 +77,12 @@ CardManager >> createHandsFor: thePlayersOfThisGame [
 		[ :onePlayer | playersStockTakings add: (Stocktaking for: onePlayer). ].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #stocking }
 CardManager >> handOf: player [ 
 	^(self stockOf: player) hand.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #stocking }
 CardManager >> handOutInitialCardsFor: thePlayersOfThisGame [
 	| n |
 	self createHandsFor: thePlayersOfThisGame.
@@ -104,23 +102,32 @@ CardManager >> initializeWithCards: initialDeck in: aGame [
 	usedCards := OrderedCollection new.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #cardsMethods }
 CardManager >> lastCardUsed [
 	^lastCardUsed.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #cardsMethods }
 CardManager >> lastCardUsed: newCard [
 	lastCardUsed:= newCard.
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #gameCollaborations }
 CardManager >> lastTypeOfBoxForPlayer: aPlayer [
 	game lastTypeOfBoxForPlayer: aPlayer.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #gameCollaborations }
+CardManager >> liberatePlayer: player [
+
+	game liberatePlayer: player.
+
+
+	
+]
+
+{ #category : #gameCollaborations }
 CardManager >> modifyDistanceOf: player [ 
 	| playerCards finalDistance|
 	finalDistance:=0.
@@ -129,39 +136,32 @@ CardManager >> modifyDistanceOf: player [
 	^finalDistance.
 ]
 
-{ #category : #'as yet unclassified' }
-CardManager >> remove: card fromTheHandOf: player [
+{ #category : #stocking }
+CardManager >> remove: card fromHandOf: player [
 	| neededStock |
 	neededStock := self stockOf: player.
 	neededStock removeOfHand: card.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #stocking }
 CardManager >> stockOf: player [ 
 	| neededStock |
 	neededStock := (playersStockTakings select: [:stock| stock owner = player]) first.
 	^neededStock.
 ]
 
-{ #category : #'as yet unclassified' }
-CardManager >> useOfInstantCard: card [
-	^((playersStockTakings select: [:stock| (stock hand includes: card)]) size)
-	
-]
-
-{ #category : #'as yet unclassified' }
+{ #category : #cardsMethods }
 CardManager >> usedCards [
 	^usedCards
 ]
 
-{ #category : #'as yet unclassified' }
-CardManager >> validate: target forAcceleration: card [
-	((card class) = AccelerationCard)
-	ifTrue: [ (game players = target) 
-		ifFalse: [Error signal: 'La acceleration card debe tener a todos los otros jugadores como target.']].
+{ #category : #cardsValidations }
+CardManager >> validateAllPlayersIn: target [
+	(game players = target) 
+	ifFalse: [Error signal: 'La acceleration card debe tener a todos los otros jugadores como target.'].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #cardsValidations }
 CardManager >> validateCancellationFor: target [
 
 		(usedCards includes: target)
@@ -169,7 +169,19 @@ CardManager >> validateCancellationFor: target [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #cardsValidations }
+CardManager >> validatePermanentCard: card of: player [
+	self verify: card belongsTo: player.
+	game validateTurnOf: player.
+	
+]
+
+{ #category : #cardsValidations }
+CardManager >> validateinstant: card of: player [
+	self verify: card belongsTo: player.
+]
+
+{ #category : #cardsValidations }
 CardManager >> verify: card belongsTo: player [
 	| neededStock |
 	neededStock := self stockOf: player.
