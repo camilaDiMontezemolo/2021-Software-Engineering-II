@@ -7,7 +7,8 @@ Class {
 		'game',
 		'deck',
 		'usedCards',
-		'playersStockTakings'
+		'playersStockTakings',
+		'discardedCards'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -20,18 +21,19 @@ CardManager class >> with: initialCards in: aGame [
 { #category : #'as yet unclassified' }
 CardManager >> addCardTo: oneStock [
 	| newCard |
-	newCard := deck drawACard.
-	oneStock addToHand: newCard.
+	self checkStateOfDeck.
+	(deck numberOfCards > 0)
+	ifTrue: [newCard := deck drawACard.
+				oneStock addToHand: newCard.]
 ]
 
 { #category : #'as yet unclassified' }
 CardManager >> affect: target with: card [
 
 	| neededStocks validCard |
-	validCard := self checkIfTheCardIsARedo: card.
-	self validate: target forAcceleration: card.
+	validCard := self validate: target for: card.
 	self lastCardUsed: card.
-	self usedCards add: validCard.
+	usedCards add: validCard.
 	neededStocks := playersStockTakings select: [:stock| (target includes: (stock owner)) | (stock owner = target)].
 	neededStocks do: [ :oneStock | oneStock addToCardsAffectingPlayer: validCard. ].
 	
@@ -72,6 +74,15 @@ CardManager >> checkIfTheCardIsARedo: card [
 ]
 
 { #category : #'as yet unclassified' }
+CardManager >> checkStateOfDeck [
+	(deck numberOfCards = 0)
+	ifTrue: [	
+			discardedCards shuffle.
+			deck refill: discardedCards.
+			discardedCards  removeAll: discardedCards.]
+]
+
+{ #category : #'as yet unclassified' }
 CardManager >> createHandsFor: thePlayersOfThisGame [
 	| n |
 	n:=0.
@@ -102,6 +113,7 @@ CardManager >> initializeWithCards: initialDeck in: aGame [
 	game := aGame.
 	playersStockTakings := OrderedCollection new.
 	usedCards := OrderedCollection new.
+	discardedCards := OrderedCollection new.
 ]
 
 { #category : #'as yet unclassified' }
@@ -111,6 +123,7 @@ CardManager >> lastCardUsed [
 
 { #category : #'as yet unclassified' }
 CardManager >> lastCardUsed: newCard [
+	discardedCards add: newCard.
 	lastCardUsed:= newCard.
 	
 ]
@@ -152,6 +165,14 @@ CardManager >> useOfInstantCard: card [
 { #category : #'as yet unclassified' }
 CardManager >> usedCards [
 	^usedCards
+]
+
+{ #category : #'as yet unclassified' }
+CardManager >> validate: target for: card [
+	|validCard|
+	validCard := self checkIfTheCardIsARedo: card.
+	self validate: target forAcceleration: validCard.
+	^validCard.
 ]
 
 { #category : #'as yet unclassified' }

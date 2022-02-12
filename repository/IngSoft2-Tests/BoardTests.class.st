@@ -4,6 +4,28 @@ Class {
 	#category : #'IngSoft2-Tests'
 }
 
+{ #category : #tests }
+BoardTests >> createBoardTestingDeck [
+		| deck |
+	deck := Deck withCards: (OrderedCollection with: (RepeatCard new) with: (AccelerationCard new) with: (AccelerationCard new) with: (SpeedUpCard new) with: (AccelerationCard new) with: (SpeedUpCard new) ).
+	^deck.
+
+]
+
+{ #category : #tests }
+BoardTests >> createStandardBoardFor: number [
+	| boxes |
+	boxes := 	BoxGenerator give: 5000.
+	boxes add: 0.38 of: NoEffectBox.
+	boxes add: 0.2 of: SpeedupBox.
+	boxes add: 0.2 of: WormHoleBox.
+	boxes add: 0.1 of: MoonWalkBox.
+	boxes add: 0.02 of: AtomicBombBox.
+	boxes add: 0.1 of: CardBox.
+	^(boxes)
+
+]
+
 { #category : #asserting }
 BoardTests >> should: block raise: kindOfError withMessage: errorMessage [
 	self
@@ -16,95 +38,49 @@ BoardTests >> should: block raise: kindOfError withMessage: errorMessage [
 { #category : #tests }
 BoardTests >> testABoardShouldHaveMoreThanZeroBoxes [
 
-    |  dice cards randomCards |
+    |  dice deck |
 
-    dice := OrderedCollection with: (Die withSides: 3).
-    randomCards :=OrderedCollection 
-		with: (AccelerationCard new) 
-		with: (CancellationCard new) 
-		with: (OverloadCard new) 
-		with: (RedoCard new) 
-		with: (RepeatCard new) 
-		with:(SpeedUpCard new).
-	cards := DeckGenerator with: 2 for: randomCards .
-
-    self should: [ PizzaGame withBoxes: OrderedCollection new players: (OrderedCollection with: #Margarita) dice: dice laps: 1 andDeck: cards.] raise: Error withMessage: 'Un juego no puede tener menos de 1 casillero.'.
+   dice := OrderedCollection with: (Die withSides: 3).
+	deck := self createBoardTestingDeck.
+    self should: [ PizzaGame withBoxes: OrderedCollection new players: (OrderedCollection with: #Margarita) dice: dice laps: 1 andDeck: deck.] raise: Error withMessage: 'Un juego no puede tener menos de 1 casillero.'.
 		
 ]
 
 { #category : #tests }
 BoardTests >> testABoardShouldHaveMoreThanZeroDie [
 
-	| someBoxes testPlayers cards randomCards |
+	| someBoxes testPlayers |
 
-	someBoxes:= BoxGenerator give: 5000.
-	someBoxes add: 0.38 of: NoEffectBox.
-	someBoxes add: 0.2 of: SpeedupBox.
-	someBoxes add: 0.2 of: WormHoleBox.
-	someBoxes add: 0.1 of: MoonWalkBox.
-	someBoxes add: 0.02 of: AtomicBombBox.
-	someBoxes add: 0.1 of: CardBox.
+	someBoxes := self createStandardBoardFor: 5000.
 	testPlayers:=(OrderedCollection with: #hawaiana).
-	randomCards :=OrderedCollection 
-		with: (AccelerationCard new) 
-		with: (CancellationCard new) 
-		with: (OverloadCard new) 
-		with: (RedoCard new) 
-		with: (RepeatCard new) 
-		with:(SpeedUpCard new).
-	cards := DeckGenerator with: 2 for: randomCards .
-
 		
-	self should: [PizzaGame withBoxes: someBoxes players: testPlayers dice: OrderedCollection new laps: 1 andDeck: cards.] raise: Error withMessage: 'Un juego no puede tener menos de un dado'
+	self should: [PizzaGame withBoxes: someBoxes players: testPlayers dice: OrderedCollection new laps: 1 andDeck: self createBoardTestingDeck.] raise: Error withMessage: 'Un juego no puede tener menos de un dado'
 ]
 
 { #category : #tests }
 BoardTests >> testABoardShouldHaveMoreThanZeroPlayers [
 
-	|  dice someBoxes cards randomCards |
+	|  dice someBoxes |
 	
 	dice := OrderedCollection with: (Die withSides: 3).
-	someBoxes:= BoxGenerator give: 5.
-	someBoxes add: 0.38 of: NoEffectBox.
-	someBoxes add: 0.2 of: SpeedupBox.
-	someBoxes add: 0.2 of: WormHoleBox.
-	someBoxes add: 0.1 of: MoonWalkBox.
-	someBoxes add: 0.02 of: AtomicBombBox.
-	someBoxes add: 0.1 of: CardBox.
-	randomCards :=OrderedCollection 
-		with: (AccelerationCard new) 
-		with: (CancellationCard new) 
-		with: (OverloadCard new) 
-		with: (RedoCard new) 
-		with: (RepeatCard new) 
-		with:(SpeedUpCard new).
-	cards := DeckGenerator with: 2 for: randomCards .
-
-	
-	self should: [ PizzaGame withBoxes: (someBoxes boxes) players: OrderedCollection new dice: dice laps: 1 andDeck: cards.] raise: Error withMessage: 'Un juego no puede tener menos de 1 jugador.'.
+	someBoxes := self createStandardBoardFor: 5.
+	self should: [ PizzaGame withBoxes: someBoxes players: OrderedCollection new dice: dice laps: 1 andDeck: self createBoardTestingDeck.] raise: Error withMessage: 'Un juego no puede tener menos de 1 jugador.'.
 		
 ]
 
 { #category : #tests }
 BoardTests >> testABoxGeneratorGivesBoxesWithProbabilities [
 
-	| someBoxes numberOfNoEffectBoxes numberOfSpeed numberOfWorm numberOfMoon numberOfAtomic cantidadCardBox |
-
-	someBoxes:= BoxGenerator give: 5000.
-	someBoxes add: 0.38 of: NoEffectBox.
-	someBoxes add: 0.2 of: SpeedupBox.
-	someBoxes add: 0.2 of: WormHoleBox.
-	someBoxes add: 0.1 of: MoonWalkBox.
-	someBoxes add: 0.02 of: AtomicBombBox.
-	someBoxes add: 0.1 of: CardBox.
+	| numberOfNoEffectBoxes numberOfSpeed numberOfWorm numberOfMoon numberOfAtomic cantidadCardBox board|
 	
+	board := (self createStandardBoardFor: 5000) boxes.
 	
-	numberOfNoEffectBoxes := (someBoxes boxes) count: [ :card | card isMemberOf: NoEffectBox ].
-	numberOfSpeed := (someBoxes boxes)  count: [ :card | card isMemberOf: SpeedupBox ].
-	numberOfWorm := (someBoxes boxes)  count: [ :card | card isMemberOf: WormHoleBox ].
-	numberOfMoon := (someBoxes boxes) count: [ :card | card isMemberOf: MoonWalkBox ].
-	numberOfAtomic := (someBoxes boxes)  count: [ :card | card isMemberOf: AtomicBombBox ].
-	cantidadCardBox := (someBoxes boxes)  count: [ :card | card isMemberOf: CardBox ].
+	numberOfNoEffectBoxes := board count: [ :card | card isMemberOf: NoEffectBox ].
+	numberOfSpeed := board  count: [ :card | card isMemberOf: SpeedupBox ].
+	numberOfWorm := board count: [ :card | card isMemberOf: WormHoleBox ].
+	numberOfMoon := board count: [ :card | card isMemberOf: MoonWalkBox ].
+	numberOfAtomic := board  count: [ :card | card isMemberOf: AtomicBombBox ].
+	cantidadCardBox := board count: [ :card | card isMemberOf: CardBox ].
 
 	self assert: (numberOfNoEffectBoxes between: 1800 and: 2000).	
 	self assert: (numberOfSpeed between: 900 and: 1000).
@@ -112,6 +88,7 @@ BoardTests >> testABoxGeneratorGivesBoxesWithProbabilities [
 	self assert: (numberOfMoon between: 400 and: 500).
 	self assert: (numberOfAtomic between: 50 and: 150).	
 	self assert: (cantidadCardBox between: 400 and: 500).
+	self assert: board size equals: 5000.
 ]
 
 { #category : #tests }
@@ -155,8 +132,7 @@ BoardTests >> testACardBoxGivesCards [
 { #category : #tests }
 BoardTests >> testAMoonWalkBoxJumpsAPlayerBoxesBack [
 	
-	| boxes testPlayers dice game cards deck randomCards
-|
+	| boxes testPlayers dice game deck|
 	
 	boxes := OrderedCollection 
 		with: NoEffectBox new 
@@ -164,22 +140,7 @@ BoardTests >> testAMoonWalkBoxJumpsAPlayerBoxesBack [
 		with: NoEffectBox with: NoEffectBox.
 	testPlayers := OrderedCollection with: #napolitana with: #hawaiana.
 	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(2))).
-	randomCards :=OrderedCollection 
-		with: (AccelerationCard new) 
-		with: (CancellationCard new) 
-		with: (OverloadCard new) 
-		with: (RedoCard new) 
-		with: (RepeatCard new) 
-		with:(SpeedUpCard new).
-	randomCards :=OrderedCollection 
-		with: (AccelerationCard new) 
-		with: (CancellationCard new) 
-		with: (OverloadCard new) 
-		with: (RedoCard new) 
-		with: (RepeatCard new) 
-		with:(SpeedUpCard new).
-	cards := DeckGenerator with: 100 for: randomCards .
-	deck := Deck withCards: cards. 
+	deck := self createBoardTestingDeck.
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	game playTurnForAllPlayers.
 
@@ -190,7 +151,7 @@ BoardTests >> testAMoonWalkBoxJumpsAPlayerBoxesBack [
 { #category : #tests }
 BoardTests >> testANoEffectBoxHasNoEffects [
 	
-	| boxes  testPlayers dice game positions cards deck randomCards |
+	| boxes  testPlayers dice game positions deck |
 	
 	boxes := OrderedCollection 
 		with: NoEffectBox new 
@@ -199,15 +160,7 @@ BoardTests >> testANoEffectBoxHasNoEffects [
 		with: NoEffectBox new.
 	testPlayers := OrderedCollection with: #napolitana.
 	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(2))).
-	randomCards :=OrderedCollection 
-		with: (AccelerationCard new) 
-		with: (CancellationCard new) 
-		with: (OverloadCard new) 
-		with: (RedoCard new) 
-		with: (RepeatCard new) 
-		with:(SpeedUpCard new).
-	cards := DeckGenerator with: 100 for: randomCards .
-	deck := Deck withCards: cards. 
+	deck := self createBoardTestingDeck.
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	game playTurnForAllPlayers.
 	positions := game ranking.
@@ -219,7 +172,7 @@ BoardTests >> testANoEffectBoxHasNoEffects [
 { #category : #tests }
 BoardTests >> testASpeedupBoxJumpsYouFourBoxes [
 	
-	| game dice ranking testPlayers boxes cards deck randomCards |
+	| game dice ranking testPlayers boxes deck|
 	boxes := OrderedCollection
 		with: SpeedupBox new
 		with: NoEffectBox new
@@ -230,15 +183,7 @@ BoardTests >> testASpeedupBoxJumpsYouFourBoxes [
 
 	testPlayers := OrderedCollection with: #napolitana.
 	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(1))).
-	randomCards :=OrderedCollection 
-		with: (AccelerationCard new) 
-		with: (CancellationCard new) 
-		with: (OverloadCard new) 
-		with: (RedoCard new) 
-		with: (RepeatCard new) 
-		with:(SpeedUpCard new).
-	cards := DeckGenerator with: 100 for: randomCards .
-	deck := Deck withCards: cards. 
+	deck := self createBoardTestingDeck.
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	game playTurnForAllPlayers.
 	ranking := game ranking.
@@ -249,7 +194,7 @@ BoardTests >> testASpeedupBoxJumpsYouFourBoxes [
 { #category : #tests }
 BoardTests >> testAnAtomicBombBoxSendsEveryoneBackToZero [
 	
-	| game dice ranking testPlayers boxes cards deck randomCards |
+	| game dice ranking testPlayers boxes deck |
 	boxes := OrderedCollection
 		with: NoEffectBox new
 		with: NoEffectBox new
@@ -262,15 +207,7 @@ BoardTests >> testAnAtomicBombBoxSendsEveryoneBackToZero [
 		with: #margarita
 		with: #hawaiana.
 	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(4))).
-	randomCards :=OrderedCollection 
-		with: (AccelerationCard new) 
-		with: (CancellationCard new) 
-		with: (OverloadCard new) 
-		with: (RedoCard new) 
-		with: (RepeatCard new) 
-		with:(SpeedUpCard new).
-	cards := DeckGenerator with: 100 for: randomCards .
-	deck := Deck withCards: cards. 
+	deck := self createBoardTestingDeck.
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 2 andDeck: deck.
 	game playTurnForAllPlayers.
 	game playTurnForAllPlayers.

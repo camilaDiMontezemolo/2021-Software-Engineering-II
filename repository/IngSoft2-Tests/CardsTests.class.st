@@ -5,6 +5,19 @@ Class {
 }
 
 { #category : #tests }
+CardsTests >> createStandardNoEffectBoard [
+	| boxes |
+	boxes := OrderedCollection 
+		with: NoEffectBox new 
+		with: NoEffectBox new
+		with: NoEffectBox new 
+		with: NoEffectBox new
+		with: NoEffectBox new 
+		with: NoEffectBox new.
+	^boxes.
+]
+
+{ #category : #tests }
 CardsTests >> should: block raise: kindOfError withMessage: errorMessage [
 	self
 		should: block
@@ -18,13 +31,7 @@ CardsTests >> testACardCanNotBeUsedOutsideYourTurn [
 	
 	| boxes testPlayers dice game cards napolitanaHand |
 	
-	boxes := OrderedCollection 
-		with: NoEffectBox new 
-		with: NoEffectBox new
-		with: NoEffectBox new 
-		with: NoEffectBox new
-		with: NoEffectBox new 
-		with: NoEffectBox new.
+	boxes := self createStandardNoEffectBoard.
 		
 	cards := Deck withCards: (OrderedCollection
 	with: (AccelerationCard new)
@@ -47,13 +54,7 @@ CardsTests >> testAPlayerCantPlayAPermanentCardThatIsntTheirs [
 	
 	| boxes testPlayers dice game cards deck napolitanaHand |
 	
-	boxes := OrderedCollection 
-		with: NoEffectBox new 
-		with: NoEffectBox new
-		with: NoEffectBox new 
-		with: NoEffectBox new
-		with: NoEffectBox new 
-		with: NoEffectBox new.
+	boxes := self createStandardNoEffectBoard.
 		
 	cards := OrderedCollection
 	with: AccelerationCard new
@@ -76,11 +77,7 @@ CardsTests >> testAPlayerCantPlayARedoCardThatIsntTheirs [
 	
 	| boxes testPlayers dice game cards deck margaritaHand napolitanaHand |
 
-    boxes := OrderedCollection 
-        with: NoEffectBox new 
-        with: NoEffectBox new
-        with: NoEffectBox new 
-        with: NoEffectBox new.
+	boxes := self createStandardNoEffectBoard.
 
     cards := OrderedCollection
 		with: SpeedUpCard new
@@ -106,11 +103,7 @@ CardsTests >> testAPlayerOutsideOfTheGameCanNotUseAnInstantCard [
 	
 	| boxes testPlayers dice game cards deck napolitanaHand margaritaHand usedCards |
 
-	boxes := OrderedCollection 
-		with: NoEffectBox new 
-		with: NoEffectBox new
-		with: NoEffectBox new 
-		with: NoEffectBox new.
+	boxes := self createStandardNoEffectBoard.
 		
 	cards := OrderedCollection
 		with: (CancellationCard new)
@@ -137,11 +130,7 @@ CardsTests >> testAccelerationCardMustBeUsedAgainstAllPlayers [
 	
 	| boxes testPlayers dice game cards deck napolitanaHand |
 	
-	boxes := OrderedCollection 
-		with: NoEffectBox new 
-		with: NoEffectBox new
-		with: NoEffectBox new 
-		with: NoEffectBox new.
+	boxes := self createStandardNoEffectBoard.
 		
 	cards := OrderedCollection
 	with: AccelerationCard new
@@ -166,11 +155,7 @@ CardsTests >> testEveryPlayerStartsAGameWithTwoCards [
 	
 	| boxes testPlayers dice game cards deck margaritaHand napolitanaHand |
 
-	boxes := OrderedCollection 
-		with: NoEffectBox new 
-		with: NoEffectBox new
-		with: NoEffectBox new 
-		with: NoEffectBox new.
+	boxes := self createStandardNoEffectBoard.
 		
 	cards := OrderedCollection
 		with: CancellationCard new
@@ -193,13 +178,9 @@ CardsTests >> testEveryPlayerStartsAGameWithTwoCards [
 
 { #category : #tests }
 CardsTests >> testIfYouUseACardItNoLongerIsInYourHand [
-	| board testPlayers dice game cards deck napolitanaHand usedCards |
+	| testPlayers dice game cards deck napolitanaHand usedCards boxes |
 	
-	board := OrderedCollection 
-		with: NoEffectBox new 
-		with: NoEffectBox new
-		with: NoEffectBox new 
-		with: NoEffectBox new.
+	boxes := self createStandardNoEffectBoard.
 		
 	cards := OrderedCollection
 		with: SpeedUpCard new
@@ -207,7 +188,7 @@ CardsTests >> testIfYouUseACardItNoLongerIsInYourHand [
 	deck := Deck withCards: cards. 	
 	testPlayers := OrderedCollection with: #napolitana.
 	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(2))).
-	game := PizzaGame withBoxes: board players: testPlayers dice: dice laps: 1 andDeck: deck.
+	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
 	napolitanaHand := game handOf: #napolitana.
 	usedCards := game usedCards.
 	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: #napolitana.
@@ -226,11 +207,7 @@ CardsTests >> testUseACancelationCardOnASpeedupCard [
 	
 	| boxes testPlayers dice game cards deck napolitanaHand margaritaHand usedCards |
 
-	boxes := OrderedCollection 
-		with: NoEffectBox new 
-		with: NoEffectBox new
-		with: NoEffectBox new 
-		with: NoEffectBox new.
+	boxes := self createStandardNoEffectBoard.
 		
 	cards := OrderedCollection
 		with: (CancellationCard new)
@@ -263,11 +240,7 @@ CardsTests >> testUseACancelationCardOnAnAccelerationCard [
 	
 	| boxes testPlayers dice game cards deck napolitanaHand margaritaHand usedCards |
 	
-	boxes := OrderedCollection 
-		with: NoEffectBox new 
-		with: NoEffectBox new
-		with: NoEffectBox new 
-		with: NoEffectBox new.
+	boxes := self createStandardNoEffectBoard.
 		
 	cards := OrderedCollection
 		with: CancellationCard new
@@ -298,11 +271,7 @@ CardsTests >> testUseACancelationCardOnAnInactiveCardRaiseError [
 
 	| boxes testPlayers dice game cards deck napolitanaHand margaritaHand |
 	
-	boxes := OrderedCollection 
-		with: NoEffectBox new 
-		with: NoEffectBox new
-		with: NoEffectBox new 
-		with: NoEffectBox new.
+	boxes := self createStandardNoEffectBoard.
 	cards := OrderedCollection
 		with: CancellationCard new
 		with: SpeedUpCard new
@@ -326,11 +295,7 @@ CardsTests >> testUseACancelationCardOnAnOverloadCard [
 	
 	| boxes testPlayers dice game cards deck margaritaHand napolitanaHand usedCards |
 
-	boxes := OrderedCollection 
-		with: NoEffectBox new 
-		with: NoEffectBox new
-		with: NoEffectBox new 
-		with: NoEffectBox new.
+	boxes := self createStandardNoEffectBoard.
 		
 	cards := OrderedCollection
 		with: CancellationCard new
@@ -361,11 +326,7 @@ CardsTests >> testUseARedoCard [
 	
 	| boxes testPlayers dice game cards deck margaritaHand napolitanaHand |
 
-    boxes := OrderedCollection 
-        with: NoEffectBox new 
-        with: NoEffectBox new
-        with: NoEffectBox new 
-        with: NoEffectBox new.
+	boxes := self createStandardNoEffectBoard.
 
     cards := OrderedCollection
 		with: SpeedUpCard new
@@ -396,13 +357,7 @@ CardsTests >> testUseARedoCardOverCancelation [
 	
 	| boxes testPlayers dice game cards deck margaritaHand napolitanaHand usedCards |
 	
-	boxes := OrderedCollection 
-		with: NoEffectBox new
-		with: NoEffectBox new 
-		with: NoEffectBox new 
-		with: NoEffectBox new
-		with: NoEffectBox new 
-		with: NoEffectBox new.
+	boxes := self createStandardNoEffectBoard.
 	
 	cards := OrderedCollection
 		with: SpeedUpCard new
@@ -467,13 +422,7 @@ CardsTests >> testUseARepeatCardWhenNoDieWasRolledYet [
 	
 	| boxes testPlayers dice game cards deck margaritaHand |
 	
-	boxes := OrderedCollection 
-		with: SpeedupBox new
-		with: NoEffectBox new 
-		with: NoEffectBox new 
-		with: NoEffectBox new
-		with: NoEffectBox new 
-		with: NoEffectBox new.
+	boxes := self createStandardNoEffectBoard.
 		
 	cards := OrderedCollection
 		with: RepeatCard new
@@ -499,11 +448,7 @@ CardsTests >> testUseASpeedUpCard [
 	
 	| board testPlayers dice game cards rankingOne deck napolitanaHand |
 	
-	board := OrderedCollection 
-		with: NoEffectBox new 
-		with: NoEffectBox new
-		with: NoEffectBox new 
-		with: NoEffectBox new.
+	board := self createStandardNoEffectBoard.
 		
 	cards := OrderedCollection
 		with: SpeedUpCard new
@@ -524,47 +469,11 @@ CardsTests >> testUseASpeedUpCard [
 ]
 
 { #category : #tests }
-CardsTests >> testUseASpeedUpCardOnTwoRounds [
-	
-	| boxes testPlayers dice game cards rankingTwo deck napolitanaHand |
-	
-	boxes := OrderedCollection 
-		with: NoEffectBox new 
-		with: NoEffectBox new
-		with: NoEffectBox new 
-		with: NoEffectBox new.
-		
-	cards := OrderedCollection
-		with: SpeedUpCard new
-		with: OverloadCard new.
-	deck := Deck withCards: cards. 
-	testPlayers := OrderedCollection with: #napolitana.
-	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(2))).
-	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
-	napolitanaHand := game handOf: #napolitana.
-	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: #napolitana.
-	game playTurnForAllPlayers.
-	game playTurnForAllPlayers.
-	rankingTwo:= game ranking.
-	
-	self assert: (rankingTwo first) location equals: 2.
-	 
-	
-	
-]
-
-{ #category : #tests }
 CardsTests >> testUseAnAccelerationCard [
 	
 	| boxes testPlayers dice game cards deck napolitanaHand |
 	
-	boxes := OrderedCollection 
-		with: NoEffectBox new 
-		with: NoEffectBox new
-		with: NoEffectBox new 
-		with: NoEffectBox new
-		with: NoEffectBox new 
-		with: NoEffectBox new.
+	boxes := self createStandardNoEffectBoard.
 		
 	cards := OrderedCollection
 	with: AccelerationCard new
@@ -596,11 +505,7 @@ CardsTests >> testUseAnOverloadCard [
 	
 	| boxes testPlayers dice game cards deck margaritaHand |
 	
-	boxes := OrderedCollection 
-		with: NoEffectBox new 
-		with: NoEffectBox new
-		with: NoEffectBox new 
-		with: NoEffectBox new.
+	boxes := self createStandardNoEffectBoard.
 		
 	cards := OrderedCollection 
 		with: OverloadCard new

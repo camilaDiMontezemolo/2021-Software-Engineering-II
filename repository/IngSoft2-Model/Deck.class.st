@@ -31,3 +31,8 @@ Deck >> initializeWithCards: aCollectionOfCards [
 Deck >> numberOfCards [
 	^(cards size).
 ]
+
+{ #category : #initialize }
+Deck >> refill: collectionOfCards [
+	collectionOfCards do: [:card | cards add: card. ].
+]
