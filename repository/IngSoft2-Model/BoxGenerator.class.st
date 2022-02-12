@@ -18,15 +18,13 @@ BoxGenerator class >> give: aSize [
 BoxGenerator >> add: aPercentage of: aBoxType [
 	| indice |
 	indice := 1.
-	[(indice <= (size *aPercentage)) & (boxCol size < size)]
-		whileTrue:[
-			boxCol add: (aBoxType new).
-			indice := (indice +1).
-			].
+	[(indice <= (size *aPercentage)) & (boxCol size < size)] whileTrue:[
+			boxCol add: aBoxType new.
+			indice := indice +1.].
 	boxCol := boxCol shuffled.
 	self validatePorcenge: aPercentage.
 	^boxCol.
-		
+		 
 ]
 
 { #category : #'as yet unclassified' }

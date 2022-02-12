@@ -37,15 +37,13 @@ DeckGeneretor >> cards [
 
 { #category : #'as yet unclassified' }
 DeckGeneretor >> completeDeck [
-(cards size < size)
-		ifTrue: [ 
-			(cards size) to: (size) do: [:emptyBox | cards add: (((cards first) class) new) ].]
+	(cards size < size) ifTrue: [ cards size to: size do: [:emptySlot | cards add: ((cards first) class) new ].]
 ]
 
 { #category : #initalize }
 DeckGeneretor >> initializeWithANumberOfCards: aNumberOfCards [
 	cards := OrderedCollection new.
-	size := (aNumberOfCards-1).
+	size := aNumberOfCards-1.
 	percentages := 0.
 
 ]
@@ -58,8 +56,6 @@ DeckGeneretor >> percentage [
 { #category : #'as yet unclassified' }
 DeckGeneretor >> validatePorcenge: aPercentage [
 	percentages := percentages + aPercentage.
-	(percentages>1)
-	ifTrue: [ Error signal: 'Las suma de probabilidades no puede ser mayor a 1.' ].
-	(percentages=1)
-	ifTrue:[ self completeDeck. ]
+	(percentages>1) ifTrue: [ Error signal: 'Las suma de probabilidades no puede ser mayor a 1.' ].
+	(percentages=1) ifTrue:[ self completeDeck. ]
 ]

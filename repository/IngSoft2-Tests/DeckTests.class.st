@@ -77,8 +77,6 @@ DeckTests >> testACardGeneratorGivesACollectionOfCardsWithProbability [
 	cards add: 0.167 of: AccelerationCard.
 	cards add: 0.165 of: RedoCard.
 	
-	 
-	
 	numberOfOverloads := (cards cards) count: [ :card | card isMemberOf: OverloadCard  ].
 	numberOfCancellationCard := (cards cards) count: [ :card | card isMemberOf: CancellationCard ].
 	numberOfSpeedUps := (cards cards) count: [ :card | card isMemberOf: SpeedUpCard ].
@@ -98,23 +96,18 @@ DeckTests >> testACardGeneratorGivesACollectionOfCardsWithProbability [
 
 { #category : #tests }
 DeckTests >> testADecksPercentegeNeedsToBeCompleteToBeValid [
-	| game dice testPlayers boxes deck napolitanaHand margaritaHand |
-		
-	boxes := OrderedCollection
-		with: CardBox new
-		with: NoEffectBox new
-		with: NoEffectBox new
-		with: NoEffectBox new
-		with: NoEffectBox new.
-	
-	testPlayers := OrderedCollection with: #napolitana with: #margarita.
-	deck := Deck withCards: (OrderedCollection with: (RepeatCard new) with: (AccelerationCard new) with: (SpeedUpCard new) with: (AccelerationCard new) with: (SpeedUpCard new)).
-	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(1))).
-	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
-	napolitanaHand := game handOf: #napolitana.
-	margaritaHand := game handOf: #margarita.
-	game playTurnForAllPlayers.	
-		
-	self assert: (napolitanaHand size) equals: 10.
 
+	| cards |
+	
+	cards := DeckGeneretor with: 10.
+	
+	cards add: 0.167 of: OverloadCard.
+	cards add: 0.167 of: CancellationCard.
+	cards add: 0.167 of: SpeedUpCard.
+	cards add: 0.167 of: RepeatCard.
+	cards add: 0.167 of: AccelerationCard.
+	cards add: 0.160 of: RedoCard.
+	
+
+	self should: [Deck withCards: cards.] raise: Error withMessage: 'El maso está incompleto.'.
 ]

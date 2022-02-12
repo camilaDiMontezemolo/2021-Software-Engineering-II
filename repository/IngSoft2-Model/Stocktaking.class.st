@@ -58,5 +58,5 @@ Stocktaking >> removeOfHand: card [
 
 { #category : #adding }
 Stocktaking >> verifyBelongsToPlayerHand: card [
-	^(hand includes: card).
+	^hand includes: card.
 ]

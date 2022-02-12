@@ -17,12 +17,11 @@ Class {
 
 { #category : #'instance creation' }
 PizzaGame class >> validateBoxes: someBoxes [
-	( (someBoxes class) = OrderedCollection) 
-	ifFalse: [ 
-		((someBoxes percentage) = 1)
-		ifFalse:[ Error signal: 'El tablero está incompleto.' ]
-		ifTrue: [ ^(someBoxes boxes) ]. ]
-	ifTrue: [ ^someBoxes. ]
+	(someBoxes class = OrderedCollection) 
+			ifFalse: [ (someBoxes percentage = 1)
+					ifFalse:[ Error signal: 'El tablero no cumple con los requerimientos de este juego.' ]
+					ifTrue: [ ^someBoxes boxes]].
+	^someBoxes.
 
 ]
 
@@ -41,17 +40,17 @@ PizzaGame class >> validateLaps: someLaps boxes: someBoxes players: somePlayers 
 ]
 
 { #category : #'instance creation' }
-PizzaGame class >> withBoxes: someBoxes players: somePlayers dice: someDice laps: someLaps andDeck: deck [
-	| list |
-	list := self validateBoxes: someBoxes.
+PizzaGame class >> withBoxes: boxes players: somePlayers dice: someDice laps: someLaps andDeck: deck [
+	| boardRequired  |
+	boardRequired := self validateBoxes: boxes.	
 	self
 		validateLaps: someLaps
-		boxes: list
+		boxes: boardRequired
 		players: somePlayers
 		dice: someDice
 		andDeck: deck.
 	^ self new
-		initializeWithBoxes: list players: somePlayers dice: someDice laps: someLaps andDeck: deck
+		initializeWithBoxes: boardRequired players: somePlayers dice: someDice laps: someLaps andDeck: deck
 ]
 
 { #category : #'as yet unclassified' }
@@ -63,18 +62,18 @@ PizzaGame >> cardFor: playerWhoGetsTheCard [
 
 { #category : #'as yet unclassified' }
 PizzaGame >> cardsAffecting: player [ 
-	^(cardManager cardsAffecting: player).
+	^cardManager cardsAffecting: player.
 ]
 
 { #category : #'as yet unclassified' }
 PizzaGame >> changeTurn [
-	(currentTurn == (players size)) ifTrue:[currentTurn:=0].
+	(currentTurn == players size) ifTrue:[currentTurn:=0].
 	currentTurn := currentTurn +1.
 ]
 
 { #category : #'as yet unclassified' }
 PizzaGame >> check: card from: player [
-	((card class) = RedoCard)
+	(card class = RedoCard)
 		ifFalse: [self sendCardErrorFor: player]
 		ifTrue:[cardManager verify: card belongsTo: player.]
 ]
@@ -86,7 +85,7 @@ PizzaGame >> firstPlace [
 
 { #category : #'as yet unclassified' }
 PizzaGame >> handOf: player [
-	^(cardManager handOf: player).
+	^cardManager handOf: player.
 ]
 
 { #category : #initialize }
@@ -182,5 +181,5 @@ PizzaGame >> sendCardErrorFor: player [
 
 { #category : #'as yet unclassified' }
 PizzaGame >> usedCards [
-	^(cardManager usedCards)
+	^cardManager usedCards
 ]

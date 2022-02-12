@@ -28,8 +28,7 @@ LoadedDie >> size [
 
 { #category : #'as yet unclassified' }
 LoadedDie >> spin [
-	 (indice >= (tosses size))
-		ifTrue: [ indice:=0 .].
+	(indice >= tosses size) ifTrue: [ indice:=0 .].
 	indice := indice +1.
-	^(tosses at: indice).
+	^tosses at: indice.
 ]

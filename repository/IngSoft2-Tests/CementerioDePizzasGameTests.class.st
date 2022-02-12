@@ -29,7 +29,7 @@ CementerioDePizzasGameTests >> createStandardDeckFor: number [
 	cards add: 0.167 of: AccelerationCard.
 	cards add: 0.165 of: RedoCard.
 	
-	deck := Deck withCards: (cards cards).
+	deck := Deck withCards: cards.
 	^deck.
 ]
 
@@ -49,7 +49,7 @@ CementerioDePizzasGameTests >> testADiceShouldHaveAtLeastOneSide [
 ]
 
 { #category : #tests }
-CementerioDePizzasGameTests >> testAGameDoesntStartIfTheBoxGeneratedsPercentageIsntOne [
+CementerioDePizzasGameTests >> testAGameDoesntStartIfTheBoardDoesNotMeetTheRequirementsOfTheGame [
 
 	| dice players board deck |
 	
@@ -66,14 +66,13 @@ CementerioDePizzasGameTests >> testAGameDoesntStartIfTheBoxGeneratedsPercentageI
 	
 	deck := self createStandardDeckFor: 10.
 
-	self should: [PizzaGame withBoxes: board players: players dice: dice laps: 2 andDeck: deck] raise: Error withMessage: 'El tablero está incompleto.'.
+	self should: [PizzaGame withBoxes: board players: players dice: dice laps: 2 andDeck: deck] raise: Error withMessage: 'El tablero no cumple con los requerimientos de este juego.'.
 	
 ]
 
 { #category : #tests }
 CementerioDePizzasGameTests >> testAGameNeedsAtLeastTwoCardsForEachPlayer [
-
-| dice napolitana board testPlayers deck |
+	| dice napolitana board testPlayers deck |
 	
 	napolitana:= #napolitana.
 	
@@ -81,12 +80,8 @@ CementerioDePizzasGameTests >> testAGameNeedsAtLeastTwoCardsForEachPlayer [
 	board := self createStandardBoardFor: 5.
 	
 	testPlayers:= OrderedCollection with: napolitana.
-	
 	deck := self createStandardDeckFor: 0.
-
-
-	self should: [PizzaGame withBoxes: board players: testPlayers dice: dice laps: 1 andDeck: deck] 
-				raise: Error withMessage: 'Un juego no puede tener menos de 2 cartas por jugador.'
+	self should: [PizzaGame withBoxes: board players: testPlayers dice: dice laps: 1 andDeck: deck] raise: Error withMessage: 'Un juego no puede tener menos de 2 cartas por jugador.'
 	
 	
 	

@@ -7,7 +7,7 @@ Class {
 { #category : #'as yet unclassified' }
 CardBox >> affect: positions triggeredOn: aPosition with: board [ 
 	| playerWhoGetsTheCard |
-	playerWhoGetsTheCard := (aPosition player).
+	playerWhoGetsTheCard := aPosition player.
 	board cardFor: playerWhoGetsTheCard.
 	
 

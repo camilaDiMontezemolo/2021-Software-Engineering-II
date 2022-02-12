@@ -8,8 +8,18 @@ Class {
 }
 
 { #category : #'instance creation' }
+Deck class >> validate: deck [
+	( deck class = OrderedCollection)  
+	ifFalse: [ (deck percentage = 1)
+						ifFalse:[ Error signal: 'El maso está incompleto.' ]
+						ifTrue: [ ^deck cards]].
+	^deck
+	
+]
+
+{ #category : #'instance creation' }
 Deck class >> withCards: aCollectionOfCards [
-	^ self new initializeWithCards: aCollectionOfCards
+	^ self new initializeWithCards: (self validate: aCollectionOfCards).
 	
 ]
 
@@ -29,7 +39,7 @@ Deck >> initializeWithCards: aCollectionOfCards [
 
 { #category : #initialize }
 Deck >> numberOfCards [
-	^(cards size).
+	^cards size.
 ]
 
 { #category : #initialize }

@@ -29,14 +29,12 @@ CardManager >> addCardTo: oneStock [
 
 { #category : #'as yet unclassified' }
 CardManager >> affect: target with: card [
-
 	| neededStocks validCard |
 	validCard := self validate: target for: card.
 	self lastCardUsed: card.
 	usedCards add: validCard.
-	neededStocks := playersStockTakings select: [:stock| (target includes: (stock owner)) | (stock owner = target)].
+	neededStocks := playersStockTakings select: [:stock| (target includes: stock owner) | (stock owner = target)]. 
 	neededStocks do: [ :oneStock | oneStock addToCardsAffectingPlayer: validCard. ].
-	
 ]
 
 { #category : #'as yet unclassified' }
@@ -60,16 +58,16 @@ CardManager >> cancellateCard: aCard [
 { #category : #'as yet unclassified' }
 CardManager >> cardsAffecting: player [
 	| neededList |
-	neededList := (self stockOf: player).
-	^(neededList cardsAffecting).
+	neededList := self stockOf: player.
+	^neededList cardsAffecting.
 ]
 
 { #category : #'as yet unclassified' }
 CardManager >> checkIfTheCardIsARedo: card [
-	((card class) = RedoCard)
+	(card class = RedoCard)
 	ifTrue: [ self usedCards add: card.
-				^(card triggerRedoEffectFrom: self).  ]
-	ifFalse: [ ^card. ].
+				^card triggerRedoEffectFrom: self.].
+	^card.
 	
 ]
 
@@ -137,7 +135,7 @@ CardManager >> lastTypeOfBoxForPlayer: aPlayer [
 CardManager >> modifyDistanceOf: player [ 
 	| playerCards finalDistance|
 	finalDistance:=0.
-	playerCards := (self cardsAffecting: player).
+	playerCards := self cardsAffecting: player.
 	playerCards do: [:card| finalDistance:= finalDistance +(card applyEffectFrom: self).].
 	^finalDistance.
 ]
@@ -158,7 +156,7 @@ CardManager >> stockOf: player [
 
 { #category : #'as yet unclassified' }
 CardManager >> useOfInstantCard: card [
-	^((playersStockTakings select: [:stock| (stock hand includes: card)]) size)
+	^(playersStockTakings select: [:stock| (stock hand includes: card)]) size
 	
 ]
 
@@ -184,7 +182,6 @@ CardManager >> validate: target forAcceleration: card [
 
 { #category : #'as yet unclassified' }
 CardManager >> validateCancellationFor: target [
-
 		(usedCards includes: target)
 		ifFalse:[Error signal: 'No es una carta válida para cancelar.' ].
 	
@@ -194,6 +191,5 @@ CardManager >> validateCancellationFor: target [
 CardManager >> verify: card belongsTo: player [
 	| neededStock |
 	neededStock := self stockOf: player.
-	(neededStock verifyBelongsToPlayerHand: card)
-	ifFalse: [ Error signal: 'Un jugador no puede tirar una que no es suya' ].
+	(neededStock verifyBelongsToPlayerHand: card) ifFalse: [ Error signal: 'Un jugador no puede tirar una que no es suya' ].
 ]

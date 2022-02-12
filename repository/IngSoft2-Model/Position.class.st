@@ -18,7 +18,8 @@ Position class >> of: aPlayer at: anAbsoluteLocation on: aBoard [
 
 { #category : #'as yet unclassified' }
 Position >> > otherPosition [
-	^(absoluteLocation > (otherPosition absoluteLocation)).
+	^absoluteLocation > (otherPosition absoluteLocation). 
+	 
 	
 ]
 
@@ -51,5 +52,5 @@ Position >> player [
 
 { #category : #'as yet unclassified' }
 Position >> samePlayerAs: anotherPosition [
-	^(player = (anotherPosition player))
+	^player = (anotherPosition player)
 ]

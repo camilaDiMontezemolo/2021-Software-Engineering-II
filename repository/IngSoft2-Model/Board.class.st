@@ -42,11 +42,10 @@ Board >> boxFor: aPosition [
 { #category : #'as yet unclassified' }
 Board >> calculateNewLocationFor: position [
 	|newLaps|
-	newLaps := ((position absoluteLocation)//(size)).
-	
+	newLaps := (position absoluteLocation)//size.
 	(newLaps ==0)
-	ifTrue:[^0.]
-	ifFalse:[^(size*newLaps)+1.].
+		ifTrue:[^0.]
+		ifFalse:[^(size*newLaps)+1.].
 ]
 
 { #category : #'as yet unclassified' }
@@ -58,7 +57,7 @@ Board >> cardFor: playerWhoGetsTheCard [
 Board >> change: aPosition by: distance [
 	| newAbsolute newPosition|
    newAbsolute:= (aPosition absoluteLocation) +distance.
-	newPosition:= (self generatePositionFor: aPosition at: newAbsolute).
+	newPosition:= self generatePositionFor: aPosition at: newAbsolute.
 	self replacePosition: aPosition with: newPosition.
    ^newPosition.
 		
@@ -77,21 +76,21 @@ Board >> changePositionOf: aPlayer by: distance playing: game [
 
 { #category : #'as yet unclassified' }
 Board >> createPositions [
-	positions:= players collect: [ :player | (Position of: player at: 0 on: self)].
+	positions:= players collect: [ :player | Position of: player at: 0 on: self].
 ]
 
 { #category : #'as yet unclassified' }
 Board >> generatePositionFor: aPosition at: absoluteLocation [
-	^(Position of: (aPosition player) at: absoluteLocation on: self).
+	^Position of: (aPosition player) at: absoluteLocation on: self.
 ]
 
 { #category : #initialize }
 Board >> initializeWithBoxes: aCollectionOfBoxes andSomePlayers: somePlayers forAGame: aGame [
 	boxes := OrderedCollection new.
 	boxes := aCollectionOfBoxes.
-	boxes addFirst: (NoEffectBox new).
-	size := ( (boxes size)-1 ).
-	lastBoxUsed := (NoEffectBox new).
+	boxes addFirst: NoEffectBox new.
+	size :=(boxes size)-1 .
+	lastBoxUsed := NoEffectBox new.
 	players:= somePlayers.
 	game:=aGame.
 ]
