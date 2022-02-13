@@ -15,7 +15,7 @@ BoardTests >> createBoardTestingDeck [
 { #category : #tests }
 BoardTests >> createStandardBoardFor: number [
 	| boxes |
-	boxes := 	BoxGenerator give: 5000.
+	boxes := 	BoxGenerator give: number.
 	boxes add: 0.38 of: NoEffectBox.
 	boxes add: 0.2 of: SpeedupBox.
 	boxes add: 0.2 of: WormHoleBox.
