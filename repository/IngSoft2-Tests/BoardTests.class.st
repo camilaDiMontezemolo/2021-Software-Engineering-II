@@ -15,15 +15,9 @@ BoardTests >> createBoardTestingDeck [
 { #category : #tests }
 BoardTests >> createStandardBoardFor: number [
 	| boxes |
-	boxes := 	BoxGenerator give: number.
-	boxes add: 0.38 of: NoEffectBox.
-	boxes add: 0.2 of: SpeedupBox.
-	boxes add: 0.2 of: WormHoleBox.
-	boxes add: 0.1 of: MoonWalkBox.
-	boxes add: 0.02 of: AtomicBombBox.
-	boxes add: 0.1 of: CardBox.
-	^(boxes)
-
+	
+	boxes := BoxGenerator give: number for: (OrderedCollection  with: NoEffectBox  with: SpeedupBox with: WormHoleBox  with: MoonWalkBox with: AtomicBombBox with: CardBox) with: (OrderedCollection with: 0.38 with: 0.2 with: 0.2  with: 0.1 with: 0.02  with: 0.1).
+	^boxes.
 ]
 
 { #category : #asserting }
@@ -73,7 +67,7 @@ BoardTests >> testABoxGeneratorGivesBoxesWithProbabilities [
 
 	| numberOfNoEffectBoxes numberOfSpeed numberOfWorm numberOfMoon numberOfAtomic cantidadCardBox board|
 	
-	board := (self createStandardBoardFor: 5000) boxes.
+	board := self createStandardBoardFor: 5000.
 	
 	numberOfNoEffectBoxes := board count: [ :card | card isMemberOf: NoEffectBox ].
 	numberOfSpeed := board  count: [ :card | card isMemberOf: SpeedupBox ].
@@ -95,13 +89,7 @@ BoardTests >> testABoxGeneratorGivesBoxesWithProbabilities [
 BoardTests >> testABoxGeneratorShouldNotGiveBoxesIfProbabilitiesSumMoreThanOne [
 		
 	| boxGen |
-	self should: [ boxGen:= BoxGenerator give: 5000.
-	boxGen add: 0.38 of: NoEffectBox.
-	boxGen add: 0.2 of: SpeedupBox.
-	boxGen add: 0.2 of: WormHoleBox.
-	boxGen add: 0.1 of: MoonWalkBox.
-	boxGen add: 0.2 of: AtomicBombBox.
-	boxGen add: 0.1 of: CardBox.	] raise: Error withMessage: 'Las suma de probabilidades no puede ser mayor a 1.'.
+	self should: [ boxGen := BoxGenerator give: 5000 for: (OrderedCollection  with: NoEffectBox  with: SpeedupBox with: WormHoleBox  with: MoonWalkBox with: AtomicBombBox with: CardBox) with: (OrderedCollection with: 0.38 with: 0.2 with: 0.2  with: 0.1 with: 0.02  with: 0.5).	] raise: Error withMessage: 'Las suma de probabilidades debe ser 1.'.
 ]
 
 { #category : #tests }
@@ -136,8 +124,9 @@ BoardTests >> testAMoonWalkBoxJumpsAPlayerBoxesBack [
 	
 	boxes := OrderedCollection 
 		with: NoEffectBox new 
-		with: (MoonWalkBox loadedWith: 1) 
-		with: NoEffectBox with: NoEffectBox.
+		with: MoonWalkBox new 
+		with: NoEffectBox new 
+		with: NoEffectBox new.
 	testPlayers := OrderedCollection with: #napolitana with: #hawaiana.
 	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(2))).
 	deck := self createBoardTestingDeck.

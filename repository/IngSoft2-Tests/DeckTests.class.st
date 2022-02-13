@@ -68,21 +68,16 @@ DeckTests >> testACardBoxGivesACardIfTheDeckIsEmptyAndOneCardWasUsed [
 DeckTests >> testACardGeneratorGivesACollectionOfCardsWithProbability [
 	
 	| cards numberOfOverloads numberOfSpeedUps numberOfAccelerationCard numberOfCancellationCard numberOfRedoCard numberOfRepeatCart|
-	cards := DeckGeneretor with: 5000.
+	cards := DeckGeneretor give: 5000 
+	for: (OrderedCollection  with: OverloadCard  with: CancellationCard with: SpeedUpCard  with: RepeatCard with: AccelerationCard with: RedoCard) 
+	with: (OrderedCollection with: 0.167 with: 0.167 with: 0.167 with: 0.167 with: 0.167  with: 0.165).
 	
-	cards add: 0.167 of: OverloadCard.
-	cards add: 0.167 of: CancellationCard.
-	cards add: 0.167 of: SpeedUpCard.
-	cards add: 0.167 of: RepeatCard.
-	cards add: 0.167 of: AccelerationCard.
-	cards add: 0.165 of: RedoCard.
-	
-	numberOfOverloads := (cards cards) count: [ :card | card isMemberOf: OverloadCard  ].
-	numberOfCancellationCard := (cards cards) count: [ :card | card isMemberOf: CancellationCard ].
-	numberOfSpeedUps := (cards cards) count: [ :card | card isMemberOf: SpeedUpCard ].
-	numberOfRepeatCart := (cards cards) count: [ :card | card isMemberOf: RepeatCard ].
-	numberOfAccelerationCard := (cards cards) count: [ :card | card isMemberOf: AccelerationCard ].
-	numberOfRedoCard := (cards cards) count: [ :card | card isMemberOf: RedoCard ].
+	numberOfOverloads := cards count: [ :card | card isMemberOf: OverloadCard  ].
+	numberOfCancellationCard := cards count: [ :card | card isMemberOf: CancellationCard ].
+	numberOfSpeedUps := cards count: [ :card | card isMemberOf: SpeedUpCard ].
+	numberOfRepeatCart := cards count: [ :card | card isMemberOf: RepeatCard ].
+	numberOfAccelerationCard := cards count: [ :card | card isMemberOf: AccelerationCard ].
+	numberOfRedoCard := cards count: [ :card | card isMemberOf: RedoCard ].
 	
 	self assert: (numberOfOverloads between: 650 and: 950).	
 	self assert: (numberOfCancellationCard between: 650 and: 950).
@@ -90,24 +85,16 @@ DeckTests >> testACardGeneratorGivesACollectionOfCardsWithProbability [
 	self assert: (numberOfAccelerationCard between: 650 and: 950).
 	self assert: (numberOfRedoCard between: 650 and: 950).
 	self assert: (numberOfSpeedUps between: 650 and: 950).
-	self assert: (cards cards) size equals: 5000 .
+	self assert: cards  size equals: 5000 .
 	
 ]
 
 { #category : #tests }
 DeckTests >> testADecksPercentegeNeedsToBeCompleteToBeValid [
 
-	| cards |
-	
-	cards := DeckGeneretor with: 10.
-	
-	cards add: 0.167 of: OverloadCard.
-	cards add: 0.167 of: CancellationCard.
-	cards add: 0.167 of: SpeedUpCard.
-	cards add: 0.167 of: RepeatCard.
-	cards add: 0.167 of: AccelerationCard.
-	cards add: 0.160 of: RedoCard.
-	
-
-	self should: [Deck withCards: cards.] raise: Error withMessage: 'El maso está incompleto.'.
+	self should: [ 
+		DeckGeneretor 
+		give: 5000 
+		for: (OrderedCollection  with: OverloadCard  with: CancellationCard with: SpeedUpCard  with: RepeatCard with: AccelerationCard with: RedoCard) 
+		with: (OrderedCollection with: 0.167 with: 0.167 with: 0.167 with: 0.167 with: 0.167  with: 0.16).] raise: Error withMessage: 'Las suma de probabilidades debe ser 1.'.
 ]

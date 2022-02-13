@@ -16,16 +16,6 @@ Class {
 }
 
 { #category : #'instance creation' }
-PizzaGame class >> validateBoxes: someBoxes [
-	(someBoxes class = OrderedCollection) 
-			ifFalse: [ (someBoxes percentage = 1)
-					ifFalse:[ Error signal: 'El tablero no cumple con los requerimientos de este juego.' ]
-					ifTrue: [ ^someBoxes boxes]].
-	^someBoxes.
-
-]
-
-{ #category : #'instance creation' }
 PizzaGame class >> validateLaps: someLaps boxes: someBoxes players: somePlayers dice: someDice andDeck: aDeck [
 	someDice size< 1
 		ifTrue: [ Error signal: 'Un juego no puede tener menos de un dado' ].
@@ -41,16 +31,15 @@ PizzaGame class >> validateLaps: someLaps boxes: someBoxes players: somePlayers 
 
 { #category : #'instance creation' }
 PizzaGame class >> withBoxes: boxes players: somePlayers dice: someDice laps: someLaps andDeck: deck [
-	| boardRequired  |
-	boardRequired := self validateBoxes: boxes.	
+
 	self
 		validateLaps: someLaps
-		boxes: boardRequired
+		boxes: boxes
 		players: somePlayers
 		dice: someDice
 		andDeck: deck.
 	^ self new
-		initializeWithBoxes: boardRequired players: somePlayers dice: someDice laps: someLaps andDeck: deck
+		initializeWithBoxes: boxes players: somePlayers dice: someDice laps: someLaps andDeck: deck
 ]
 
 { #category : #'as yet unclassified' }

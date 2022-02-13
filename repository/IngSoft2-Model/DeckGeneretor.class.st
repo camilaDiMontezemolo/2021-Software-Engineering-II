@@ -3,59 +3,58 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'size',
-		'percentages',
 		'cards'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
-DeckGeneretor class >> with: aNumberOfCards [
-	^ self new initializeWithANumberOfCards: aNumberOfCards
+DeckGeneretor class >> give: aSize for: cardTypes with: probabilities [.
+	self validate: probabilities.
+	^ self new initializeWithSize: aSize for: cardTypes with: probabilities.
+]
+
+{ #category : #'instance creation' }
+DeckGeneretor class >> validate: probabilities [
+	| sum |
+	sum := 0. 
+	probabilities do: [:oneProba | sum := sum + oneProba].
+	(sum = 1)
+	ifFalse: [ Error signal: 'Las suma de probabilidades debe ser 1.'  ]
 ]
 
 { #category : #'as yet unclassified' }
-DeckGeneretor >> add: aPercentage of: aBoxType [
-	| indice |
-	indice := 1.
-	[(indice <= (size *aPercentage)) & (cards size < size)]
-		whileTrue:[
-			cards add: (aBoxType new).
-			indice := (indice +1).
-			].
+DeckGeneretor >> add: aPercentage of: aCardType [
+	| index |
+	index := 1.
+	[(index <= (size *aPercentage)) & (cards size < size)] whileTrue:[
+			cards add: aCardType new.
+			index := index +1.].
 	cards := cards shuffled.
-	self validatePorcenge: aPercentage.
 	^cards.
-		
-]
-
-{ #category : #'as yet unclassified' }
-DeckGeneretor >> cards [
-	^cards.
-		
-]
-
-{ #category : #'as yet unclassified' }
-DeckGeneretor >> completeDeck [
-	(cards size < size) ifTrue: [ cards size to: size do: [:emptySlot | cards add: ((cards first) class) new ].]
+		 
 ]
 
 { #category : #initalize }
-DeckGeneretor >> initializeWithANumberOfCards: aNumberOfCards [
+DeckGeneretor >> completeBoard [
+	(cards size < size)
+		ifTrue: [ (cards size) to: (size) do: [:emptyBox | cards add: (((cards first) class) new) ].	].
+]
+
+{ #category : #initalize }
+DeckGeneretor >> createBoardFor: boxTypes with: probabilities [
+	| index |
+	index := 1.
+	[ index <= boxTypes size ]
+		whileTrue: [ self add: (probabilities at: index) of: (boxTypes at: index).
+			index := index + 1 ]
+]
+
+{ #category : #initalize }
+DeckGeneretor >> initializeWithSize: aSize for: cardTypes with: probabilities [
+	size := aSize - 1.
 	cards := OrderedCollection new.
-	size := aNumberOfCards-1.
-	percentages := 0.
-
-]
-
-{ #category : #'as yet unclassified' }
-DeckGeneretor >> percentage [
-	^percentages 
-]
-
-{ #category : #'as yet unclassified' }
-DeckGeneretor >> validatePorcenge: aPercentage [
-	percentages := percentages + aPercentage.
-	(percentages>1) ifTrue: [ Error signal: 'Las suma de probabilidades no puede ser mayor a 1.' ].
-	(percentages=1) ifTrue:[ self completeDeck. ]
+	self createBoardFor: cardTypes with: probabilities.
+	self completeBoard.
+	^ cards
 ]

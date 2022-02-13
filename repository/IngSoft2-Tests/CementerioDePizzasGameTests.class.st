@@ -7,27 +7,14 @@ Class {
 { #category : #tests }
 CementerioDePizzasGameTests >> createStandardBoardFor: number [
 	| boxes |
-	boxes := 	BoxGenerator give: number.
-	boxes add: 0.38 of: NoEffectBox.
-	boxes add: 0.2 of: SpeedupBox.
-	boxes add: 0.2 of: WormHoleBox.
-	boxes add: 0.1 of: MoonWalkBox.
-	boxes add: 0.02 of: AtomicBombBox.
-	boxes add: 0.1 of: CardBox.
+	boxes := BoxGenerator give: number for: (OrderedCollection  with: NoEffectBox  with: SpeedupBox with: WormHoleBox  with: MoonWalkBox with: AtomicBombBox with: CardBox) with: (OrderedCollection with: 0.38 with: 0.2 with: 0.2  with: 0.1 with: 0.02  with: 0.1).
 	^boxes
 ]
 
 { #category : #tests }
 CementerioDePizzasGameTests >> createStandardDeckFor: number [
 	| cards deck |
-	cards := DeckGeneretor with: number.
-	
-	cards add: 0.167 of: OverloadCard.
-	cards add: 0.167 of: CancellationCard.
-	cards add: 0.167 of: SpeedUpCard.
-	cards add: 0.167 of: RepeatCard.
-	cards add: 0.167 of: AccelerationCard.
-	cards add: 0.165 of: RedoCard.
+	cards := DeckGeneretor give: number for: (OrderedCollection  with: OverloadCard  with: CancellationCard with: SpeedUpCard  with: RepeatCard with: AccelerationCard with: RedoCard) with: (OrderedCollection with: 0.167 with: 0.167 with: 0.167 with: 0.167 with: 0.167  with: 0.165).
 	
 	deck := Deck withCards: cards.
 	^deck.
@@ -46,28 +33,6 @@ CementerioDePizzasGameTests >> should: block raise: kindOfError withMessage: err
 CementerioDePizzasGameTests >> testADiceShouldHaveAtLeastOneSide [
 	
 	self should: [Die withSides: 0.] raise: Error withMessage: 'Un dado no puede tener menos de 3 cara(s).'.
-]
-
-{ #category : #tests }
-CementerioDePizzasGameTests >> testAGameDoesntStartIfTheBoardDoesNotMeetTheRequirementsOfTheGame [
-
-	| dice players board deck |
-	
-	dice := OrderedCollection with: (Die withSides: 3).
-	board := 	BoxGenerator give: 50.
-	board add: 0.18 of: NoEffectBox.
-	board add: 0.2 of: SpeedupBox.
-	board add: 0.2 of: WormHoleBox.
-	board add: 0.1 of: MoonWalkBox.
-	board add: 0.02 of: AtomicBombBox.
-	board add: 0.1 of: CardBox.
-	players:= (OrderedCollection with: #hawaiana).
-
-	
-	deck := self createStandardDeckFor: 10.
-
-	self should: [PizzaGame withBoxes: board players: players dice: dice laps: 2 andDeck: deck] raise: Error withMessage: 'El tablero no cumple con los requerimientos de este juego.'.
-	
 ]
 
 { #category : #tests }
@@ -111,7 +76,7 @@ CementerioDePizzasGameTests >> testCreateAGameMultiPlayer [
 		with: NoEffectBox new
 		with: WormHoleBox new
 		with: AtomicBombBox new
-		with: (MoonWalkBox loadedWith: 1)
+		with: MoonWalkBox new
 		with: SpeedupBox new.
 
 	testPlayers := OrderedCollection
