@@ -48,11 +48,10 @@ CardManager >> affectCard: target with: card [
 
 { #category : #'as yet unclassified' }
 CardManager >> cancellateCard: aCard [
-	| neededStocks|
-	self validateCancellationFor: aCard.
-	neededStocks := playersStockTakings select: [:stock| (stock cardsAffecting) includes: aCard].
-	neededStocks do:
-		[ :oneStock | oneStock removeCardAffectingPlayer: aCard.].
+	| neededStocks |
+	self validateInstantaneousEffectFor: aCard.
+	neededStocks := self findStocksWith: aCard.
+	self delete: aCard from: neededStocks
 ]
 
 { #category : #'as yet unclassified' }
@@ -86,6 +85,18 @@ CardManager >> createHandsFor: thePlayersOfThisGame [
 	n:=0.
 	thePlayersOfThisGame do:
 		[ :onePlayer | playersStockTakings add: (Stocktaking for: onePlayer). ].
+]
+
+{ #category : #'as yet unclassified' }
+CardManager >> delete: aCard from: stocks [
+	stocks
+		do: [ :oneStock | oneStock removeCardAffectingPlayer: aCard ]
+]
+
+{ #category : #'as yet unclassified' }
+CardManager >> findStocksWith: aCard [
+	^ playersStockTakings
+		select: [ :stock | stock cardsAffecting includes: aCard ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -136,7 +147,7 @@ CardManager >> modifyDistanceOf: player [
 	| playerCards finalDistance|
 	finalDistance:=0.
 	playerCards := self cardsAffecting: player.
-	playerCards do: [:card| finalDistance:= finalDistance +(card applyEffectFrom: self).].
+	playerCards do: [:card| finalDistance:= finalDistance +(card value).].
 	^finalDistance.
 ]
 
@@ -145,6 +156,18 @@ CardManager >> remove: card fromTheHandOf: player [
 	| neededStock |
 	neededStock := self stockOf: player.
 	neededStock removeOfHand: card.
+]
+
+{ #category : #'as yet unclassified' }
+CardManager >> speedBoostCard: aCard [
+	| neededStocks newCard |
+	self validateInstantaneousEffectFor: aCard.
+	neededStocks := self findStocksWith: aCard.
+	self delete: aCard from: neededStocks.
+	newCard := (aCard class) withValue: ((aCard value) * 2).
+	usedCards remove: aCard.
+	usedCards add: newCard.
+	neededStocks do: [ :oneStock | oneStock addToCardsAffectingPlayer: newCard.].
 ]
 
 { #category : #'as yet unclassified' }
@@ -181,9 +204,9 @@ CardManager >> validate: target forAcceleration: card [
 ]
 
 { #category : #'as yet unclassified' }
-CardManager >> validateCancellationFor: target [
+CardManager >> validateInstantaneousEffectFor: target [
 		(usedCards includes: target)
-		ifFalse:[Error signal: 'No es una carta válida para cancelar.' ].
+		ifFalse:[Error signal: 'No se puede aplicar el efecto a esa carta.' ].
 	
 ]
 

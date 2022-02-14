@@ -4,14 +4,14 @@ Class {
 	#category : #'IngSoft2-Tests'
 }
 
-{ #category : #tests }
+{ #category : #creation }
 CementerioDePizzasGameTests >> createStandardBoardFor: number [
 	| boxes |
 	boxes := BoxGenerator give: number for: (OrderedCollection  with: NoEffectBox  with: SpeedupBox with: WormHoleBox  with: MoonWalkBox with: AtomicBombBox with: CardBox) with: (OrderedCollection with: 0.38 with: 0.2 with: 0.2  with: 0.1 with: 0.02  with: 0.1).
 	^boxes
 ]
 
-{ #category : #tests }
+{ #category : #creation }
 CementerioDePizzasGameTests >> createStandardDeckFor: number [
 	| cards deck |
 	cards := DeckGeneretor give: number for: (OrderedCollection  with: OverloadCard  with: CancellationCard with: SpeedUpCard  with: RepeatCard with: AccelerationCard with: RedoCard) with: (OrderedCollection with: 0.167 with: 0.167 with: 0.167 with: 0.167 with: 0.167  with: 0.165).
@@ -20,7 +20,7 @@ CementerioDePizzasGameTests >> createStandardDeckFor: number [
 	^deck.
 ]
 
-{ #category : #tests }
+{ #category : #asserting }
 CementerioDePizzasGameTests >> should: block raise: kindOfError withMessage: errorMessage [
 	self
 		should: block

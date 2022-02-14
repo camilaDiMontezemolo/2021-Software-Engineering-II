@@ -4,15 +4,16 @@ Class {
 	#category : #'IngSoft2-Tests'
 }
 
-{ #category : #tests }
+{ #category : #creation }
 BoardTests >> createBoardTestingDeck [
 		| deck |
-	deck := Deck withCards: (OrderedCollection with: (RepeatCard new) with: (AccelerationCard new) with: (AccelerationCard new) with: (SpeedUpCard new) with: (AccelerationCard new) with: (SpeedUpCard new) ).
+	deck := Deck 
+	withCards: (OrderedCollection with: (RepeatCard new) with: (AccelerationCard new) with: (AccelerationCard new) with: (SpeedUpCard new) with: (AccelerationCard new) with: (SpeedUpCard new) ).
 	^deck.
 
 ]
 
-{ #category : #tests }
+{ #category : #creation }
 BoardTests >> createStandardBoardFor: number [
 	| boxes |
 	
