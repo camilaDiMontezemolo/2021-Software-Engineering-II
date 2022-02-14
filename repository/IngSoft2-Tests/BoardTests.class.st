@@ -37,13 +37,13 @@ BoardTests >> testABoardShouldHaveMoreThanZeroDie [
 
 	| someBoxes testPlayers cards randomCards |
 
-	someBoxes:= BoxGenerator give: 5000.
-	someBoxes add: 0.38 of: NoEffectBox.
-	someBoxes add: 0.2 of: SpeedupBox.
+	someBoxes:= EffectGenerator give: 5000.
+	someBoxes add: 0.38 of: NoEffect.
+	someBoxes add: 0.2 of: SpeedupEffect.
 	someBoxes add: 0.2 of: WormHoleBox.
-	someBoxes add: 0.1 of: MoonWalkBox.
-	someBoxes add: 0.02 of: AtomicBombBox.
-	someBoxes add: 0.1 of: CardBox.
+	someBoxes add: 0.1 of: MoonWalkEffect.
+	someBoxes add: 0.02 of: AtomicBombEffect.
+	someBoxes add: 0.1 of: CardEffect.
 	testPlayers:=(OrderedCollection with: #hawaiana).
 	randomCards :=OrderedCollection 
 		with: (AccelerationCard new) 
@@ -64,13 +64,13 @@ BoardTests >> testABoardShouldHaveMoreThanZeroPlayers [
 	|  dice someBoxes cards randomCards |
 	
 	dice := OrderedCollection with: (Die withSides: 3).
-	someBoxes:= BoxGenerator give: 5.
-	someBoxes add: 0.38 of: NoEffectBox.
-	someBoxes add: 0.2 of: SpeedupBox.
+	someBoxes:= EffectGenerator give: 5.
+	someBoxes add: 0.38 of: NoEffect.
+	someBoxes add: 0.2 of: SpeedupEffect.
 	someBoxes add: 0.2 of: WormHoleBox.
-	someBoxes add: 0.1 of: MoonWalkBox.
-	someBoxes add: 0.02 of: AtomicBombBox.
-	someBoxes add: 0.1 of: CardBox.
+	someBoxes add: 0.1 of: MoonWalkEffect.
+	someBoxes add: 0.02 of: AtomicBombEffect.
+	someBoxes add: 0.1 of: CardEffect.
 	randomCards :=OrderedCollection 
 		with: (AccelerationCard new) 
 		with: (CancellationCard new) 
@@ -90,21 +90,21 @@ BoardTests >> testABoxGeneratorGivesBoxesWithProbabilities [
 
 	| someBoxes numberOfNoEffectBoxes numberOfSpeed numberOfWorm numberOfMoon numberOfAtomic cantidadCardBox |
 
-	someBoxes:= BoxGenerator give: 5000.
-	someBoxes add: 0.38 of: NoEffectBox.
-	someBoxes add: 0.2 of: SpeedupBox.
+	someBoxes:= EffectGenerator give: 5000.
+	someBoxes add: 0.38 of: NoEffect.
+	someBoxes add: 0.2 of: SpeedupEffect.
 	someBoxes add: 0.2 of: WormHoleBox.
-	someBoxes add: 0.1 of: MoonWalkBox.
-	someBoxes add: 0.02 of: AtomicBombBox.
-	someBoxes add: 0.1 of: CardBox.
+	someBoxes add: 0.1 of: MoonWalkEffect.
+	someBoxes add: 0.02 of: AtomicBombEffect.
+	someBoxes add: 0.1 of: CardEffect.
 	
 	
-	numberOfNoEffectBoxes := (someBoxes boxes) count: [ :card | card isMemberOf: NoEffectBox ].
-	numberOfSpeed := (someBoxes boxes)  count: [ :card | card isMemberOf: SpeedupBox ].
+	numberOfNoEffectBoxes := (someBoxes boxes) count: [ :card | card isMemberOf: NoEffect ].
+	numberOfSpeed := (someBoxes boxes)  count: [ :card | card isMemberOf: SpeedupEffect ].
 	numberOfWorm := (someBoxes boxes)  count: [ :card | card isMemberOf: WormHoleBox ].
-	numberOfMoon := (someBoxes boxes) count: [ :card | card isMemberOf: MoonWalkBox ].
-	numberOfAtomic := (someBoxes boxes)  count: [ :card | card isMemberOf: AtomicBombBox ].
-	cantidadCardBox := (someBoxes boxes)  count: [ :card | card isMemberOf: CardBox ].
+	numberOfMoon := (someBoxes boxes) count: [ :card | card isMemberOf: MoonWalkEffect ].
+	numberOfAtomic := (someBoxes boxes)  count: [ :card | card isMemberOf: AtomicBombEffect ].
+	cantidadCardBox := (someBoxes boxes)  count: [ :card | card isMemberOf: CardEffect ].
 
 	self assert: (numberOfNoEffectBoxes between: 1800 and: 2000).	
 	self assert: (numberOfSpeed between: 900 and: 1000).
@@ -118,198 +118,275 @@ BoardTests >> testABoxGeneratorGivesBoxesWithProbabilities [
 BoardTests >> testABoxGeneratorShouldNotGiveBoxesIfProbabilitiesSumMoreThanOne [
 		
 	| boxGen |
-	self should: [ boxGen:= BoxGenerator give: 5000.
-	boxGen add: 0.38 of: NoEffectBox.
-	boxGen add: 0.2 of: SpeedupBox.
+	self should: [ boxGen:= EffectGenerator give: 5000.
+	boxGen add: 0.38 of: NoEffect.
+	boxGen add: 0.2 of: SpeedupEffect.
 	boxGen add: 0.2 of: WormHoleBox.
-	boxGen add: 0.1 of: MoonWalkBox.
-	boxGen add: 0.2 of: AtomicBombBox.
-	boxGen add: 0.1 of: CardBox.	] raise: Error withMessage: 'Las suma de probabilidades no puede ser mayor a 1.'.
+	boxGen add: 0.1 of: MoonWalkEffect.
+	boxGen add: 0.2 of: AtomicBombEffect.
+	boxGen add: 0.1 of: CardEffect.	] raise: Error withMessage: 'Las suma de probabilidades no puede ser mayor a 1.'.
 ]
 
 { #category : #tests }
 BoardTests >> testACardBoxGivesCards [
+
 	| game dice ranking testPlayers boxes deck napolitanaHand |
-		
 	boxes := OrderedCollection
-		with: CardBox new
-		with: NoEffectBox new
-		with: NoEffectBox new
-		with: NoEffectBox new
-		with: NoEffectBox new.
-	
+		         with: CardEffect new
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: NoEffect new.
+
 	testPlayers := OrderedCollection with: #napolitana.
-	deck := Deck withCards: (OrderedCollection with: (RepeatCard new) with: (AccelerationCard new) with: (SpeedUpCard new)).
-	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(1))).
-	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
+	deck := Deck withCards: (OrderedCollection
+			         with: RepeatCard new
+			         with: AccelerationCard new
+			         with: SpeedUpCard new).
+	dice := Beaker with:
+		        (OrderedCollection with:
+			         (LoadedDie withTosses: #( 1 ) andSides: 3)).
+	game := PizzaGame
+		        withBoxes: boxes
+		        players: testPlayers
+		        dice: dice
+		        laps: 1
+		        andDeck: deck.
 	game playTurnForAllPlayers.
 	napolitanaHand := game handOf: #napolitana.
-	
-	game player: #napolitana wantsToApplyCard: (napolitanaHand at: 3) to: #napolitana.
+
+	game
+		player: #napolitana
+		wantsToApplyCard: (napolitanaHand at: 3)
+		to: #napolitana.
 	game playTurnForAllPlayers.
 	ranking := game ranking.
-	
-	self assert: (ranking first) location equals: 3.
+
+	self assert: ranking first location equals: 3
 ]
 
 { #category : #tests }
 BoardTests >> testAMoonWalkBoxJumpsAPlayerBoxesBack [
-	
-	| boxes testPlayers dice game cards deck randomCards
-|
-	
-	boxes := OrderedCollection 
-		with: NoEffectBox new 
-		with: (MoonWalkBox loadedWith: 1) 
-		with: NoEffectBox with: NoEffectBox.
+
+	| boxes testPlayers dice game cards deck randomCards |
+	boxes := OrderedCollection
+		         with: NoEffect new
+		         with: (MoonWalkEffect loadedWith: 1)
+		         with: NoEffect
+		         with: NoEffect.
 	testPlayers := OrderedCollection with: #napolitana with: #hawaiana.
-	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(2))).
-	randomCards :=OrderedCollection 
-		with: (AccelerationCard new) 
-		with: (CancellationCard new) 
-		with: (OverloadCard new) 
-		with: (RedoCard new) 
-		with: (RepeatCard new) 
-		with:(SpeedUpCard new).
-	randomCards :=OrderedCollection 
-		with: (AccelerationCard new) 
-		with: (CancellationCard new) 
-		with: (OverloadCard new) 
-		with: (RedoCard new) 
-		with: (RepeatCard new) 
-		with:(SpeedUpCard new).
-	cards := DeckGenerator with: 100 for: randomCards .
-	deck := Deck withCards: cards. 
-	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
+	dice := Beaker with:
+		        (OrderedCollection with:
+			         (LoadedDie withTosses: #( 2 ) andSides: 3)).
+	randomCards := OrderedCollection
+		               with: AccelerationCard new
+		               with: CancellationCard new
+		               with: OverloadCard new
+		               with: RedoCard new
+		               with: RepeatCard new
+		               with: SpeedUpCard new.
+	randomCards := OrderedCollection
+		               with: AccelerationCard new
+		               with: CancellationCard new
+		               with: OverloadCard new
+		               with: RedoCard new
+		               with: RepeatCard new
+		               with: SpeedUpCard new.
+	cards := DeckGenerator with: 100 for: randomCards.
+	deck := Deck withCards: cards.
+	game := PizzaGame
+		        withBoxes: boxes
+		        players: testPlayers
+		        dice: dice
+		        laps: 1
+		        andDeck: deck.
 	game playTurnForAllPlayers.
 
-	self assert: (game ranking second) location equals: 1.
-	
+	self assert: game ranking second location equals: 1
 ]
 
 { #category : #tests }
 BoardTests >> testANoEffectBoxHasNoEffects [
-	
-	| boxes  testPlayers dice game positions cards deck randomCards |
-	
-	boxes := OrderedCollection 
-		with: NoEffectBox new 
-		with: NoEffectBox new
-		with: NoEffectBox new
-		with: NoEffectBox new.
+
+	| boxes testPlayers dice game positions cards deck randomCards |
+	boxes := OrderedCollection
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: NoEffect new.
 	testPlayers := OrderedCollection with: #napolitana.
-	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(2))).
-	randomCards :=OrderedCollection 
-		with: (AccelerationCard new) 
-		with: (CancellationCard new) 
-		with: (OverloadCard new) 
-		with: (RedoCard new) 
-		with: (RepeatCard new) 
-		with:(SpeedUpCard new).
-	cards := DeckGenerator with: 100 for: randomCards .
-	deck := Deck withCards: cards. 
-	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
+	dice := Beaker with:
+		        (OrderedCollection with:
+			         (LoadedDie withTosses: #( 2 ) andSides: 3)).
+	randomCards := OrderedCollection
+		               with: AccelerationCard new
+		               with: CancellationCard new
+		               with: OverloadCard new
+		               with: RedoCard new
+		               with: RepeatCard new
+		               with: SpeedUpCard new.
+	cards := DeckGenerator with: 100 for: randomCards.
+	deck := Deck withCards: cards.
+	game := PizzaGame
+		        withBoxes: boxes
+		        players: testPlayers
+		        dice: dice
+		        laps: 1
+		        andDeck: deck.
 	game playTurnForAllPlayers.
 	positions := game ranking.
 
-	self assert: (positions first) location equals: 2.
-	
+	self assert: positions first location equals: 2
 ]
 
 { #category : #tests }
 BoardTests >> testASpeedupBoxJumpsYouFourBoxes [
-	
+
 	| game dice ranking testPlayers boxes cards deck randomCards |
 	boxes := OrderedCollection
-		with: SpeedupBox new
-		with: NoEffectBox new
-		with: NoEffectBox new
-		with: NoEffectBox new
-		with: NoEffectBox new
-		with: NoEffectBox new.
+		         with: SpeedupEffect new
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: NoEffect new.
 
 	testPlayers := OrderedCollection with: #napolitana.
-	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(1))).
-	randomCards :=OrderedCollection 
-		with: (AccelerationCard new) 
-		with: (CancellationCard new) 
-		with: (OverloadCard new) 
-		with: (RedoCard new) 
-		with: (RepeatCard new) 
-		with:(SpeedUpCard new).
-	cards := DeckGenerator with: 100 for: randomCards .
-	deck := Deck withCards: cards. 
-	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
+	dice := Beaker with:
+		        (OrderedCollection with:
+			         (LoadedDie withTosses: #( 1 ) andSides: 3)).
+	randomCards := OrderedCollection
+		               with: AccelerationCard new
+		               with: CancellationCard new
+		               with: OverloadCard new
+		               with: RedoCard new
+		               with: RepeatCard new
+		               with: SpeedUpCard new.
+	cards := DeckGenerator with: 100 for: randomCards.
+	deck := Deck withCards: cards.
+	game := PizzaGame
+		        withBoxes: boxes
+		        players: testPlayers
+		        dice: dice
+		        laps: 1
+		        andDeck: deck.
 	game playTurnForAllPlayers.
 	ranking := game ranking.
-	self assert: (ranking first) location equals: 5.
-
+	self assert: ranking first location equals: 5
 ]
 
 { #category : #tests }
 BoardTests >> testAnAtomicBombBoxSendsEveryoneBackToZero [
-	
+
 	| game dice ranking testPlayers boxes cards deck randomCards |
 	boxes := OrderedCollection
-		with: NoEffectBox new
-		with: NoEffectBox new
-		with: AtomicBombBox new
-		with: NoEffectBox new
-		with: NoEffectBox new.
-		
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: AtomicBombEffect new
+		         with: NoEffect new
+		         with: NoEffect new.
+
 	testPlayers := OrderedCollection
-		with: #napolitana
-		with: #margarita
-		with: #hawaiana.
-	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(4))).
-	randomCards :=OrderedCollection 
-		with: (AccelerationCard new) 
-		with: (CancellationCard new) 
-		with: (OverloadCard new) 
-		with: (RedoCard new) 
-		with: (RepeatCard new) 
-		with:(SpeedUpCard new).
-	cards := DeckGenerator with: 100 for: randomCards .
-	deck := Deck withCards: cards. 
-	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 2 andDeck: deck.
+		               with: #napolitana
+		               with: #margarita
+		               with: #hawaiana.
+	dice := Beaker with:
+		        (OrderedCollection with:
+			         (LoadedDie withTosses: #( 4 ) andSides: 4)).
+	randomCards := OrderedCollection
+		               with: AccelerationCard new
+		               with: CancellationCard new
+		               with: OverloadCard new
+		               with: RedoCard new
+		               with: RepeatCard new
+		               with: SpeedUpCard new.
+	cards := DeckGenerator with: 100 for: randomCards.
+	deck := Deck withCards: cards.
+	game := PizzaGame
+		        withBoxes: boxes
+		        players: testPlayers
+		        dice: dice
+		        laps: 2
+		        andDeck: deck.
 	game playTurnForAllPlayers.
 	game playTurnForAllPlayers.
 	ranking := game ranking.
-	self assert: (ranking first) location equals: 1.
-	self assert: (ranking second) location equals: 4.
-	self assert: (ranking third) location equals: 4.
-	
+	self assert: ranking first location equals: 1.
+	self assert: ranking second location equals: 4.
+	self assert: ranking third location equals: 4
 ]
 
 { #category : #tests }
 BoardTests >> testJailBox [
-	
+
 	| board testPlayers dice game cards rankingOne deck napolitanaHand |
-	
-	board := OrderedCollection 
-		with: JailBox new
-		with: NoEffectBox new 
-		with: NoEffectBox new 
-		with: NoEffectBox new
-		with: NoEffectBox new 
-		with: NoEffectBox new.
-		
+	board := OrderedCollection
+		         with: JailEffect new
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: NoEffect new.
+
 	cards := OrderedCollection
-		with: LibertyCard new
-		with: OverloadCard new
-		with: LibertyCard new
-		with: OverloadCard new.
-		
+		         with: LibertyCard new
+		         with: OverloadCard new
+		         with: LibertyCard new
+		         with: OverloadCard new.
+
 	deck := Deck withCards: cards.
-	testPlayers := OrderedCollection with: #napolitana with: #margarita. 
-	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(1 2))).
-	game := PizzaGame withBoxes: board players: testPlayers dice: dice laps: 1 andDeck: deck.
+	testPlayers := OrderedCollection with: #napolitana with: #margarita.
+	dice := Beaker with: (OrderedCollection with:
+			         (LoadedDie withTosses: #( 1 2 ) andSides: 3)).
+	game := PizzaGame
+		        withBoxes: board
+		        players: testPlayers
+		        dice: dice
+		        laps: 1
+		        andDeck: deck.
 	napolitanaHand := game handOf: #napolitana.
 	game playTurnForAllPlayers.
 	game playTurnForAllPlayers.
-	rankingOne:= game ranking.
-	
-	self assert: (rankingOne second) location equals: 1.
-	self assert: (rankingOne first) location equals: 4.
-	
+	rankingOne := game ranking.
+
+	self assert: rankingOne second location equals: 1.
+	self assert: rankingOne first location equals: 4
+]
+
+{ #category : #tests }
+BoardTests >> testJailBoxSetsYouFreeAfterYouReachTheMaxToss [
+
+	| board testPlayers dice game cards rankingOne deck napolitanaHand |
+	board := OrderedCollection
+		         with: JailEffect new
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: NoEffect new.
+
+	cards := OrderedCollection
+		         with: LibertyCard new
+		         with: OverloadCard new
+		         with: LibertyCard new
+		         with: OverloadCard new.
+
+	deck := Deck withCards: cards.
+	testPlayers := OrderedCollection with: #napolitana.
+	dice := Beaker with: (OrderedCollection with:
+			         (LoadedDie withTosses: #( 1 1 1 3 ) andSides: 3)).
+	game := PizzaGame
+		        withBoxes: board
+		        players: testPlayers
+		        dice: dice
+		        laps: 1
+		        andDeck: deck.
+	napolitanaHand := game handOf: #napolitana.
+	game playTurnForAllPlayers.
+	game playTurnForAllPlayers.
+	game playTurnForAllPlayers.
+	game playTurnForAllPlayers.
+	rankingOne := game ranking.
+
+	self assert: rankingOne first location equals: 4.
 ]

@@ -1,5 +1,5 @@
 Class {
-	#name : #BoxGenerator,
+	#name : #EffectGenerator,
 	#superclass : #Object,
 	#instVars : [
 		'size',
@@ -10,12 +10,12 @@ Class {
 }
 
 { #category : #'instance creation' }
-BoxGenerator class >> give: aSize [
+EffectGenerator class >> give: aSize [
 	^ self new initializeWithSize: aSize
 ]
 
 { #category : #'as yet unclassified' }
-BoxGenerator >> add: aPercentage of: aBoxType [
+EffectGenerator >> add: aPercentage of: aBoxType [
 	| indice |
 	indice := 1.
 	[(indice <= (size *aPercentage)) & (boxCol size < size)]
@@ -30,13 +30,13 @@ BoxGenerator >> add: aPercentage of: aBoxType [
 ]
 
 { #category : #'as yet unclassified' }
-BoxGenerator >> boxes [
+EffectGenerator >> boxes [
 	^boxCol.
 		
 ]
 
 { #category : #initalize }
-BoxGenerator >> initializeWithSize: aSize [
+EffectGenerator >> initializeWithSize: aSize [
 	size := (aSize-1).
 	boxCol := OrderedCollection new.
 	percentages := 0.
@@ -44,18 +44,18 @@ BoxGenerator >> initializeWithSize: aSize [
 ]
 
 { #category : #'as yet unclassified' }
-BoxGenerator >> percentage [
+EffectGenerator >> percentage [
 	^percentages 
 ]
 
 { #category : #'as yet unclassified' }
-BoxGenerator >> validatePorcenge: aPercentage [
+EffectGenerator >> validatePorcenge: aPercentage [
 	percentages := percentages + aPercentage.
 	(percentages>1)
 	ifTrue: [ Error signal: 'Las suma de probabilidades no puede ser mayor a 1.' ].
 	(percentages=1)
 	ifTrue:[ (boxCol size < size)
 		ifTrue: [ 
-			(boxCol size) to: (size) do: [:emptyBox | boxCol add: (NoEffectBox new) ].
+			(boxCol size) to: (size) do: [:emptyBox | boxCol add: (NoEffect new) ].
 		].]
 ]

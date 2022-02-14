@@ -1,6 +1,6 @@
 Class {
-	#name : #MoonWalkBox,
-	#superclass : #Box,
+	#name : #MoonWalkEffect,
+	#superclass : #Effect,
 	#instVars : [
 		'n'
 	],
@@ -8,14 +8,14 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-MoonWalkBox class >> loadedWith: aNumber [ 
+MoonWalkEffect class >> loadedWith: aNumber [ 
 	(aNumber <1 ) ifTrue: [ Error signal: 'Un moonwalk no te puede tirar menos de 1 para atras.' ].
 	^self new initializeLoaded: aNumber.
 	
 ]
 
 { #category : #'as yet unclassified' }
-MoonWalkBox >> affect: positions triggeredOn: aPosition with: board [
+MoonWalkEffect >> affect: positions triggeredOn: aPosition on: board withPreviousAdvance: distance [
 	| affectedPositions|
 	affectedPositions :=(positions reject: [:position| position samePlayerAs: aPosition]).
 	affectedPositions do: [:position |board change: position by: n].
@@ -23,11 +23,11 @@ MoonWalkBox >> affect: positions triggeredOn: aPosition with: board [
 ]
 
 { #category : #'as yet unclassified' }
-MoonWalkBox >> initialize [
+MoonWalkEffect >> initialize [
 	n:= 5 atRandom.
 ]
 
 { #category : #'as yet unclassified' }
-MoonWalkBox >> initializeLoaded: aNumber [.
+MoonWalkEffect >> initializeLoaded: aNumber [.
 	n:= 0-aNumber.
 ]

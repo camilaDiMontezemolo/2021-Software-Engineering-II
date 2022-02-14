@@ -49,13 +49,13 @@ CementerioDePizzasGameTests >> testACardGeneratorShouldntBeAbleToGiveZeroCards [
 	napolitana:= #napolitana.
 	
 	dice := OrderedCollection with: (Die withSides: 5).
-	someBoxes:= BoxGenerator give: 5.
-	someBoxes add: 0.38 of: NoEffectBox.
-	someBoxes add: 0.2 of: SpeedupBox.
+	someBoxes:= EffectGenerator give: 5.
+	someBoxes add: 0.38 of: NoEffect.
+	someBoxes add: 0.2 of: SpeedupEffect.
 	someBoxes add: 0.2 of: WormHoleBox.
-	someBoxes add: 0.1 of: MoonWalkBox.
-	someBoxes add: 0.02 of: AtomicBombBox.
-	someBoxes add: 0.1 of: CardBox.
+	someBoxes add: 0.1 of: MoonWalkEffect.
+	someBoxes add: 0.02 of: AtomicBombEffect.
+	someBoxes add: 0.1 of: CardEffect.
 	
 	testPlayers:= OrderedCollection with: napolitana.
 	
@@ -88,12 +88,12 @@ CementerioDePizzasGameTests >> testAGameDoesntStartIfTheDeckGeneratorsPercentage
 	| dice players cards someBoxes randomCards |
 	
 	dice := OrderedCollection with: (Die withSides: 3).
-	someBoxes:= BoxGenerator give: 10.
-	someBoxes add: 0.38 of: NoEffectBox.
-	someBoxes add: 0.2 of: SpeedupBox.
+	someBoxes:= EffectGenerator give: 10.
+	someBoxes add: 0.38 of: NoEffect.
+	someBoxes add: 0.2 of: SpeedupEffect.
 	someBoxes add: 0.2 of: WormHoleBox.
-	someBoxes add: 0.1 of: MoonWalkBox.
-	someBoxes add: 0.02 of: AtomicBombBox.
+	someBoxes add: 0.1 of: MoonWalkEffect.
+	someBoxes add: 0.02 of: AtomicBombEffect.
 	players:= (OrderedCollection with: #hawaiana).
 	randomCards :=OrderedCollection 
 		with: (AccelerationCard new) 
@@ -114,13 +114,13 @@ CementerioDePizzasGameTests >> testAGameShouldHaveAtLeastOneLap [
 	| dice players cards someBoxes randomCards |
 	
 	dice := OrderedCollection with: (Die withSides: 3).
-	someBoxes:= BoxGenerator give: 10.
-	someBoxes add: 0.38 of: NoEffectBox.
-	someBoxes add: 0.2 of: SpeedupBox.
+	someBoxes:= EffectGenerator give: 10.
+	someBoxes add: 0.38 of: NoEffect.
+	someBoxes add: 0.2 of: SpeedupEffect.
 	someBoxes add: 0.2 of: WormHoleBox.
-	someBoxes add: 0.1 of: MoonWalkBox.
-	someBoxes add: 0.02 of: AtomicBombBox.
-	someBoxes add: 0.1 of: CardBox.
+	someBoxes add: 0.1 of: MoonWalkEffect.
+	someBoxes add: 0.02 of: AtomicBombEffect.
+	someBoxes add: 0.1 of: CardEffect.
 	players:= (OrderedCollection with: #hawaiana).
 	randomCards :=OrderedCollection 
 		with: (AccelerationCard new) 
@@ -137,34 +137,42 @@ CementerioDePizzasGameTests >> testAGameShouldHaveAtLeastOneLap [
 
 { #category : #tests }
 CementerioDePizzasGameTests >> testCreateAGameMultiPlayer [
+
 	| game dice napolitana ranking margarita testPlayers mozzarella boxes cards deck randomCards |
 	napolitana := #napolitana.
 	margarita := #margarita.
 	mozzarella := #mozzarella.
 	boxes := OrderedCollection
-		with: NoEffectBox new
-		with: NoEffectBox new
-		with: WormHoleBox new
-		with: AtomicBombBox new
-		with: (MoonWalkBox loadedWith: 1)
-		with: SpeedupBox new.
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: WormHoleBox new
+		         with: AtomicBombEffect new
+		         with: (MoonWalkEffect loadedWith: 1)
+		         with: SpeedupEffect new.
 
 	testPlayers := OrderedCollection
-		with: #napolitana
-		with: #margarita
-		with: #mozzarella.
+		               with: #napolitana
+		               with: #margarita
+		               with: #mozzarella.
 
-	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(4 4 4 2 2 2 2 2 2 6 6 6 2 2 2))).
-	randomCards :=OrderedCollection 
-		with: (AccelerationCard new) 
-		with: (CancellationCard new) 
-		with: (OverloadCard new) 
-		with: (RedoCard new) 
-		with: (RepeatCard new) 
-		with:(SpeedUpCard new).
-	cards := DeckGenerator with: 100 for: randomCards .
-	deck := Deck withCards: cards. 
-	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
+	dice := Beaker with: (OrderedCollection with: (LoadedDie
+				          withTosses: #( 4 4 4 2 2 2 2 2 2 6 6 6 2 2 2 )
+				          andSides: 7)).
+	randomCards := OrderedCollection
+		               with: AccelerationCard new
+		               with: CancellationCard new
+		               with: OverloadCard new
+		               with: RedoCard new
+		               with: RepeatCard new
+		               with: SpeedUpCard new.
+	cards := DeckGenerator with: 100 for: randomCards.
+	deck := Deck withCards: cards.
+	game := PizzaGame
+		        withBoxes: boxes
+		        players: testPlayers
+		        dice: dice
+		        laps: 1
+		        andDeck: deck.
 	game play.
 	ranking := game ranking.
 	self assert: game isFinished.
@@ -176,38 +184,43 @@ CementerioDePizzasGameTests >> testCreateAGameMultiPlayer [
 
 { #category : #tests }
 CementerioDePizzasGameTests >> testCreateAGameSinglePlayer [
-	
+
 	| game dice positions napolitana someBoxes testPlayers cards deck randomCards |
-	
-	napolitana:= #napolitana.
-	
-	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(5))).
-	someBoxes:= BoxGenerator give: 5.
-	someBoxes add: 0.38 of: NoEffectBox.
-	someBoxes add: 0.2 of: SpeedupBox.
+	napolitana := #napolitana.
+
+	dice := Beaker with:
+		        (OrderedCollection with:
+			         (LoadedDie withTosses: #( 5 ) andSides: 6)).
+	someBoxes := EffectGenerator give: 5.
+	someBoxes add: 0.38 of: NoEffect.
+	someBoxes add: 0.2 of: SpeedupEffect.
 	someBoxes add: 0.2 of: WormHoleBox.
-	someBoxes add: 0.1 of: MoonWalkBox.
-	someBoxes add: 0.02 of: AtomicBombBox.
-	someBoxes add: 0.1 of: CardBox.
-	
-	testPlayers:= OrderedCollection with: napolitana.
-	
-	randomCards :=OrderedCollection 
-		with: (AccelerationCard new) 
-		with: (CancellationCard new) 
-		with: (OverloadCard new) 
-		with: (RedoCard new) 
-		with: (RepeatCard new) 
-		with:(SpeedUpCard new).
-	cards := DeckGenerator with: 100 for: randomCards .
-	deck := Deck withCards: cards. 
-	game := PizzaGame withBoxes: (someBoxes boxes) players: testPlayers dice: dice laps: 1 andDeck: deck.
-	
+	someBoxes add: 0.1 of: MoonWalkEffect.
+	someBoxes add: 0.02 of: AtomicBombEffect.
+	someBoxes add: 0.1 of: CardEffect.
+
+	testPlayers := OrderedCollection with: napolitana.
+
+	randomCards := OrderedCollection
+		               with: AccelerationCard new
+		               with: CancellationCard new
+		               with: OverloadCard new
+		               with: RedoCard new
+		               with: RepeatCard new
+		               with: SpeedUpCard new.
+	cards := DeckGenerator with: 100 for: randomCards.
+	deck := Deck withCards: cards.
+	game := PizzaGame
+		        withBoxes: someBoxes boxes
+		        players: testPlayers
+		        dice: dice
+		        laps: 1
+		        andDeck: deck.
+
 	game play.
 	positions := game ranking.
-	self assert: (game isFinished).
-	self assert: (positions at:1) player identicalTo: napolitana.
-	
+	self assert: game isFinished.
+	self assert: (positions at: 1) player identicalTo: napolitana
 ]
 
 { #category : #tests }
@@ -219,13 +232,13 @@ CementerioDePizzasGameTests >> testCreateARandomMultiPlayerGame [
 	margarita:= #margarita.
 	mozzarella:= #mozzarella.
 	
-	boxesGen:= BoxGenerator give: 40.
-	boxesGen add: 0.38 of: NoEffectBox.
-	boxesGen add: 0.2 of: SpeedupBox.
+	boxesGen:= EffectGenerator give: 40.
+	boxesGen add: 0.38 of: NoEffect.
+	boxesGen add: 0.2 of: SpeedupEffect.
 	boxesGen add: 0.2 of: WormHoleBox.
-	boxesGen add: 0.1 of: MoonWalkBox.
-	boxesGen add: 0.02 of: AtomicBombBox.
-	boxesGen add: 0.1 of: CardBox.
+	boxesGen add: 0.1 of: MoonWalkEffect.
+	boxesGen add: 0.02 of: AtomicBombEffect.
+	boxesGen add: 0.1 of: CardEffect.
 	
 	testPlayers:= OrderedCollection with: napolitana with: margarita with: mozzarella.
 	
@@ -249,30 +262,35 @@ CementerioDePizzasGameTests >> testCreateARandomMultiPlayerGame [
 
 { #category : #tests }
 CementerioDePizzasGameTests >> testYouShouldBeAbleToGetYourLapAndLocation [
-	
+
 	| boxes testPlayers dice game cards deck randomCards |
+	boxes := OrderedCollection
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: NoEffect new.
 
-    boxes := OrderedCollection 
-        with: NoEffectBox new 
-        with: NoEffectBox new
-        with: NoEffectBox new 
-        with: NoEffectBox new.
-
-   randomCards :=OrderedCollection 
-		with: (AccelerationCard new) 
-		with: (CancellationCard new) 
-		with: (OverloadCard new) 
-		with: (RedoCard new) 
-		with: (RepeatCard new) 
-		with:(SpeedUpCard new).
-	cards := DeckGenerator with: 50 for: randomCards .
-	deck := Deck withCards: cards. 
-   testPlayers := OrderedCollection with:#margarita with: #napolitana.
-	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(6))).
-   game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 2 andDeck: deck.
+	randomCards := OrderedCollection
+		               with: AccelerationCard new
+		               with: CancellationCard new
+		               with: OverloadCard new
+		               with: RedoCard new
+		               with: RepeatCard new
+		               with: SpeedUpCard new.
+	cards := DeckGenerator with: 50 for: randomCards.
+	deck := Deck withCards: cards.
+	testPlayers := OrderedCollection with: #margarita with: #napolitana.
+	dice := Beaker with:
+		        (OrderedCollection with:
+			         (LoadedDie withTosses: #( 6 ) andSides: 7)).
+	game := PizzaGame
+		        withBoxes: boxes
+		        players: testPlayers
+		        dice: dice
+		        laps: 2
+		        andDeck: deck.
 	game playNextTurn.
-	
-	self assert: ((game ranking) first) lap equals: 1.
-	self assert: ((game ranking) second) location equals: 0.
-	 
+
+	self assert: game ranking first lap equals: 1.
+	self assert: game ranking second location equals: 0
 ]

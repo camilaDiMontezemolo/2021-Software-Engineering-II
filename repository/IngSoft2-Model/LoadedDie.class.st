@@ -3,22 +3,36 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'tosses',
-		'indice'
+		'index',
+		'sides'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
-LoadedDie class >> withTosses: someTosses [ 
+LoadedDie class >> validateSides: numberOfSides [
+	numberOfSides < 3
+		ifTrue: [ Error signal: 'Un dado no puede tener menos de 3 cara(s).' ]
+]
 
-	^self new initializeWithTheFollowingTosses: someTosses.
+{ #category : #'instance creation' }
+LoadedDie class >> withTosses: someTosses andSides: dieSides [
+
+	self validateSides: dieSides.	
+	^ self new initializeWithTheFollowingTosses: someTosses andSides: dieSides
 ]
 
 { #category : #initalize }
-LoadedDie >> initializeWithTheFollowingTosses: someTosses [ 
+LoadedDie >> initializeWithTheFollowingTosses: dieTosses andSides: dieSides [ 
 	tosses := OrderedCollection new.
-	tosses:= someTosses.
-	indice:=0.
+	tosses:= dieTosses.
+	sides := dieSides.
+	index := 0.
+]
+
+{ #category : #'as yet unclassified' }
+LoadedDie >> maxToss [
+	^sides
 ]
 
 { #category : #'as yet unclassified' }
@@ -28,8 +42,8 @@ LoadedDie >> size [
 
 { #category : #'as yet unclassified' }
 LoadedDie >> spin [
-	 (indice >= (tosses size))
-		ifTrue: [ indice:=0 .].
-	indice := indice +1.
-	^(tosses at: indice).
+	 (index >= (tosses size))
+		ifTrue: [ index:=0 .].
+	index := index +1.
+	^(tosses at: index).
 ]

@@ -31,6 +31,11 @@ CardManager >> addCardTo: oneStock [
 	oneStock addToHand: newCard.
 ]
 
+{ #category : #cardsMethods }
+CardManager >> addSpeedUpToBoxOf: player [
+	game addSpeedUpToBoxOf: player.
+]
+
 { #category : #gameCollaborations }
 CardManager >> affect: target with: card of: player [
 

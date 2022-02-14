@@ -1,11 +1,11 @@
 Class {
-	#name : #CardBox,
-	#superclass : #Box,
+	#name : #CardEffect,
+	#superclass : #Effect,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'as yet unclassified' }
-CardBox >> affect: positions triggeredOn: aPosition with: board [ 
+CardEffect >> affect: positions triggeredOn: aPosition on: board withPreviousAdvance: distance [ 
 	| playerWhoGetsTheCard |
 	playerWhoGetsTheCard := (aPosition player).
 	board cardFor: playerWhoGetsTheCard.

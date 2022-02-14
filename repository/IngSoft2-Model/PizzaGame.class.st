@@ -54,6 +54,11 @@ PizzaGame class >> withBoxes: someBoxes players: somePlayers dice: someDice laps
 		initializeWithBoxes: list players: somePlayers dice: someDice laps: someLaps andDeck: deck
 ]
 
+{ #category : #BoardCollabs }
+PizzaGame >> addSpeedUpToBoxOf: player [
+	board addSpeedUpToBoxOf: player.
+]
+
 { #category : #cardsCollabs }
 PizzaGame >> cardFor: playerWhoGetsTheCard [
 	| stock |
@@ -111,6 +116,11 @@ PizzaGame >> liberatePlayer: player [
 	
 	board liberatePlayer: player.
 
+]
+
+{ #category : #cardsCollabs }
+PizzaGame >> maximunToss [
+	^(dice maxToss)
 ]
 
 { #category : #turns }
