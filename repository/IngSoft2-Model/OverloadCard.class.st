@@ -10,6 +10,12 @@ OverloadCard >> applyEffectFrom: aCardManager [
 ]
 
 { #category : #'as yet unclassified' }
+OverloadCard >> cancelUsing: cancelationCard by:player andTell: cardManager [
+	
+	cardManager cancellateTarget: self using: cancelationCard from: player.
+]
+
+{ #category : #'as yet unclassified' }
 OverloadCard >> triggerEffectOn: target from: cardManager by: player [
 
 	cardManager validatePermanentCard: self of: player. 

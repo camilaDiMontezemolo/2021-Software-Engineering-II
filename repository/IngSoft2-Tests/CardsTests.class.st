@@ -487,6 +487,42 @@ CardsTests >> testUseACancelationCardOnAnOverloadCard [
 ]
 
 { #category : #tests }
+CardsTests >> testUseACancellationCardOnSpeedPlusCard [
+
+	| board testPlayers dice game cards rankingOne deck napolitanaHand margaritaHand|
+	board := OrderedCollection
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: NoEffect new.
+
+	cards := OrderedCollection
+		         with: SpeedPlusCard new
+		         with: OverloadCard new
+					with: SpeedPlusCard new
+		         with: CancellationCard new.
+		
+	deck := Deck withCards: cards.
+	testPlayers := OrderedCollection with: #napolitana with: #margarita.
+	dice := Beaker with:
+		        (OrderedCollection with:
+			         (LoadedDie withTosses: #( 2 ) andSides: 3)).
+	game := PizzaGame withBoxes: board players: testPlayers dice: dice laps: 3 andDeck: deck.
+	napolitanaHand := game handOf: #napolitana.
+	margaritaHand := game handOf: #margarita.
+	game playTurnForAllPlayers.
+	game player: #napolitana wantsToApplyCard: napolitanaHand first to: #napolitana.
+	game playNextTurn.
+	game player: #margarita wantsToApplyCard: margaritaHand second to: (napolitanaHand first).
+	game playNextTurn.
+	game playTurnForAllPlayers.
+	rankingOne := game ranking.
+
+	self assert: rankingOne first location equals: 2.
+	self assert: rankingOne first lap equals: 1.
+]
+
+{ #category : #tests }
 CardsTests >> testUseALibertyCard [
 
 	| board testPlayers dice game cards rankingOne deck napolitanaHand |
@@ -687,7 +723,7 @@ CardsTests >> testUseARepeatCardWhenNoDieWasRolledYet [
 { #category : #tests }
 CardsTests >> testUseASpeedPlusCard [
 
-	| board testPlayers dice game cards rankingOne deck napolitanaHand margaritaHand |
+	| board testPlayers dice game cards rankingOne deck napolitanaHand |
 	board := OrderedCollection
 		         with: NoEffect new
 		         with: NoEffect new
@@ -719,7 +755,7 @@ CardsTests >> testUseASpeedPlusCard [
 { #category : #tests }
 CardsTests >> testUseASpeedPlusCardOnAWormhole [
 
-	| board testPlayers dice game cards rankingOne deck napolitanaHand margaritaHand |
+	| board testPlayers dice game cards rankingOne deck napolitanaHand |
 	board := OrderedCollection
 		         with: NoEffect new
 		         with: WormHoleBox new
@@ -745,7 +781,8 @@ CardsTests >> testUseASpeedPlusCardOnAWormhole [
 	game playTurnForAllPlayers.
 	rankingOne := game ranking.
 
-	self assert: rankingOne first location equals: 2
+	self assert: rankingOne first location equals: 2.
+	self assert: rankingOne first lap equals: 0.
 ]
 
 { #category : #tests }

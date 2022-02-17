@@ -10,6 +10,12 @@ AccelerationCard >> applyEffectFrom: cardManager [
 ]
 
 { #category : #'as yet unclassified' }
+AccelerationCard >> cancelUsing: cancelationCard by:player andTell: cardManager [
+	
+	cardManager cancellateTarget: self using: cancelationCard from: player.
+]
+
+{ #category : #'as yet unclassified' }
 AccelerationCard >> triggerEffectOn: target from: cardManager by: player [
 
 	cardManager validateAllPlayersIn: target.

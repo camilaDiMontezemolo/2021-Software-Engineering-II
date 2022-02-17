@@ -4,6 +4,22 @@ Class {
 	#category : #'IngSoft2-Tests'
 }
 
+{ #category : #creation }
+CementerioDePizzasGameTests >> createStandardBoardFor: number [
+	| boxes |
+	boxes := EffectGenerator give: number for: (OrderedCollection  with: NoEffect  with: SpeedupEffect with: WormHoleBox  with: MoonWalkEffect with: AtomicBombEffect with: CardEffect) with: (OrderedCollection with: 0.38 with: 0.2 with: 0.2  with: 0.1 with: 0.02  with: 0.1).
+	^boxes
+]
+
+{ #category : #creation }
+CementerioDePizzasGameTests >> createStandardDeckFor: number [
+	| cards deck |
+	cards := DeckGenerator give: number for: (OrderedCollection  with: OverloadCard  with: CancellationCard with: SpeedUpCard  with: RepeatCard with: AccelerationCard with: RedoCard) with: (OrderedCollection with: 0.167 with: 0.167 with: 0.167 with: 0.167 with: 0.167  with: 0.165).
+	
+	deck := Deck withCards: cards.
+	^deck.
+]
+
 { #category : #tests }
 CementerioDePizzasGameTests >> should: block raise: kindOfError withMessage: errorMessage [
 	self
@@ -42,96 +58,36 @@ CementerioDePizzasGameTests >> testACardGeneratorGivesACollectionOfCardsWithProb
 ]
 
 { #category : #tests }
-CementerioDePizzasGameTests >> testACardGeneratorShouldntBeAbleToGiveZeroCards [
-
-| dice napolitana someBoxes testPlayers cards deck randomCards |
-	
-	napolitana:= #napolitana.
-	
-	dice := OrderedCollection with: (Die withSides: 5).
-	someBoxes:= EffectGenerator give: 5.
-	someBoxes add: 0.38 of: NoEffect.
-	someBoxes add: 0.2 of: SpeedupEffect.
-	someBoxes add: 0.2 of: WormHoleBox.
-	someBoxes add: 0.1 of: MoonWalkEffect.
-	someBoxes add: 0.02 of: AtomicBombEffect.
-	someBoxes add: 0.1 of: CardEffect.
-	
-	testPlayers:= OrderedCollection with: napolitana.
-	
-	randomCards :=OrderedCollection 
-		with: (AccelerationCard new) 
-		with: (CancellationCard new) 
-		with: (OverloadCard new) 
-		with: (RedoCard new) 
-		with: (RepeatCard new) 
-		with:(SpeedUpCard new).
-	cards := DeckGenerator with: 0 for: randomCards .
-	deck := Deck withCards: cards. 
-
-	self should: [PizzaGame withBoxes: (someBoxes boxes) players: testPlayers dice: dice laps: 1 andDeck: deck] 
-				raise: Error withMessage: 'Un juego no puede tener menos de 2 cartas por jugador.'
-	
-	
-	
-]
-
-{ #category : #tests }
 CementerioDePizzasGameTests >> testADiceShouldHaveAtLeastOneSide [
 	
 	self should: [Die withSides: 0.] raise: Error withMessage: 'Un dado no puede tener menos de 3 cara(s).'.
 ]
 
 { #category : #tests }
-CementerioDePizzasGameTests >> testAGameDoesntStartIfTheDeckGeneratorsPercentageIsntOne [
+CementerioDePizzasGameTests >> testAGameMustHaveAtLeastTwoCardsForEachPlayer [
 
-	| dice players cards someBoxes randomCards |
+	| dice napolitana board testPlayers deck |
 	
-	dice := OrderedCollection with: (Die withSides: 3).
-	someBoxes:= EffectGenerator give: 10.
-	someBoxes add: 0.38 of: NoEffect.
-	someBoxes add: 0.2 of: SpeedupEffect.
-	someBoxes add: 0.2 of: WormHoleBox.
-	someBoxes add: 0.1 of: MoonWalkEffect.
-	someBoxes add: 0.02 of: AtomicBombEffect.
-	players:= (OrderedCollection with: #hawaiana).
-	randomCards :=OrderedCollection 
-		with: (AccelerationCard new) 
-		with: (CancellationCard new) 
-		with: (OverloadCard new) 
-		with: (RedoCard new) 
-		with: (RepeatCard new) 
-		with:(SpeedUpCard new).
-
-	cards := Deck withCards: (DeckGenerator with: 2 for: randomCards).
-	self should: [PizzaGame withBoxes: someBoxes players: players dice: dice laps: 2 andDeck: cards] raise: Error withMessage: 'El tablero está incompleto.'.
+	napolitana:= #napolitana.
 	
+	dice := OrderedCollection with: (Die withSides: 5).
+	board := self createStandardBoardFor: 5.
+	
+	testPlayers:= OrderedCollection with: napolitana.
+	deck := self createStandardDeckFor: 0.
+	self should: [PizzaGame withBoxes: board players: testPlayers dice: dice laps: 1 andDeck: deck] raise: Error withMessage: 'Un juego no puede tener menos de 2 cartas por jugador.'
 ]
 
 { #category : #tests }
 CementerioDePizzasGameTests >> testAGameShouldHaveAtLeastOneLap [
 
-	| dice players cards someBoxes randomCards |
+	| dice players board deck |
 	
 	dice := OrderedCollection with: (Die withSides: 3).
-	someBoxes:= EffectGenerator give: 10.
-	someBoxes add: 0.38 of: NoEffect.
-	someBoxes add: 0.2 of: SpeedupEffect.
-	someBoxes add: 0.2 of: WormHoleBox.
-	someBoxes add: 0.1 of: MoonWalkEffect.
-	someBoxes add: 0.02 of: AtomicBombEffect.
-	someBoxes add: 0.1 of: CardEffect.
+	board := self createStandardBoardFor: 10.
 	players:= (OrderedCollection with: #hawaiana).
-	randomCards :=OrderedCollection 
-		with: (AccelerationCard new) 
-		with: (CancellationCard new) 
-		with: (OverloadCard new) 
-		with: (RedoCard new) 
-		with: (RepeatCard new) 
-		with:(SpeedUpCard new).
-
-	cards := Deck withCards: (DeckGenerator with: 2 for: randomCards).
-	self should: [PizzaGame withBoxes: someBoxes players: players dice: dice laps: 0 andDeck: cards] raise: Error withMessage: 'Un juego no puede tener menos de 1 vuelta.'.
+	deck := self createStandardDeckFor: 10.
+	self should: [PizzaGame withBoxes: board players: players dice: dice laps: 0 andDeck: deck] raise: Error withMessage: 'Un juego no puede tener menos de 1 vuelta.'.
 	
 ]
 
@@ -185,79 +141,42 @@ CementerioDePizzasGameTests >> testCreateAGameMultiPlayer [
 { #category : #tests }
 CementerioDePizzasGameTests >> testCreateAGameSinglePlayer [
 
-	| game dice positions napolitana someBoxes testPlayers cards deck randomCards |
-	napolitana := #napolitana.
-
-	dice := Beaker with:
-		        (OrderedCollection with:
-			         (LoadedDie withTosses: #( 5 ) andSides: 6)).
-	someBoxes := EffectGenerator give: 5.
-	someBoxes add: 0.38 of: NoEffect.
-	someBoxes add: 0.2 of: SpeedupEffect.
-	someBoxes add: 0.2 of: WormHoleBox.
-	someBoxes add: 0.1 of: MoonWalkEffect.
-	someBoxes add: 0.02 of: AtomicBombEffect.
-	someBoxes add: 0.1 of: CardEffect.
-
-	testPlayers := OrderedCollection with: napolitana.
-
-	randomCards := OrderedCollection
-		               with: AccelerationCard new
-		               with: CancellationCard new
-		               with: OverloadCard new
-		               with: RedoCard new
-		               with: RepeatCard new
-		               with: SpeedUpCard new.
-	cards := DeckGenerator with: 100 for: randomCards.
-	deck := Deck withCards: cards.
-	game := PizzaGame
-		        withBoxes: someBoxes boxes
-		        players: testPlayers
-		        dice: dice
-		        laps: 1
-		        andDeck: deck.
-
+	| game dice positions napolitana testPlayers deck board |
+	
+	napolitana:= #napolitana.
+	
+	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(5) andSides:6)).
+	board := self createStandardBoardFor: 5.
+	testPlayers:= OrderedCollection with: napolitana.
+	deck := self createStandardDeckFor: 10.
+	game := PizzaGame withBoxes: board players: testPlayers dice: dice laps: 1 andDeck: deck.
+	
 	game play.
 	positions := game ranking.
-	self assert: game isFinished.
-	self assert: (positions at: 1) player identicalTo: napolitana
+	self assert: (game isFinished).
+	self assert: (positions at:1) player identicalTo: napolitana.
 ]
 
 { #category : #tests }
 CementerioDePizzasGameTests >> testCreateARandomMultiPlayerGame [
-	
-	| game dice napolitana margarita testPlayers mozzarella boxesGen cards deck randomCards |
+
+	| game dice napolitana margarita testPlayers mozzarella deck board |
 	
 	napolitana:= #napolitana.	
 	margarita:= #margarita.
 	mozzarella:= #mozzarella.
 	
-	boxesGen:= EffectGenerator give: 40.
-	boxesGen add: 0.38 of: NoEffect.
-	boxesGen add: 0.2 of: SpeedupEffect.
-	boxesGen add: 0.2 of: WormHoleBox.
-	boxesGen add: 0.1 of: MoonWalkEffect.
-	boxesGen add: 0.02 of: AtomicBombEffect.
-	boxesGen add: 0.1 of: CardEffect.
+	board := self createStandardBoardFor: 40.
 	
 	testPlayers:= OrderedCollection with: napolitana with: margarita with: mozzarella.
 	
 	dice := Beaker with: (OrderedCollection with: (Die withSides: 5) with: (Die withSides: 4)).
-	randomCards :=OrderedCollection 
-		with: (AccelerationCard new) 
-		with: (CancellationCard new) 
-		with: (OverloadCard new) 
-		with: (RedoCard new) 
-		with: (RepeatCard new) 
-		with:(SpeedUpCard new).
-	cards := DeckGenerator with: 100 for: randomCards .
-	deck := Deck withCards: cards. 
-	game:= PizzaGame withBoxes: boxesGen players: testPlayers dice: dice laps: 1 andDeck: deck.
+	deck := self createStandardDeckFor: 10.
+	game:= PizzaGame withBoxes: board players: testPlayers dice: dice laps: 1 andDeck: deck.
 	
 	game play.
 	
 	self assert: (game isFinished).
-	
 ]
 
 { #category : #tests }

@@ -7,7 +7,8 @@ Class {
 		'game',
 		'deck',
 		'usedCards',
-		'playersStockTakings'
+		'playersStockTakings',
+		'discardedCards'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -26,14 +27,18 @@ CardManager >> add: card toHandOf: player [
 
 { #category : #stocking }
 CardManager >> addCardTo: oneStock [
-	| newCard |
-	newCard := deck drawACard.
-	oneStock addToHand: newCard.
+
+	self checkStateOfDeck.
+	(deck numberOfCards > 0)
+	ifTrue:[oneStock addToHand: (deck drawACard)]
 ]
 
 { #category : #cardsMethods }
-CardManager >> addSpeedUpToBoxOf: player [
-	game addSpeedUpToBoxOf: player.
+CardManager >> addSpeedUpToBoxOf: player using: card [
+
+	game addSpeedUpToBoxOf: player using: card.
+	self usedCards add: card.
+	self lastCardUsed: card.
 ]
 
 { #category : #gameCollaborations }
@@ -49,22 +54,11 @@ CardManager >> affect: target with: card of: player [
 ]
 
 { #category : #cardsMethods }
-CardManager >> cancellateCard: aCard [
-	| neededStocks|
-	self validateCancellationFor: aCard.
-	neededStocks := playersStockTakings select: [:stock| (stock cardsAffecting) includes: aCard].
-	neededStocks do:
-		[ :oneStock | oneStock removeCardAffectingPlayer: aCard.].
-]
-
-{ #category : #cardsMethods }
 CardManager >> cancellateTarget: target using: card from: player [
-	| neededStocks|
+
 	self validateCancellationFor: target.
-	neededStocks := playersStockTakings select: [:stock| (stock cardsAffecting) includes: target].
-	neededStocks do:
-		[ :oneStock | oneStock removeCardAffectingPlayer: target.].
-	self remove: card fromHandOf: player.
+	self remove: target.
+	self remove: card fromHandOf: player
 ]
 
 { #category : #stocking }
@@ -72,6 +66,15 @@ CardManager >> cardsAffecting: player [
 	| neededList |
 	neededList := (self stockOf: player).
 	^(neededList cardsAffecting).
+]
+
+{ #category : #deckCollaborations }
+CardManager >> checkStateOfDeck [
+	(deck numberOfCards = 0)
+	ifTrue: [	
+			discardedCards shuffle.
+			deck refill: discardedCards.
+			discardedCards  removeAll: discardedCards.]
 ]
 
 { #category : #stocking }
@@ -105,6 +108,7 @@ CardManager >> initializeWithCards: initialDeck in: aGame [
 	game := aGame.
 	playersStockTakings := OrderedCollection new.
 	usedCards := OrderedCollection new.
+	discardedCards := OrderedCollection new.
 ]
 
 { #category : #cardsMethods }
@@ -114,6 +118,7 @@ CardManager >> lastCardUsed [
 
 { #category : #cardsMethods }
 CardManager >> lastCardUsed: newCard [
+	discardedCards add: newCard.
 	lastCardUsed:= newCard.
 	
 ]
@@ -141,11 +146,29 @@ CardManager >> modifyDistanceOf: player [
 	^finalDistance.
 ]
 
+{ #category : #cardsMethods }
+CardManager >> remove: target [
+
+	| neededStocks |
+	neededStocks := playersStockTakings select: [ :stock | 
+		                stock cardsAffecting includes: target ].
+	neededStocks do: [ :oneStock | 
+		oneStock removeCardAffectingPlayer: target ]
+]
+
 { #category : #stocking }
 CardManager >> remove: card fromHandOf: player [
 	| neededStock |
 	neededStock := self stockOf: player.
 	neededStock removeOfHand: card.
+]
+
+{ #category : #cardsMethods }
+CardManager >> removeEffectBy: target using: card by: player [
+
+	self validateCancellationFor: target.
+	game removeEffect: target.
+	self remove: card fromHandOf: player
 ]
 
 { #category : #stocking }

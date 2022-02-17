@@ -20,12 +20,12 @@ Board class >> withBoxes: aCollectionOfBoxes andSomePlayers: somePlayers forAGam
 ]
 
 { #category : #effects }
-Board >> addSpeedUpToBoxOf: player [
-	|position box|
+Board >> addSpeedUpToBoxOf: player using: card [
+
+	| position box|
 	position := self positionOfPlayer: player.
-	box := (self boxFor: position).
-	box addEffect: (SpeedupEffect new).
-	
+	box := self boxFor: position.
+	box addEffect: SpeedupEffect new using: card.
 ]
 
 { #category : #effects }
@@ -34,11 +34,19 @@ Board >> addToImprisioned: player [
 ]
 
 { #category : #effects }
+Board >> affectPositionOf: player using: card [
+
+	| position |
+	position := self positionOfPlayer: player.
+	self addEfectTo: position
+]
+
+{ #category : #effects }
 Board >> applyEffectFor: aPosition withPreviuosAdvance: distance [
 
 	| box |
 	box := self boxFor: aPosition.
-	box affect: positions triggeredOn: aPosition on: self withPreviousAdvance: distance.
+	box affect: positions triggeredOn: (aPosition player) on: self withPreviousAdvance: distance.
 	lastEffect := box.
 ]
 
@@ -47,7 +55,7 @@ Board >> applyLastTypeOfBoxFor: aPlayer [
 
 	| positionOfPlayer |
 	positionOfPlayer := self positionOfPlayer: aPlayer.
-	lastEffect affect: positions triggeredOn: positionOfPlayer  on: self withPreviousAdvance: 0.
+	lastEffect affect: positions triggeredOn: aPlayer  on: self withPreviousAdvance: 0.
 ]
 
 { #category : #effects }
@@ -169,6 +177,13 @@ Board >> positionOfPlayer: aPlayer [
 { #category : #positions }
 Board >> positions [
 	^positions.
+]
+
+{ #category : #effects }
+Board >> removeEffect: target [
+	| affectedBoxes |
+	affectedBoxes := boxes select: [ :box | box cardsAffecting includes: target].
+	affectedBoxes do: [ :box | box removeCard: target ].
 ]
 
 { #category : #effects }

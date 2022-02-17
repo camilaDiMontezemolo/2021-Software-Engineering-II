@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'dice',
-		'effects'
+		'effects',
+		'cardsAffecting'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -14,18 +15,30 @@ Box class >> createWith: effects [
 ]
 
 { #category : #effects }
-Box >> addEffect: effect [
+Box >> addEffect: effect using: card [
 	effects add: effect.
+	cardsAffecting add: card.
 ]
 
 { #category : #effects }
-Box >> affect: positions triggeredOn: positionOfPlayer  on: board withPreviousAdvance: distance [
-	effects do: [:effect | effect affect: positions triggeredOn: (board positionOfPlayer: (positionOfPlayer player))  on: board withPreviousAdvance: distance].
+Box >> affect: positions triggeredOn: player  on: board withPreviousAdvance: distance [
+	effects do: [:effect | effect affect: positions triggeredOn: (board positionOfPlayer: player)  on: board withPreviousAdvance: distance].
+]
+
+{ #category : #initialization }
+Box >> cardsAffecting [
+	^cardsAffecting.
 ]
 
 { #category : #initialization }
 Box >> initializeWithEffects: boxEffects [
 	effects:= OrderedCollection new.
 	effects add: boxEffects.
-	
+	cardsAffecting := OrderedCollection new.
+]
+
+{ #category : #effects }
+Box >> removeCard: card [
+	cardsAffecting remove: card.
+	effects remove: (effects at: 2).
 ]
