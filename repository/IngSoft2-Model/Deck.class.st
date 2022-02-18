@@ -44,5 +44,5 @@ Deck >> numberOfCards [
 
 { #category : #cards }
 Deck >> refill: collectionOfCards [
-	collectionOfCards do: [:card | cards add: card. ].
+	cards := collectionOfCards collect: [:card | cards add: card. ].
 ]

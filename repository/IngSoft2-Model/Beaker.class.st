@@ -15,9 +15,11 @@ Beaker class >> with: dice [
 { #category : #initialize }
 Beaker >> intializeWithDice: gameDice [
 	dice := gameDice.
+	(dice isEmpty)
+	ifTrue: [ Error signal: 'No se puede implementar un cubilete vacio' ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #toss }
 Beaker >> maxToss [
 	|max|
 	max := 0.
@@ -25,12 +27,12 @@ Beaker >> maxToss [
 	^max.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 Beaker >> size [
 	^(dice size)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #toss }
 Beaker >> spin [
 	|distance|
 	distance := 0.

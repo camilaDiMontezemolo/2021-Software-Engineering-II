@@ -5,10 +5,10 @@ Class {
 }
 
 { #category : #creation }
-CementerioDePizzasGameTests >> createStandardBoardFor: number [
-	| boxes |
-	boxes := EffectGenerator give: number for: (OrderedCollection  with: NoEffect  with: SpeedupEffect with: WormHoleBox  with: MoonWalkEffect with: AtomicBombEffect with: CardEffect) with: (OrderedCollection with: 0.38 with: 0.2 with: 0.2  with: 0.1 with: 0.02  with: 0.1).
-	^boxes
+CementerioDePizzasGameTests >> createEffectTestingDeck [
+		| deck |
+		deck := Deck withCards: (OrderedCollection with: (RepeatCard new) with: (AccelerationCard new) with: (AccelerationCard new) with: (SpeedUpCard new) with: (AccelerationCard new) with: (SpeedUpCard new) ).
+	^deck.
 ]
 
 { #category : #creation }
@@ -20,6 +20,13 @@ CementerioDePizzasGameTests >> createStandardDeckFor: number [
 	^deck.
 ]
 
+{ #category : #creation }
+CementerioDePizzasGameTests >> createStandardEffectDistributionFor: number [
+	| boxes |
+	boxes := EffectGenerator give: number for: (OrderedCollection  with: NoEffect  with: SpeedupEffect with: WormHoleEffect  with: MoonWalkEffect with: AtomicBombEffect with: CardEffect) with: (OrderedCollection with: 0.38 with: 0.2 with: 0.2  with: 0.1 with: 0.02  with: 0.1).
+	^boxes
+]
+
 { #category : #tests }
 CementerioDePizzasGameTests >> should: block raise: kindOfError withMessage: errorMessage [
 	self
@@ -27,6 +34,25 @@ CementerioDePizzasGameTests >> should: block raise: kindOfError withMessage: err
 		raise: kindOfError
 		withExceptionDo:
 			[ :error | self assert: error messageText equals: errorMessage ]
+]
+
+{ #category : #tests }
+CementerioDePizzasGameTests >> testABoardOnAGameShouldHaveMoreThanZeroEffects [
+
+    |  dice cards randomCards |
+
+    dice := OrderedCollection with: (Die withSides: 3).
+    randomCards :=OrderedCollection 
+		with: (AccelerationCard new) 
+		with: (CancellationCard new) 
+		with: (OverloadCard new) 
+		with: (RedoCard new) 
+		with: (RepeatCard new) 
+		with:(SpeedUpCard new).
+	cards := DeckGenerator with: 2 for: randomCards .
+
+    self should: [ PizzaGame withBoxes: OrderedCollection new players: (OrderedCollection with: #Margarita) dice: dice laps: 1 andDeck: cards.] raise: Error withMessage: 'Un juego no puede tener menos de 1 casillero.'.
+		
 ]
 
 { #category : #tests }
@@ -71,11 +97,11 @@ CementerioDePizzasGameTests >> testAGameMustHaveAtLeastTwoCardsForEachPlayer [
 	napolitana:= #napolitana.
 	
 	dice := OrderedCollection with: (Die withSides: 5).
-	board := self createStandardBoardFor: 5.
+	board := self createStandardEffectDistributionFor: 5.
 	
 	testPlayers:= OrderedCollection with: napolitana.
 	deck := self createStandardDeckFor: 0.
-	self should: [PizzaGame withBoxes: board players: testPlayers dice: dice laps: 1 andDeck: deck] raise: Error withMessage: 'Un juego no puede tener menos de 2 cartas por jugador.'
+	self should: [PizzaGame withBoxes: board effects players: testPlayers dice: dice laps: 1 andDeck: deck] raise: Error withMessage: 'Un juego no puede tener menos de 2 cartas por jugador.'
 ]
 
 { #category : #tests }
@@ -84,10 +110,32 @@ CementerioDePizzasGameTests >> testAGameShouldHaveAtLeastOneLap [
 	| dice players board deck |
 	
 	dice := OrderedCollection with: (Die withSides: 3).
-	board := self createStandardBoardFor: 10.
+	board := self createStandardEffectDistributionFor: 10.
 	players:= (OrderedCollection with: #hawaiana).
 	deck := self createStandardDeckFor: 10.
 	self should: [PizzaGame withBoxes: board players: players dice: dice laps: 0 andDeck: deck] raise: Error withMessage: 'Un juego no puede tener menos de 1 vuelta.'.
+	
+]
+
+{ #category : #tests }
+CementerioDePizzasGameTests >> testAGameShouldHaveMoreThanZeroDie [
+
+	| someBoxes testPlayers |
+
+	someBoxes := self createStandardEffectDistributionFor: 5000.
+	testPlayers:=(OrderedCollection with: #hawaiana).
+		
+	self should: [PizzaGame withBoxes: someBoxes players: testPlayers dice: OrderedCollection new laps: 1 andDeck: self createEffectTestingDeck.] raise: Error withMessage: 'Un juego no puede tener menos de un dado'
+]
+
+{ #category : #tests }
+CementerioDePizzasGameTests >> testAGameShouldHaveMoreThanZeroPlayers [
+
+	|  dice someBoxes |
+	
+	dice := OrderedCollection with: (Die withSides: 3).
+	someBoxes := self createStandardEffectDistributionFor: 5.
+	self should: [ PizzaGame withBoxes: someBoxes players: OrderedCollection new dice: dice laps: 1 andDeck: self createEffectTestingDeck.] raise: Error withMessage: 'Un juego no puede tener menos de 1 jugador.'.
 	
 ]
 
@@ -101,7 +149,7 @@ CementerioDePizzasGameTests >> testCreateAGameMultiPlayer [
 	boxes := OrderedCollection
 		         with: NoEffect new
 		         with: NoEffect new
-		         with: WormHoleBox new
+		         with: WormHoleEffect new
 		         with: AtomicBombEffect new
 		         with: (MoonWalkEffect loadedWith: 1)
 		         with: SpeedupEffect new.
@@ -146,10 +194,10 @@ CementerioDePizzasGameTests >> testCreateAGameSinglePlayer [
 	napolitana:= #napolitana.
 	
 	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(5) andSides:6)).
-	board := self createStandardBoardFor: 5.
+	board := self createStandardEffectDistributionFor: 5.
 	testPlayers:= OrderedCollection with: napolitana.
 	deck := self createStandardDeckFor: 10.
-	game := PizzaGame withBoxes: board players: testPlayers dice: dice laps: 1 andDeck: deck.
+	game := PizzaGame withBoxes: board effects players: testPlayers dice: dice laps: 1 andDeck: deck.
 	
 	game play.
 	positions := game ranking.
@@ -166,13 +214,13 @@ CementerioDePizzasGameTests >> testCreateARandomMultiPlayerGame [
 	margarita:= #margarita.
 	mozzarella:= #mozzarella.
 	
-	board := self createStandardBoardFor: 40.
+	board := self createStandardEffectDistributionFor: 40.
 	
 	testPlayers:= OrderedCollection with: napolitana with: margarita with: mozzarella.
 	
 	dice := Beaker with: (OrderedCollection with: (Die withSides: 5) with: (Die withSides: 4)).
 	deck := self createStandardDeckFor: 10.
-	game:= PizzaGame withBoxes: board players: testPlayers dice: dice laps: 1 andDeck: deck.
+	game:= PizzaGame withBoxes: board effects players: testPlayers dice: dice laps: 1 andDeck: deck.
 	
 	game play.
 	

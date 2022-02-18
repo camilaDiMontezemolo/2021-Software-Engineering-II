@@ -4,15 +4,15 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #cardEffect }
 SpeedPlusCard >> cancelUsing: cancelationCard by:player andTell: cardManager [
 	
 	cardManager removeEffectBy: self using: cancelationCard by: player.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #cardEffect }
 SpeedPlusCard >> triggerEffectOn: target from: cardManager by: player [
 
 	cardManager validatePermanentCard: self of: player.
-	cardManager addSpeedUpToBoxOf: player using: self
+	cardManager addEffect: SpeedupEffect new ToBoxOf: player using: self.
 ]

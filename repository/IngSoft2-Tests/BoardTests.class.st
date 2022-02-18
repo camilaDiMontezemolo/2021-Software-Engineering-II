@@ -5,17 +5,10 @@ Class {
 }
 
 { #category : #creation }
-BoardTests >> createBoardTestingDeck [
-		| deck |
-		deck := Deck withCards: (OrderedCollection with: (RepeatCard new) with: (AccelerationCard new) with: (AccelerationCard new) with: (SpeedUpCard new) with: (AccelerationCard new) with: (SpeedUpCard new) ).
-	^deck.
-]
-
-{ #category : #creation }
-BoardTests >> createStandardBoardFor: number [
+BoardTests >> createStandardEffectDistributionFor: number [
 	| effects |
 	
-	effects := EffectGenerator give: number for: (OrderedCollection  with: NoEffect  with: SpeedupEffect with: WormHoleBox with: MoonWalkEffect  with: AtomicBombEffect with: CardEffect) with: (OrderedCollection with: 0.38 with: 0.2 with: 0.2  with: 0.1 with: 0.02  with: 0.1).
+	effects := EffectGenerator give: number for: (OrderedCollection  with: NoEffect  with: SpeedupEffect with: WormHoleEffect with: MoonWalkEffect  with: AtomicBombEffect with: CardEffect) with: (OrderedCollection with: 0.38 with: 0.2 with: 0.2  with: 0.1 with: 0.02  with: 0.1).
 	^effects.
 ]
 
@@ -29,58 +22,18 @@ BoardTests >> should: block raise: kindOfError withMessage: errorMessage [
 ]
 
 { #category : #tests }
-BoardTests >> testABoardShouldHaveMoreThanZeroBoxes [
-
-    |  dice cards randomCards |
-
-    dice := OrderedCollection with: (Die withSides: 3).
-    randomCards :=OrderedCollection 
-		with: (AccelerationCard new) 
-		with: (CancellationCard new) 
-		with: (OverloadCard new) 
-		with: (RedoCard new) 
-		with: (RepeatCard new) 
-		with:(SpeedUpCard new).
-	cards := DeckGenerator with: 2 for: randomCards .
-
-    self should: [ PizzaGame withBoxes: OrderedCollection new players: (OrderedCollection with: #Margarita) dice: dice laps: 1 andDeck: cards.] raise: Error withMessage: 'Un juego no puede tener menos de 1 casillero.'.
-		
-]
-
-{ #category : #tests }
-BoardTests >> testABoardShouldHaveMoreThanZeroDie [
-
-	| someBoxes testPlayers |
-
-	someBoxes := self createStandardBoardFor: 5000.
-	testPlayers:=(OrderedCollection with: #hawaiana).
-		
-	self should: [PizzaGame withBoxes: someBoxes players: testPlayers dice: OrderedCollection new laps: 1 andDeck: self createBoardTestingDeck.] raise: Error withMessage: 'Un juego no puede tener menos de un dado'
-]
-
-{ #category : #tests }
-BoardTests >> testABoardShouldHaveMoreThanZeroPlayers [
-
-	|  dice someBoxes |
-	
-	dice := OrderedCollection with: (Die withSides: 3).
-	someBoxes := self createStandardBoardFor: 5.
-	self should: [ PizzaGame withBoxes: someBoxes players: OrderedCollection new dice: dice laps: 1 andDeck: self createBoardTestingDeck.] raise: Error withMessage: 'Un juego no puede tener menos de 1 jugador.'.
-]
-
-{ #category : #tests }
 BoardTests >> testABoxGeneratorGivesBoxesWithProbabilities [
 
-	| numberOfNoEffectBoxes numberOfSpeed numberOfWorm numberOfMoon numberOfAtomic cantidadCardBox board|
+	| numberOfNoEffectBoxes numberOfSpeed numberOfWorm numberOfMoon numberOfAtomic cantidadCardBox effects|
 	
-	board := self createStandardBoardFor: 5000.
+	effects := self createStandardEffectDistributionFor: 5000.
 	
-	numberOfNoEffectBoxes := board count: [ :card | card isMemberOf: NoEffect ].
-	numberOfSpeed := board  count: [ :card | card isMemberOf: SpeedupEffect ].
-	numberOfWorm := board count: [ :card | card isMemberOf: WormHoleBox ].
-	numberOfMoon := board count: [ :card | card isMemberOf: MoonWalkEffect ].
-	numberOfAtomic := board  count: [ :card | card isMemberOf: AtomicBombEffect ].
-	cantidadCardBox := board count: [ :card | card isMemberOf: CardEffect ].
+	numberOfNoEffectBoxes := effects proportionOf: NoEffect.
+	numberOfSpeed := effects  proportionOf: SpeedupEffect.
+	numberOfWorm := effects proportionOf: WormHoleEffect.
+	numberOfMoon := effects proportionOf: MoonWalkEffect.
+	numberOfAtomic := effects proportionOf: AtomicBombEffect.
+	cantidadCardBox := effects proportionOf: CardEffect.
 
 	self assert: (numberOfNoEffectBoxes between: 1800 and: 2000).	
 	self assert: (numberOfSpeed between: 900 and: 1000).
@@ -88,14 +41,14 @@ BoardTests >> testABoxGeneratorGivesBoxesWithProbabilities [
 	self assert: (numberOfMoon between: 400 and: 500).
 	self assert: (numberOfAtomic between: 50 and: 150).	
 	self assert: (cantidadCardBox between: 400 and: 500).
-	self assert: board size equals: 5000.
+	"self assert: effects size equals: 5000."
 ]
 
 { #category : #tests }
 BoardTests >> testABoxGeneratorShouldNotGiveBoxesIfProbabilitiesSumMoreThanOne [
 
 	| boxGen |
-	self should: [ boxGen := EffectGenerator give: 5000 for: (OrderedCollection  with: NoEffect  with: SpeedupEffect with: WormHoleBox  with: MoonWalkEffect with: AtomicBombEffect with: CardEffect) with: (OrderedCollection with: 0.38 with: 0.2 with: 0.2  with: 0.1 with: 0.02  with: 0.5).	] raise: Error withMessage: 'Las suma de probabilidades debe ser 1.'.
+	self should: [ boxGen := EffectGenerator give: 5000 for: (OrderedCollection  with: NoEffect  with: SpeedupEffect with: WormHoleEffect  with: MoonWalkEffect with: AtomicBombEffect with: CardEffect) with: (OrderedCollection with: 0.38 with: 0.2 with: 0.2  with: 0.1 with: 0.02  with: 0.5).	] raise: Error withMessage: 'Las suma de probabilidades debe ser 1.'.
 ]
 
 { #category : #tests }
@@ -288,43 +241,6 @@ BoardTests >> testAnAtomicBombBoxSendsEveryoneBackToZero [
 ]
 
 { #category : #tests }
-BoardTests >> testJailBox [
-
-	| board testPlayers dice game cards rankingOne deck napolitanaHand |
-	board := OrderedCollection
-		         with: JailEffect new
-		         with: NoEffect new
-		         with: NoEffect new
-		         with: NoEffect new
-		         with: NoEffect new
-		         with: NoEffect new.
-
-	cards := OrderedCollection
-		         with: LibertyCard new
-		         with: OverloadCard new
-		         with: LibertyCard new
-		         with: OverloadCard new.
-
-	deck := Deck withCards: cards.
-	testPlayers := OrderedCollection with: #napolitana with: #margarita.
-	dice := Beaker with: (OrderedCollection with:
-			         (LoadedDie withTosses: #( 1 2 ) andSides: 3)).
-	game := PizzaGame
-		        withBoxes: board
-		        players: testPlayers
-		        dice: dice
-		        laps: 1
-		        andDeck: deck.
-	napolitanaHand := game handOf: #napolitana.
-	game playTurnForAllPlayers.
-	game playTurnForAllPlayers.
-	rankingOne := game ranking.
-
-	self assert: rankingOne second location equals: 1.
-	self assert: rankingOne first location equals: 4
-]
-
-{ #category : #tests }
 BoardTests >> testJailBoxSetsYouFreeAfterYouReachTheMaxToss [
 
 	| board testPlayers dice game cards rankingOne deck napolitanaHand |
@@ -360,4 +276,41 @@ BoardTests >> testJailBoxSetsYouFreeAfterYouReachTheMaxToss [
 	rankingOne := game ranking.
 
 	self assert: rankingOne first location equals: 4.
+]
+
+{ #category : #tests }
+BoardTests >> testStayInJailBoxForTwoRounds [
+
+	| board testPlayers dice game cards rankingOne deck napolitanaHand |
+	board := OrderedCollection
+		         with: JailEffect new
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: NoEffect new.
+
+	cards := OrderedCollection
+		         with: LibertyCard new
+		         with: OverloadCard new
+		         with: LibertyCard new
+		         with: OverloadCard new.
+
+	deck := Deck withCards: cards.
+	testPlayers := OrderedCollection with: #napolitana with: #margarita.
+	dice := Beaker with: (OrderedCollection with:
+			         (LoadedDie withTosses: #( 1 2 ) andSides: 3)).
+	game := PizzaGame
+		        withBoxes: board
+		        players: testPlayers
+		        dice: dice
+		        laps: 1
+		        andDeck: deck.
+	napolitanaHand := game handOf: #napolitana.
+	game playTurnForAllPlayers.
+	game playTurnForAllPlayers.
+	rankingOne := game ranking.
+
+	self assert: rankingOne second location equals: 1.
+	self assert: rankingOne first location equals: 4
 ]

@@ -24,17 +24,17 @@ Die >> initializeWithSides: aNumberOfSides [
 	sides:= aNumberOfSides.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #toss }
 Die >> maxToss [
 	^sides
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 Die >> size [
 	^1.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #toss }
 Die >> spin [
 	^(sides atRandom).
 ]

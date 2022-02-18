@@ -20,25 +20,17 @@ Board class >> withBoxes: aCollectionOfBoxes andSomePlayers: somePlayers forAGam
 ]
 
 { #category : #effects }
-Board >> addSpeedUpToBoxOf: player using: card [
+Board >> addEffect: effect ToBoxOf: player using: card [
 
 	| position box|
 	position := self positionOfPlayer: player.
 	box := self boxFor: position.
-	box addEffect: SpeedupEffect new using: card.
+	box addEffect: effect using: card.
 ]
 
 { #category : #effects }
 Board >> addToImprisioned: player [
 	imprisioned add: player.
-]
-
-{ #category : #effects }
-Board >> affectPositionOf: player using: card [
-
-	| position |
-	position := self positionOfPlayer: player.
-	self addEfectTo: position
 ]
 
 { #category : #effects }
@@ -105,11 +97,8 @@ Board >> createPositions [
 
 { #category : #positions }
 Board >> generateBoxesWithEffects: effects [
-	|boardboxes |
-	boardboxes := OrderedCollection new.
-	boardboxes := effects collect: [:effect | boardboxes add:(Box createWith: effect)].
-	boardboxes addFirst: (Box createWith: (NoEffect new)).
-	^boardboxes.
+	boxes := effects collect: [:effect | boxes add:(Box createWith: effect)].
+	boxes addFirst: (Box createWith: (NoEffect new)).
 ]
 
 { #category : #positions }
@@ -120,7 +109,7 @@ Board >> generatePositionFor: aPosition at: absoluteLocation [
 { #category : #initialize }
 Board >> initializeWithBoxes: collectionOfEffects andSomePlayers: somePlayers forAGame: aGame [
 	boxes := OrderedCollection new.
-	boxes := (self generateBoxesWithEffects: collectionOfEffects).
+	self generateBoxesWithEffects: collectionOfEffects.
 	size := ( (boxes size)-1 ).
 	lastEffect := (NoEffect new).
 	players:= somePlayers.
@@ -130,7 +119,7 @@ Board >> initializeWithBoxes: collectionOfEffects andSomePlayers: somePlayers fo
 
 { #category : #positions }
 Board >> lapsOfPosition: absoluteLocation [.
-	^absoluteLocation//size.
+	^(absoluteLocation//size)
 ]
 
 { #category : #effects }
@@ -138,8 +127,9 @@ Board >> liberatePlayer: player [
 
 	|playerPosition|
 	playerPosition := self positionOfPlayer: player.
+	(imprisioned includes: player)
+	ifFalse: [Error signal: 'Un jugador fuera de la carcel no puede salir de esta'].
 	imprisioned remove: player.
-	"self change: playerPosition by: 1."
 
 	
 

@@ -4,10 +4,11 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #cardEffect }
 CancellationCard >> triggerEffectOn: target from: cardManager by: player [
 
 	cardManager validateinstant: self of: player.
+	cardManager validateCancellationFor: target.
 	target cancelUsing: self by:player andTell: cardManager.  
 	cardManager lastCardUsed: self.
 ]

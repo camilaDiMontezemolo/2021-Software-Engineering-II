@@ -4,7 +4,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #boxEffect }
 Effect >> affect: positions triggeredOn: aPosition on: board withPreviousAdvance: distance [
 	^self subclassResponsibility.
 ]

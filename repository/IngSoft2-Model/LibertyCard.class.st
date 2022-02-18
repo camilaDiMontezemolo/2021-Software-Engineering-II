@@ -4,7 +4,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #cardEffect }
 LibertyCard >> triggerEffectOn: target from: cardManager by: player [
 	cardManager lastCardUsed: self.
 	cardManager liberatePlayer: target.

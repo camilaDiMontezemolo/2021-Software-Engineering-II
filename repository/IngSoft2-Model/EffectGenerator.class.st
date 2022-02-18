@@ -3,8 +3,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'size',
-		'percentages',
-		'boxCol'
+		'effects'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -24,44 +23,47 @@ EffectGenerator class >> validate: probabilities [
 	ifFalse: [ Error signal: 'Las suma de probabilidades debe ser 1.']
 ]
 
-{ #category : #'as yet unclassified' }
-EffectGenerator >> add: aPercentage of: aBoxType [
+{ #category : #effectsCreation }
+EffectGenerator >> add: aPercentage of: effectType [
 	| index |
 	index := 1.
-	[(index <= (size *aPercentage)) & (boxCol size < size)] whileTrue:[
-			boxCol add: aBoxType new.
+	[(index <= (size *aPercentage)) & (effects size < size)] whileTrue:[
+			effects add: effectType new.
 			index := index +1.].
-	boxCol := boxCol shuffled.
-	^boxCol.
+	effects := effects shuffled.
 		
 ]
 
-{ #category : #'as yet unclassified' }
-EffectGenerator >> boxes [
-	^boxCol.
-		
+{ #category : #effectsCreation }
+EffectGenerator >> completeEffectList [ 
+	(effects size < size)
+		ifTrue: [ (effects size) to: (size) do: [:emptyEffect | effects add: (NoEffect new) ]].
 ]
 
-{ #category : #'as yet unclassified' }
-EffectGenerator >> completeBoard [ 
-	(boxCol size < size)
-		ifTrue: [ (boxCol size) to: (size) do: [:emptyBox | boxCol add: (NoEffect new) ]].
-]
-
-{ #category : #'as yet unclassified' }
-EffectGenerator >> createBoardFor: boxTypes with: probabilities [
+{ #category : #effectsCreation }
+EffectGenerator >> createEffectsr: effectTypes with: probabilities [
 	| index |
 	index := 1.
-	[ index <= boxTypes size ]
-		whileTrue: [ self add: (probabilities at: index) of: (boxTypes at: index).
+	[ index <= effectTypes size ]
+		whileTrue: [ self add: (probabilities at: index) of: (effectTypes at: index).
 			index := index + 1 ]
 ]
 
+{ #category : #effectsCreation }
+EffectGenerator >> effects [
+	^effects.
+		
+]
+
 { #category : #initalize }
-EffectGenerator >> initializeWithSize: aSize for: boxTypes with: probabilities [
+EffectGenerator >> initializeWithSize: aSize for: effectTypes with: probabilities [
 	size := aSize - 1.
-	boxCol := OrderedCollection new.
-	self createBoardFor: boxTypes with: probabilities.
-	self completeBoard.
-	^ boxCol
+	effects := OrderedCollection new.
+	self createEffectsr: effectTypes with: probabilities.
+	self completeEffectList.
+]
+
+{ #category : #initalize }
+EffectGenerator >> proportionOf: typeOfEffect [
+	^(effects count: [ :effect | effect isMemberOf: typeOfEffect ]).
 ]

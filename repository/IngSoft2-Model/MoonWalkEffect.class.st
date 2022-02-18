@@ -14,7 +14,7 @@ MoonWalkEffect class >> loadedWith: aNumber [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #boxEffect }
 MoonWalkEffect >> affect: positions triggeredOn: aPosition on: board withPreviousAdvance: distance [
 	| affectedPositions|
 	affectedPositions :=(positions reject: [:position| position samePlayerAs: aPosition]).
@@ -22,12 +22,12 @@ MoonWalkEffect >> affect: positions triggeredOn: aPosition on: board withPreviou
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #boxEffect }
 MoonWalkEffect >> initialize [
 	n:= 5 atRandom.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #boxEffect }
 MoonWalkEffect >> initializeLoaded: aNumber [.
 	n:= 0-aNumber.
 ]

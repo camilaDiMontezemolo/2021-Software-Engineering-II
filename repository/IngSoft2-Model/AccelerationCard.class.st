@@ -4,18 +4,18 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #cardEffect }
 AccelerationCard >> applyEffectFrom: cardManager [ 
 	^1.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #cardEffect }
 AccelerationCard >> cancelUsing: cancelationCard by:player andTell: cardManager [
 	
 	cardManager cancellateTarget: self using: cancelationCard from: player.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #cardEffect }
 AccelerationCard >> triggerEffectOn: target from: cardManager by: player [
 
 	cardManager validateAllPlayersIn: target.

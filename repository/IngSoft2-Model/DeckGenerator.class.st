@@ -40,18 +40,9 @@ DeckGenerator >> add: aPercentage of: aCardType [
 ]
 
 { #category : #cardsCreation }
-DeckGenerator >> completeBoard [
+DeckGenerator >> completeEffectList [
 	(cards size < size)
 		ifTrue: [ (cards size) to: (size) do: [:emptyBox | cards add: (((cards first) class) new) ]].	
-]
-
-{ #category : #cardsCreation }
-DeckGenerator >> createBoardFor: boxTypes with: probabilities [
-	| index |
-	index := 1.
-	[ index <= boxTypes size ]
-		whileTrue: [ self add: (probabilities at: index) of: (boxTypes at: index).
-			index := index + 1 ]
 ]
 
 { #category : #cardsCreation }
@@ -59,6 +50,15 @@ DeckGenerator >> createCardFor: collectionOfTypes [
 	|randomCards |
 	randomCards := collectionOfTypes shuffled.
 	cards add: (randomCards first).
+]
+
+{ #category : #cardsCreation }
+DeckGenerator >> createEffectsr: boxTypes with: probabilities [
+	| index |
+	index := 1.
+	[ index <= boxTypes size ]
+		whileTrue: [ self add: (probabilities at: index) of: (boxTypes at: index).
+			index := index + 1 ]
 ]
 
 { #category : #initialization }
@@ -76,8 +76,8 @@ DeckGenerator >> initializeWithANumberOfCards: aNumberOfCards for: collectionOfT
 DeckGenerator >> initializeWithSize: aSize for: cardTypes with: probabilities [
 	size := aSize - 1.
 	cards := OrderedCollection new.
-	self createBoardFor: cardTypes with: probabilities.
-	self completeBoard.
+	self createEffectsr: cardTypes with: probabilities.
+	self completeEffectList.
 	^ cards
 
 ]

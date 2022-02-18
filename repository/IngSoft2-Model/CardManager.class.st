@@ -34,11 +34,11 @@ CardManager >> addCardTo: oneStock [
 ]
 
 { #category : #cardsMethods }
-CardManager >> addSpeedUpToBoxOf: player using: card [
+CardManager >> addEffect: effect ToBoxOf: player using: card [
 
-	game addSpeedUpToBoxOf: player using: card.
+	game addEffect: effect ToBoxOf: player using: card.
 	self usedCards add: card.
-	self lastCardUsed: card.
+	self lastCardUsed: card
 ]
 
 { #category : #gameCollaborations }
@@ -56,7 +56,6 @@ CardManager >> affect: target with: card of: player [
 { #category : #cardsMethods }
 CardManager >> cancellateTarget: target using: card from: player [
 
-	self validateCancellationFor: target.
 	self remove: target.
 	self remove: card fromHandOf: player
 ]
@@ -70,19 +69,18 @@ CardManager >> cardsAffecting: player [
 
 { #category : #deckCollaborations }
 CardManager >> checkStateOfDeck [
-	(deck numberOfCards = 0)
-	ifTrue: [	
-			discardedCards shuffle.
-			deck refill: discardedCards.
-			discardedCards  removeAll: discardedCards.]
+
+	deck numberOfCards = 0 ifFalse: [ ^ self ].
+	discardedCards shuffle.
+	deck refill: discardedCards.
+	discardedCards removeAll: discardedCards
 ]
 
 { #category : #stocking }
 CardManager >> createHandsFor: thePlayersOfThisGame [
 	| n |
 	n:=0.
-	thePlayersOfThisGame do:
-		[ :onePlayer | playersStockTakings add: (Stocktaking for: onePlayer). ].
+	playersStockTakings := thePlayersOfThisGame collect: [ :onePlayer | playersStockTakings add: (Stocktaking for: onePlayer). ].
 ]
 
 { #category : #stocking }

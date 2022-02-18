@@ -22,7 +22,9 @@ Box >> addEffect: effect using: card [
 
 { #category : #effects }
 Box >> affect: positions triggeredOn: player  on: board withPreviousAdvance: distance [
-	effects do: [:effect | effect affect: positions triggeredOn: (board positionOfPlayer: player)  on: board withPreviousAdvance: distance].
+	effects do: [:effect | 
+		effect affect: positions triggeredOn: (board positionOfPlayer: player)  on: board withPreviousAdvance: distance
+	].
 ]
 
 { #category : #initialization }
@@ -39,6 +41,8 @@ Box >> initializeWithEffects: boxEffects [
 
 { #category : #effects }
 Box >> removeCard: card [
-	cardsAffecting remove: card.
-	effects remove: (effects at: 2).
+	| orderOfInsertion |
+	orderOfInsertion := cardsAffecting indexOf: card.
+	cardsAffecting removeAt: orderOfInsertion.
+	effects remove: (effects at: orderOfInsertion +1).
 ]

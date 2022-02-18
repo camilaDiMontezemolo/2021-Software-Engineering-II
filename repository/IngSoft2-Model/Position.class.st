@@ -3,8 +3,6 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'player',
-		'location',
-		'lap',
 		'absoluteLocation',
 		'board'
 	],
@@ -16,13 +14,13 @@ Position class >> of: aPlayer at: anAbsoluteLocation on: aBoard [
 	^self new initializeWith: aPlayer at: anAbsoluteLocation on: aBoard.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #locationManagment }
 Position >> > otherPosition [
 	^(absoluteLocation > (otherPosition absoluteLocation)).
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #locationManagment }
 Position >> absoluteLocation [
 	^absoluteLocation.
 ]
@@ -34,22 +32,22 @@ Position >> initializeWith: aPlayer at: anAbsoluteLocation on: aBoard [
 	board:= aBoard.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #locationManagment }
 Position >> lap [
 	^board lapsOfPosition: absoluteLocation.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #locationManagment }
 Position >> location [
 	^board locationOfPosition: absoluteLocation.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #player }
 Position >> player [
 	^player.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #player }
 Position >> samePlayerAs: anotherPosition [
 	^(player = (anotherPosition player))
 ]

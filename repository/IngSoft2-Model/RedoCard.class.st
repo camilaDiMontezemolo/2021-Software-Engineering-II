@@ -4,7 +4,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #cardEffect }
 RedoCard >> triggerEffectOn: target from: cardManager by: player [
 
 	| card |

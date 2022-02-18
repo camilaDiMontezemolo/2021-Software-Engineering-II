@@ -5,9 +5,7 @@ Class {
 		'players',
 		'board',
 		'laps',
-		'positions',
 		'dice',
-		'cards',
 		'currentTurn',
 		'cardManager',
 		'deck'
@@ -37,9 +35,9 @@ PizzaGame class >> withBoxes: someBoxes players: somePlayers dice: someDice laps
 ]
 
 { #category : #BoardCollabs }
-PizzaGame >> addSpeedUpToBoxOf: player using: card [
+PizzaGame >> addEffect: effect ToBoxOf: player using: card [
 
-	board addSpeedUpToBoxOf: player using: card
+	board addEffect: effect ToBoxOf: player using: card
 ]
 
 { #category : #cardsCollabs }
@@ -73,9 +71,8 @@ PizzaGame >> handOf: player [
 { #category : #initialize }
 PizzaGame >> initializeWithBoxes: someBoxes players: somePlayers dice: someDie laps: someLaps andDeck: aDeck [
 	board:=Board withBoxes: someBoxes andSomePlayers: somePlayers forAGame: self.
-	players:=somePlayers.
-	positions:= OrderedCollection new.
 	board createPositions.
+	players:=somePlayers.
 	dice:=someDie.
 	laps:=someLaps.
 	currentTurn:=1.

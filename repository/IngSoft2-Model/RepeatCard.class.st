@@ -4,7 +4,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #cardEffect }
 RepeatCard >> triggerEffectOn: target from: cardManager by: player [
 
 	cardManager validateinstant: self of: player.
