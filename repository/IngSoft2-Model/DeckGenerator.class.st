@@ -42,7 +42,7 @@ DeckGenerator >> add: aPercentage of: aCardType [
 { #category : #cardsCreation }
 DeckGenerator >> completeEffectList [
 	(cards size < size)
-		ifTrue: [ (cards size) to: (size) do: [:emptyBox | cards add: (((cards first) class) new) ]].	
+		ifTrue: [ (cards size) to: (size) do: [:card | cards add: (((cards first) class) new) ]].	
 ]
 
 { #category : #cardsCreation }
@@ -53,11 +53,11 @@ DeckGenerator >> createCardFor: collectionOfTypes [
 ]
 
 { #category : #cardsCreation }
-DeckGenerator >> createEffectsr: boxTypes with: probabilities [
+DeckGenerator >> createEffectsr: cardTypes with: probabilities [
 	| index |
 	index := 1.
-	[ index <= boxTypes size ]
-		whileTrue: [ self add: (probabilities at: index) of: (boxTypes at: index).
+	[ index <= cardTypes size ]
+		whileTrue: [ self add: (probabilities at: index) of: (cardTypes at: index).
 			index := index + 1 ]
 ]
 

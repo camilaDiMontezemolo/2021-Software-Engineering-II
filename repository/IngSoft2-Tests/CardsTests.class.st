@@ -844,7 +844,7 @@ CardsTests >> testUseARepeatCardOnAWhormHoleEffect [
 	testPlayers := OrderedCollection with: #margarita with: #napolitana.
 	dice := Beaker with:
 		        (OrderedCollection with:
-			         (LoadedDie withTosses: #( 5 ) andSides: 3)).
+			         (LoadedDie withTosses: #( 5 ) andSides: 6)).
 	game := PizzaGame
 		        withBoxes: boxes
 		        players: testPlayers
