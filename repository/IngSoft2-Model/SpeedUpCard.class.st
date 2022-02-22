@@ -12,17 +12,17 @@ SpeedUpCard class >> withValue: newValue [
 	^self new initializeWithNewValue: newValue
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 SpeedUpCard >> initialize [ 
 	value := 1.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 SpeedUpCard >> initializeWithNewValue: newValue [
 	value := newValue.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'apply effects' }
 SpeedUpCard >> value [ 
 	^value
 ]

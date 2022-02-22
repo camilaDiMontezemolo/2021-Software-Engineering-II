@@ -120,7 +120,7 @@ PizzaGame >> playTurnForAllPlayers [
 	players do: [:player | self playNextTurn ].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'in game mechanics' }
 PizzaGame >> player: player wantsToApplyCard: card to: target [
  
 	((players at: currentTurn) = player & (players includes: player))
@@ -131,7 +131,7 @@ PizzaGame >> player: player wantsToApplyCard: card to: target [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'in game mechanics' }
 PizzaGame >> player: player wantsToApplyCard: card toCard: target [
 	
 	(players includes: player)

@@ -21,12 +21,12 @@ LoadedDie >> initializeWithTheFollowingTosses: someTosses [
 	index:=0.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'set up' }
 LoadedDie >> size [
 	^1
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'set up' }
 LoadedDie >> spin [
 	(index >= tosses size) ifTrue: [ index:=0 .].
 	index := index +1.

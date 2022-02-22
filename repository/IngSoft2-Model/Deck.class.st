@@ -23,7 +23,7 @@ Deck class >> withCards: aCollectionOfCards [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'set up' }
 Deck >> drawACard [
 	| card |
 	card := cards first.
@@ -37,12 +37,12 @@ Deck >> initializeWithCards: aCollectionOfCards [
 
 ]
 
-{ #category : #initialize }
+{ #category : #'set up' }
 Deck >> numberOfCards [
 	^cards size.
 ]
 
-{ #category : #initialize }
+{ #category : #'set up' }
 Deck >> refill: collectionOfCards [
 	collectionOfCards do: [:card | cards add: card. ].
 ]

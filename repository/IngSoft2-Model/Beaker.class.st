@@ -17,12 +17,12 @@ Beaker >> intializeWithDice: gameDice [
 	dice := gameDice.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'set up' }
 Beaker >> size [
 	^dice size
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'set up' }
 Beaker >> spin [
 	|distance|
 	distance := 0.

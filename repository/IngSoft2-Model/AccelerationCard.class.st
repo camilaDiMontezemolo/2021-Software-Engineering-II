@@ -12,17 +12,17 @@ AccelerationCard class >> withValue: newValue [
 	^self new initializeWithNewValue: newValue
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 AccelerationCard >> initialize [ 
 	value := 1.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 AccelerationCard >> initializeWithNewValue: newValue [
 	value := newValue.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'apply effects' }
 AccelerationCard >> value [ 
 	^value
 ]

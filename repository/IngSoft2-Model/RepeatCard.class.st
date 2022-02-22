@@ -4,7 +4,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'apply effects' }
 RepeatCard >> triggerInstantaneousEffect: affectedPlayer  from: aCardManager [
 	aCardManager lastCardUsed: self.
 	aCardManager lastTypeOfBoxForPlayer: affectedPlayer.

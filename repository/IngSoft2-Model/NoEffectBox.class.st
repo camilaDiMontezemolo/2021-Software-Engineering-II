@@ -4,7 +4,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'apply effects' }
 NoEffectBox >> affect: positions triggeredOn: aPosition with: board [
 	
 ]

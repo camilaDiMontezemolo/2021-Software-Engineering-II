@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'size',
 		'percentages',
-		'boxCol'
+		'boxCollection'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -24,25 +24,25 @@ BoxGenerator class >> validate: probabilities [
 	ifFalse: [ Error signal: 'Las suma de probabilidades debe ser 1.'  ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'set up' }
 BoxGenerator >> add: aPercentage of: aBoxType [
 	| indice |
 	indice := 1.
-	[(indice <= (size *aPercentage)) & (boxCol size < size)] whileTrue:[
-			boxCol add: aBoxType new.
+	[(indice <= (size *aPercentage)) & (boxCollection size < size)] whileTrue:[
+			boxCollection add: aBoxType new.
 			indice := indice +1.].
-	boxCol := boxCol shuffled.
-	^boxCol.
+	boxCollection := boxCollection shuffled.
+	^boxCollection.
 		 
 ]
 
-{ #category : #initalize }
+{ #category : #'set up' }
 BoxGenerator >> completeBoard [
-	(boxCol size < size)
-		ifTrue: [ (boxCol size) to: (size) do: [:emptyBox | boxCol add: (NoEffectBox new) ].	].
+	(boxCollection size < size)
+		ifTrue: [ (boxCollection size) to: (size) do: [:emptyBox | boxCollection add: (NoEffectBox new) ].	].
 ]
 
-{ #category : #initalize }
+{ #category : #'set up' }
 BoxGenerator >> createBoardFor: boxTypes with: probabilities [
 	| index |
 	index := 1.
@@ -54,8 +54,8 @@ BoxGenerator >> createBoardFor: boxTypes with: probabilities [
 { #category : #initalize }
 BoxGenerator >> initializeWithSize: aSize for: boxTypes with: probabilities [
 	size := aSize - 1.
-	boxCol := OrderedCollection new.
+	boxCollection := OrderedCollection new.
 	self createBoardFor: boxTypes with: probabilities.
 	self completeBoard.
-	^ boxCol
+	^ boxCollection.
 ]

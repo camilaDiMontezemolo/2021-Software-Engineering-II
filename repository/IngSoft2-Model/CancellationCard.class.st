@@ -4,7 +4,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'apply effects' }
 CancellationCard >> triggerInstantaneousEffect: affectedCard  from: aCardManager [
 	aCardManager cancellateCard: affectedCard.
 	aCardManager lastCardUsed: self.

@@ -23,7 +23,7 @@ DeckGeneretor class >> validate: probabilities [
 	ifFalse: [ Error signal: 'Las suma de probabilidades debe ser 1.'  ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'set up' }
 DeckGeneretor >> add: aPercentage of: aCardType [
 	| index |
 	index := 1.
@@ -35,13 +35,13 @@ DeckGeneretor >> add: aPercentage of: aCardType [
 		 
 ]
 
-{ #category : #initalize }
+{ #category : #'set up' }
 DeckGeneretor >> completeBoard [
 	(cards size < size)
 		ifTrue: [ (cards size) to: (size) do: [:emptyBox | cards add: (((cards first) class) new) ].	].
 ]
 
-{ #category : #initalize }
+{ #category : #'set up' }
 DeckGeneretor >> createBoardFor: boxTypes with: probabilities [
 	| index |
 	index := 1.

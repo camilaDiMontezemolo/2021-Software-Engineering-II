@@ -12,17 +12,17 @@ OverloadCard class >> withValue: newValue [
 	^self new initializeWithNewValue: newValue
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 OverloadCard >> initialize [ 
 	value := -2.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 OverloadCard >> initializeWithNewValue: newValue [
 	value := newValue.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'apply effects' }
 OverloadCard >> value [ 
 	^value
 ]
