@@ -6,10 +6,26 @@ Class {
 
 { #category : #creation }
 BoardTests >> createStandardEffectDistributionFor: number [
+
 	| effects |
-	
-	effects := EffectGenerator give: number for: (OrderedCollection  with: NoEffect  with: SpeedupEffect with: WormHoleEffect with: MoonWalkEffect  with: AtomicBombEffect with: CardEffect) with: (OrderedCollection with: 0.38 with: 0.2 with: 0.2  with: 0.1 with: 0.02  with: 0.1).
-	^effects.
+	effects := ProbabilityGenerator
+		           give: number
+		           for: (OrderedCollection
+				            with: NoEffect
+				            with: SpeedupEffect
+				            with: WormHoleEffect
+				            with: MoonWalkEffect
+				            with: AtomicBombEffect
+				            with: CardEffect)
+		           with: (OrderedCollection
+				            with: 0.38
+				            with: 0.2
+				            with: 0.2
+				            with: 0.1
+				            with: 0.02
+				            with: 0.1)
+		           usingFiller: NoEffect.
+	^ effects
 ]
 
 { #category : #asserting }
@@ -41,14 +57,34 @@ BoardTests >> testABoxGeneratorGivesBoxesWithProbabilities [
 	self assert: (numberOfMoon between: 400 and: 500).
 	self assert: (numberOfAtomic between: 50 and: 150).	
 	self assert: (cantidadCardBox between: 400 and: 500).
-	"self assert: effects size equals: 5000."
+	self assert: effects size equals: 5000.
 ]
 
 { #category : #tests }
 BoardTests >> testABoxGeneratorShouldNotGiveBoxesIfProbabilitiesSumMoreThanOne [
 
 	| boxGen |
-	self should: [ boxGen := EffectGenerator give: 5000 for: (OrderedCollection  with: NoEffect  with: SpeedupEffect with: WormHoleEffect  with: MoonWalkEffect with: AtomicBombEffect with: CardEffect) with: (OrderedCollection with: 0.38 with: 0.2 with: 0.2  with: 0.1 with: 0.02  with: 0.5).	] raise: Error withMessage: 'Las suma de probabilidades debe ser 1.'.
+	self
+		should: [ 
+			boxGen := ProbabilityGenerator
+				          give: 5000
+				          for: (OrderedCollection
+						           with: NoEffect
+						           with: SpeedupEffect
+						           with: WormHoleEffect
+						           with: MoonWalkEffect
+						           with: AtomicBombEffect
+						           with: CardEffect)
+				          with: (OrderedCollection
+						           with: 0.38
+						           with: 0.2
+						           with: 0.2
+						           with: 0.1
+						           with: 0.02
+						           with: 0.5)
+				          usingFiller: NoEffect ]
+		raise: Error
+		withMessage: 'Las suma de probabilidades debe ser 1.'
 ]
 
 { #category : #tests }
@@ -92,7 +128,7 @@ BoardTests >> testACardBoxGivesCards [
 { #category : #tests }
 BoardTests >> testAMoonWalkBoxJumpsAPlayerBoxesBack [
 
-	| boxes testPlayers dice game cards deck randomCards |
+	| boxes testPlayers dice game deck |
 	boxes := OrderedCollection
 		         with: NoEffect new
 		         with: (MoonWalkEffect loadedWith: 1)
@@ -102,22 +138,12 @@ BoardTests >> testAMoonWalkBoxJumpsAPlayerBoxesBack [
 	dice := Beaker with:
 		        (OrderedCollection with:
 			         (LoadedDie withTosses: #( 2 ) andSides: 3)).
-	randomCards := OrderedCollection
-		               with: AccelerationCard new
-		               with: CancellationCard new
-		               with: OverloadCard new
-		               with: RedoCard new
-		               with: RepeatCard new
-		               with: SpeedUpCard new.
-	randomCards := OrderedCollection
-		               with: AccelerationCard new
-		               with: CancellationCard new
-		               with: OverloadCard new
-		               with: RedoCard new
-		               with: RepeatCard new
-		               with: SpeedUpCard new.
-	cards := DeckGenerator with: 100 for: randomCards.
-	deck := Deck withCards: cards.
+	
+	deck := Deck withCards: (OrderedCollection
+			         with: RepeatCard new
+			         with: AccelerationCard new
+						with: SpeedUpCard new
+			         with: SpeedUpCard new).
 	game := PizzaGame
 		        withBoxes: boxes
 		        players: testPlayers
@@ -132,7 +158,7 @@ BoardTests >> testAMoonWalkBoxJumpsAPlayerBoxesBack [
 { #category : #tests }
 BoardTests >> testANoEffectBoxHasNoEffects [
 
-	| boxes testPlayers dice game positions cards deck randomCards |
+	| boxes testPlayers dice game positions deck |
 	boxes := OrderedCollection
 		         with: NoEffect new
 		         with: NoEffect new
@@ -142,15 +168,12 @@ BoardTests >> testANoEffectBoxHasNoEffects [
 	dice := Beaker with:
 		        (OrderedCollection with:
 			         (LoadedDie withTosses: #( 2 ) andSides: 3)).
-	randomCards := OrderedCollection
-		               with: AccelerationCard new
-		               with: CancellationCard new
-		               with: OverloadCard new
-		               with: RedoCard new
-		               with: RepeatCard new
-		               with: SpeedUpCard new.
-	cards := DeckGenerator with: 100 for: randomCards.
-	deck := Deck withCards: cards.
+
+	deck := Deck withCards: (OrderedCollection
+			         with: RepeatCard new
+			         with: AccelerationCard new
+						with: SpeedUpCard new
+			         with: SpeedUpCard new).
 	game := PizzaGame
 		        withBoxes: boxes
 		        players: testPlayers
@@ -166,7 +189,7 @@ BoardTests >> testANoEffectBoxHasNoEffects [
 { #category : #tests }
 BoardTests >> testASpeedupBoxJumpsYouFourBoxes [
 
-	| game dice ranking testPlayers boxes cards deck randomCards |
+	| game dice ranking testPlayers boxes deck |
 	boxes := OrderedCollection
 		         with: SpeedupEffect new
 		         with: NoEffect new
@@ -179,15 +202,11 @@ BoardTests >> testASpeedupBoxJumpsYouFourBoxes [
 	dice := Beaker with:
 		        (OrderedCollection with:
 			         (LoadedDie withTosses: #( 1 ) andSides: 3)).
-	randomCards := OrderedCollection
-		               with: AccelerationCard new
-		               with: CancellationCard new
-		               with: OverloadCard new
-		               with: RedoCard new
-		               with: RepeatCard new
-		               with: SpeedUpCard new.
-	cards := DeckGenerator with: 100 for: randomCards.
-	deck := Deck withCards: cards.
+	deck := Deck withCards: (OrderedCollection
+			         with: RepeatCard new
+			         with: AccelerationCard new
+						with: SpeedUpCard new
+			         with: SpeedUpCard new).
 	game := PizzaGame
 		        withBoxes: boxes
 		        players: testPlayers
@@ -202,7 +221,7 @@ BoardTests >> testASpeedupBoxJumpsYouFourBoxes [
 { #category : #tests }
 BoardTests >> testAnAtomicBombBoxSendsEveryoneBackToZero [
 
-	| game dice ranking testPlayers boxes cards deck randomCards |
+	| game dice ranking testPlayers boxes deck|
 	boxes := OrderedCollection
 		         with: NoEffect new
 		         with: NoEffect new
@@ -217,15 +236,14 @@ BoardTests >> testAnAtomicBombBoxSendsEveryoneBackToZero [
 	dice := Beaker with:
 		        (OrderedCollection with:
 			         (LoadedDie withTosses: #( 4 ) andSides: 4)).
-	randomCards := OrderedCollection
-		               with: AccelerationCard new
-		               with: CancellationCard new
-		               with: OverloadCard new
-		               with: RedoCard new
-		               with: RepeatCard new
-		               with: SpeedUpCard new.
-	cards := DeckGenerator with: 100 for: randomCards.
-	deck := Deck withCards: cards.
+
+	deck := Deck withCards: (OrderedCollection
+			         with: RepeatCard new
+			         with: AccelerationCard new
+						with: SpeedUpCard new
+			         with: SpeedUpCard new
+						with: SpeedUpCard new
+			         with: SpeedUpCard new).
 	game := PizzaGame
 		        withBoxes: boxes
 		        players: testPlayers

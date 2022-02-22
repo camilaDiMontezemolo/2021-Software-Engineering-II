@@ -1,5 +1,5 @@
 Class {
-	#name : #EffectGenerator,
+	#name : #ProbabilityGenerator,
 	#superclass : #Object,
 	#instVars : [
 		'size',
@@ -9,13 +9,18 @@ Class {
 }
 
 { #category : #'instance creation' }
-EffectGenerator class >> give: aSize for: boxTypes with: probabilities [
+ProbabilityGenerator class >> give: aSize for: boxTypes with: probabilities usingFiller: filler [
+
 	self validate: probabilities.
-	^ self new initializeWithSize: aSize for: boxTypes with: probabilities.
+	^ self new
+		  initializeWithSize: aSize
+		  for: boxTypes
+		  with: probabilities
+		  usingFiller: filler
 ]
 
 { #category : #'instance creation' }
-EffectGenerator class >> validate: probabilities [
+ProbabilityGenerator class >> validate: probabilities [
 	| sum |
 	sum := 0. 
 	probabilities do: [:oneProba | sum := sum + oneProba].
@@ -24,7 +29,7 @@ EffectGenerator class >> validate: probabilities [
 ]
 
 { #category : #effectsCreation }
-EffectGenerator >> add: aPercentage of: effectType [
+ProbabilityGenerator >> add: aPercentage of: effectType [
 	| index |
 	index := 1.
 	[(index <= (size *aPercentage)) & (effects size < size)] whileTrue:[
@@ -35,13 +40,13 @@ EffectGenerator >> add: aPercentage of: effectType [
 ]
 
 { #category : #effectsCreation }
-EffectGenerator >> completeEffectList [ 
+ProbabilityGenerator >> completeListWith: filler [
 	(effects size < size)
-		ifTrue: [ (effects size) to: (size) do: [:emptyEffect | effects add: (NoEffect new) ]].
+		ifTrue: [ (effects size) to: (size) do: [:emptyEffect | effects add: (filler new) ]].
 ]
 
 { #category : #effectsCreation }
-EffectGenerator >> createEffectsr: effectTypes with: probabilities [
+ProbabilityGenerator >> createObjetct: effectTypes withProbability: probabilities [
 	| index |
 	index := 1.
 	[ index <= effectTypes size ]
@@ -50,20 +55,25 @@ EffectGenerator >> createEffectsr: effectTypes with: probabilities [
 ]
 
 { #category : #effectsCreation }
-EffectGenerator >> effects [
+ProbabilityGenerator >> effects [
 	^effects.
 		
 ]
 
 { #category : #initalize }
-EffectGenerator >> initializeWithSize: aSize for: effectTypes with: probabilities [
+ProbabilityGenerator >> initializeWithSize: aSize for: effectTypes with: probabilities usingFiller: filler [
 	size := aSize - 1.
 	effects := OrderedCollection new.
-	self createEffectsr: effectTypes with: probabilities.
-	self completeEffectList.
+	self createObjetct: effectTypes withProbability: probabilities.
+	self completeListWith: filler.
 ]
 
 { #category : #initalize }
-EffectGenerator >> proportionOf: typeOfEffect [
+ProbabilityGenerator >> proportionOf: typeOfEffect [
 	^(effects count: [ :effect | effect isMemberOf: typeOfEffect ]).
+]
+
+{ #category : #initalize }
+ProbabilityGenerator >> size [
+	^size+1
 ]

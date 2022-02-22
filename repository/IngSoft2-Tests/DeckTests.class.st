@@ -81,14 +81,18 @@ DeckTests >> testACardGeneratorGivesACollectionOfCardsWithProbability [
 		                            with: 0.167
 		                            with: 0.165.
 
-	cards := DeckGenerator give: 5000 for: initialCards with: initialCardsPobabilities.
+	cards := ProbabilityGenerator
+		         give: 5000
+		         for: initialCards
+		         with: initialCardsPobabilities
+		         usingFiller: SpeedUpCard.
 
-	numberOfOverloads := cards count: [ :card | card isMemberOf: OverloadCard ].
-	numberOfCancellationCard := cards count: [ :card | card isMemberOf: CancellationCard ].
-	numberOfSpeedUps := cards count: [ :card | card isMemberOf: SpeedUpCard ].
-	numberOfRepeatCart := cards count: [ :card | card isMemberOf: RepeatCard ].
-	numberOfAccelerationCard := cards count: [ :card | card isMemberOf: AccelerationCard ].
-	numberOfRedoCard := cards count: [ :card | card isMemberOf: RedoCard ].
+	numberOfOverloads := cards proportionOf: OverloadCard.
+	numberOfCancellationCard := cards proportionOf: CancellationCard.
+	numberOfSpeedUps := cards proportionOf: SpeedUpCard.
+	numberOfRepeatCart := cards proportionOf: RepeatCard.
+	numberOfAccelerationCard := cards proportionOf: AccelerationCard.
+	numberOfRedoCard := cards proportionOf: RedoCard.
 
 	self assert: (numberOfOverloads between: 650 and: 950).
 	self assert: (numberOfCancellationCard between: 650 and: 950).
@@ -100,8 +104,63 @@ DeckTests >> testACardGeneratorGivesACollectionOfCardsWithProbability [
 ]
 
 { #category : #tests }
-DeckTests >> testADecksPercentegeNeedsToBeCompleteToBeValid [ 
+DeckTests >> testADecksPercentegeNeedsToBeCompleteToBeValid [
 
-	self should: [ DeckGenerator give: 5000 for: (OrderedCollection  with: OverloadCard  with: CancellationCard with: SpeedUpCard  with: RepeatCard with: AccelerationCard with: RedoCard) 
-		with: (OrderedCollection with: 0.167 with: 0.167 with: 0.167 with: 0.167 with: 0.167  with: 0.16).] raise: Error withMessage: 'Las suma de probabilidades debe ser 1.'.
+	self
+		should: [ 
+			ProbabilityGenerator 
+				give: 5000
+				for: (OrderedCollection
+						 with: OverloadCard
+						 with: CancellationCard
+						 with: SpeedUpCard
+						 with: RepeatCard
+						 with: AccelerationCard
+						 with: RedoCard)
+				with: (OrderedCollection
+						 with: 0.167
+						 with: 0.167
+						 with: 0.167
+						 with: 0.167
+						 with: 0.167
+						 with: 0.16)
+				usingFiller: SpeedPlusCard ]
+		raise: Error
+		withMessage: 'Las suma de probabilidades debe ser 1.'
+]
+
+{ #category : #tests }
+DeckTests >> testDeckRefillsItself [
+
+	| game dice ranking testPlayers boxes deck napolitanaHand cards usedCard|
+	boxes := OrderedCollection
+		         with: NoEffect new
+		         with: CardEffect new
+		         with: NoEffect new
+		         with: NoEffect new
+		         with: NoEffect new.
+	cards := OrderedCollection
+						with: SpeedUpCard new
+			         with: AccelerationCard new.
+
+	testPlayers := OrderedCollection with: #napolitana.
+	deck := Deck withCards: cards.
+	dice := Beaker with:
+		        (OrderedCollection with:
+			         (LoadedDie withTosses: #( 1 ) andSides: 3)).
+	game := PizzaGame
+		        withBoxes: boxes
+		        players: testPlayers
+		        dice: dice
+		        laps: 1
+		        andDeck: deck.
+	napolitanaHand := game handOf: #napolitana.
+	usedCard:= napolitanaHand first.
+	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: #napolitana.
+	game playTurnForAllPlayers.
+	napolitanaHand := game handOf: #napolitana.
+	game handOf: #napolitana.
+	ranking := game ranking.
+
+	self assert: napolitanaHand second equals: usedCard.
 ]
