@@ -142,7 +142,7 @@ PizzaGame >> player: player wantsToApplyCard: card toCard: target [
 	ifFalse:[ self sendCardErrorFor: player. ]
 ]
 
-{ #category : #initialize }
+{ #category : #'instance variables' }
 PizzaGame >> players [
 	^players.
 ]
@@ -168,7 +168,7 @@ PizzaGame >> sendCardErrorFor: player [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance variables' }
 PizzaGame >> usedCards [
 	^cardManager usedCards
 ]

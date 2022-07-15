@@ -1,6 +1,6 @@
 Class {
 	#name : #OverloadCard,
-	#superclass : #Card,
+	#superclass : #Permanent,
 	#instVars : [
 		'value'
 	],

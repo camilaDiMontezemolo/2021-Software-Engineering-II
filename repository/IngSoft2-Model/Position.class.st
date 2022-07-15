@@ -16,14 +16,14 @@ Position class >> of: aPlayer at: anAbsoluteLocation on: aBoard [
 	^self new initializeWith: aPlayer at: anAbsoluteLocation on: aBoard.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #validations }
 Position >> > otherPosition [
 	^absoluteLocation > (otherPosition absoluteLocation). 
 	 
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance variables' }
 Position >> absoluteLocation [
 	^absoluteLocation.
 ]
@@ -35,22 +35,22 @@ Position >> initializeWith: aPlayer at: anAbsoluteLocation on: aBoard [
 	board:= aBoard.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance variables' }
 Position >> lap [
 	^board lapsOfPosition: absoluteLocation.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance variables' }
 Position >> location [
 	^board locationOfPosition: absoluteLocation.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance variables' }
 Position >> player [
 	^player.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #validations }
 Position >> samePlayerAs: anotherPosition [
 	^player = (anotherPosition player)
 ]

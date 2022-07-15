@@ -1,6 +1,6 @@
 Class {
 	#name : #SpeedUpCard,
-	#superclass : #Card,
+	#superclass : #Permanent,
 	#instVars : [
 		'value'
 	],

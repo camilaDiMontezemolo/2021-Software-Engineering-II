@@ -29,7 +29,7 @@ Die >> size [
 	^1.
 ]
 
-{ #category : #'set up' }
+{ #category : #task }
 Die >> spin [
 	^(sides atRandom).
 ]

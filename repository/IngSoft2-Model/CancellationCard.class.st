@@ -1,6 +1,6 @@
 Class {
 	#name : #CancellationCard,
-	#superclass : #Card,
+	#superclass : #Instantaneous,
 	#category : #'IngSoft2-Model'
 }
 

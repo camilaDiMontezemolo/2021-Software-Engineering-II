@@ -321,7 +321,38 @@ CardsTests >> testUseACancelationCardOnAnOverloadCard [
 ]
 
 { #category : #tests }
-CardsTests >> testUseARedoCard [
+CardsTests >> testUseARedoCardOnOverlordCard [
+	
+	| boxes testPlayers dice game cards deck margaritaHand napolitanaHand |
+
+	boxes := self createStandardNoEffectBoard.
+
+    cards := OrderedCollection
+		with: SpeedUpCard new
+		with: OverloadCard new
+		with: RedoCard new
+		with: OverloadCard new.
+	deck := Deck withCards: cards. 
+   testPlayers := OrderedCollection with:#margarita with: #napolitana.
+   dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(2))).
+   game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
+	napolitanaHand := game handOf: #napolitana.
+	margaritaHand := game handOf: #margarita.
+	game player: #margarita wantsToApplyCard: (margaritaHand second) to: #margarita.
+   game playNextTurn.
+
+	game player: #napolitana wantsToApplyCard: (napolitanaHand first) to: #napolitana.
+	game playNextTurn.
+	
+	self assert: ((game ranking) first) location equals: 0.
+	self assert: ((game ranking) second) location equals: 0.
+	 
+	
+	
+]
+
+{ #category : #tests }
+CardsTests >> testUseARedoCardOnSpeedUpCard [
 	
 	| boxes testPlayers dice game cards deck margaritaHand napolitanaHand |
 
@@ -373,14 +404,11 @@ CardsTests >> testUseARedoCardOverCancelation [
 	game player: #margarita wantsToApplyCard: (margaritaHand first) to: #margarita.
 	usedCards := game usedCards.
 	game player: #napolitana wantsToApplyCard: (napolitanaHand at: 2) toCard: (usedCards first).
-	game player: #napolitana wantsToApplyCard: (napolitanaHand at: 1) toCard: (usedCards second).
+	game player: #napolitana wantsToApplyCard: (napolitanaHand at: 1) toCard: (usedCards first).
 	game playTurnForAllPlayers.
 	
 	self assert: ((game ranking) second) location equals: 2.
 	self assert: ((game ranking) first) location equals: 2.
-	 
-	
-	
 ]
 
 { #category : #tests }
@@ -491,7 +519,7 @@ CardsTests >> testUseASpeedBoostOnASpeedUpCardTwice [
 	usedCards := game usedCards.
 	game player: #napolitana wantsToApplyCard: (napolitanaHand second) to: #napolitana.
 	game player: #napolitana wantsToApplyCard: (napolitanaHand at: 1) toCard: (usedCards first).
-	game player: #margarita wantsToApplyCard: (margaritaHand at: 1) toCard: (usedCards first).
+	game player: #margarita wantsToApplyCard: (margaritaHand at: 1) toCard: (usedCards second).
 	game playTurnForAllPlayers.
 	rankingOne:= game ranking.
 	
@@ -530,6 +558,39 @@ CardsTests >> testUseASpeedBoostOnAnAccelerationCard [
 	game playTurnForAllPlayers.
 	self assert: ((game ranking) first) location equals: 0.
 	self assert: ((game ranking) second) location equals: 0.
+	 
+	
+	
+]
+
+{ #category : #tests }
+CardsTests >> testUseASpeedBoostOnAnInstantaneousCard [
+	
+	| boxes testPlayers dice game cards deck napolitanaHand usedCards margaritaHand|
+	
+	boxes := self createStandardNoEffectBoard.
+		
+	cards := OrderedCollection
+	with: SpeedBoostCard new
+	with: AccelerationCard new
+	with: OverloadCard new
+	with: CancellationCard new.
+	
+	deck := Deck withCards: cards. 	
+	testPlayers := OrderedCollection with:#napolitana with: #margarita.
+	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(1))).
+	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 2 andDeck: deck.
+	napolitanaHand := game handOf: #napolitana.
+	margaritaHand := game handOf: #margarita.
+	
+	usedCards := game usedCards.
+	game player: #napolitana wantsToApplyCard: (napolitanaHand second) to: testPlayers.
+	game playNextTurn.
+	game player: #margarita wantsToApplyCard: (margaritaHand second) toCard: (usedCards first).
+	game playNextTurn.
+
+	self should: [game player: #napolitana wantsToApplyCard: (napolitanaHand first) toCard: (usedCards first).] raise: Error withMessage: 'No se puede jugar esta carta sobre una carta Instantanea'
+
 	 
 	
 	

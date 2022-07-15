@@ -1,6 +1,6 @@
 Class {
 	#name : #AccelerationCard,
-	#superclass : #Card,
+	#superclass : #Permanent,
 	#instVars : [
 		'value'
 	],

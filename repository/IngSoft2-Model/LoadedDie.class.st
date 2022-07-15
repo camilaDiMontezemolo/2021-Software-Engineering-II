@@ -23,10 +23,10 @@ LoadedDie >> initializeWithTheFollowingTosses: someTosses [
 
 { #category : #'set up' }
 LoadedDie >> size [
-	^1
+	^1.
 ]
 
-{ #category : #'set up' }
+{ #category : #task }
 LoadedDie >> spin [
 	(index >= tosses size) ifTrue: [ index:=0 .].
 	index := index +1.

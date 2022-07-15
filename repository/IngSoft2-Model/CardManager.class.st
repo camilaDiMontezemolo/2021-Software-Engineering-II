@@ -41,6 +41,8 @@ CardManager >> affect: target with: card [
 CardManager >> affectCard: target with: card [
 	| validCard |
 	validCard := self checkIfTheCardIsARedo: card.
+	self lastCardUsed: card.
+	usedCards add: validCard.
 	validCard triggerInstantaneousEffect: target from: self.
 	
 	
@@ -50,6 +52,7 @@ CardManager >> affectCard: target with: card [
 CardManager >> cancellateCard: aCard [
 	| neededStocks |
 	self validateInstantaneousEffectFor: aCard.
+	usedCards remove: aCard.
 	neededStocks := self findStocksWith: aCard.
 	self delete: aCard from: neededStocks
 ]
@@ -170,6 +173,12 @@ CardManager >> speedBoostCard: aCard [
 	neededStocks do: [ :oneStock | oneStock addToCardsAffectingPlayer: newCard.].
 ]
 
+{ #category : #'in game mechanics' }
+CardManager >> speedBoostValidationFor: target [
+	(target isKindOf: Instantaneous)
+		ifTrue: [ Error signal: 'No se puede jugar esta carta sobre una carta Instantanea'].
+]
+
 { #category : #stocking }
 CardManager >> stockOf: player [ 
 	| neededStock |
@@ -198,14 +207,14 @@ CardManager >> validate: target for: card [
 
 { #category : #validations }
 CardManager >> validate: target forAcceleration: card [
-	((card class) = AccelerationCard)
+	(card isMemberOf: AccelerationCard)
 	ifTrue: [ (game players = target) 
 		ifFalse: [Error signal: 'La acceleration card debe tener a todos los otros jugadores como target.']].
 ]
 
 { #category : #validations }
 CardManager >> validateInstantaneousEffectFor: target [
-		(usedCards includes: target)
+	(usedCards includes: target)
 		ifFalse:[Error signal: 'No se puede aplicar el efecto a esa carta.' ].
 	
 ]

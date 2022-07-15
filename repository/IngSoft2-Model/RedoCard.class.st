@@ -1,6 +1,6 @@
 Class {
 	#name : #RedoCard,
-	#superclass : #Card,
+	#superclass : #Instantaneous,
 	#category : #'IngSoft2-Model'
 }
 

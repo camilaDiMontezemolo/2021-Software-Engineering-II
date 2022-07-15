@@ -17,7 +17,7 @@ Beaker >> intializeWithDice: gameDice [
 	dice := gameDice.
 ]
 
-{ #category : #'set up' }
+{ #category : #initialize }
 Beaker >> size [
 	^dice size
 ]
