@@ -120,7 +120,7 @@ Board >> moveAllPlayersToFirstBoxSlot [
 			(self calculateNewLocationFor: position))].
 ]
 
-{ #category : #checking }
+{ #category : #'validations/checks' }
 Board >> playerSurpassed: someLaps [
 	^(self positions) anySatisfy: [ :position | ((position absoluteLocation)//size) >= someLaps].
 ]

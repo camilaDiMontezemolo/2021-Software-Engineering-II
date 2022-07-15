@@ -280,7 +280,6 @@ CardsTests >> testUseACancelationCardOnAnInactiveCardRaiseError [
 	testPlayers := OrderedCollection with: #napolitana with: #margarita.
 	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(2))).
 	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
-	"game playNextTurn."
 	napolitanaHand := game handOf: #napolitana.
 	margaritaHand := game handOf: #margarita.
 
