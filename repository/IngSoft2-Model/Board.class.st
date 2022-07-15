@@ -2,13 +2,13 @@ Class {
 	#name : #Board,
 	#superclass : #Object,
 	#instVars : [
-		'mySize',
-		'myBoxes',
+		'size',
+		'boxes',
 		'positions',
-		'mylaps',
+		'laps',
 		'lastBoxUsed',
-		'myPlayers',
-		'myGame'
+		'players',
+		'game'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -18,36 +18,46 @@ Board class >> withBoxes: aCollectionOfBoxes andSomePlayers: somePlayers forAGam
 	^self new initializeWithBoxes: aCollectionOfBoxes andSomePlayers: somePlayers forAGame: aGame.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'apply effects' }
 Board >> applyEffectFor: aPosition [
 	| box |
-	box := self findBoxFor: aPosition.
+	box := self boxFor: aPosition.
 	box affect: positions triggeredOn: aPosition with: self.
 	lastBoxUsed:=box.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'apply effects' }
 Board >> applyLastTypeOfBoxFor: aPlayer [ 
 	| positionOfPlayer |
-	positionOfPlayer := self findPositionOfPlayer: aPlayer.
+	positionOfPlayer := self positionOfPlayer: aPlayer.
 	lastBoxUsed affect: positions triggeredOn: positionOfPlayer with: self. 
 ]
 
-{ #category : #'as yet unclassified' }
-Board >> calculateNewLocationFor: position [
-	|laps|
-	laps:= ((position absoluteLocation)//(mySize)).
-	
-	(laps ==0)
-	ifTrue:[^0.]
-	ifFalse:[^(mySize*laps)+1.].
+{ #category : #positioning }
+Board >> boxFor: aPosition [
+	^ boxes at:
+			((aPosition absoluteLocation) - (size*((aPosition absoluteLocation)//size)))+1.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #positioning }
+Board >> calculateNewLocationFor: position [
+	|newLaps|
+	newLaps := (position absoluteLocation)//size.
+	(newLaps ==0)
+		ifTrue:[^0.]
+		ifFalse:[^(size*newLaps)+1.].
+]
+
+{ #category : #'apply effects' }
+Board >> cardFor: playerWhoGetsTheCard [
+	game cardFor: playerWhoGetsTheCard.
+]
+
+{ #category : #positioning }
 Board >> change: aPosition by: distance [
 	| newAbsolute newPosition|
    newAbsolute:= (aPosition absoluteLocation) +distance.
-	newPosition:= (self generatePositionFor: aPosition at: newAbsolute).
+	newPosition:= self generatePositionFor: aPosition at: newAbsolute.
 	self replacePosition: aPosition with: newPosition.
    ^newPosition.
 		
@@ -55,7 +65,7 @@ Board >> change: aPosition by: distance [
 		
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #positioning }
 Board >> changePositionOf: aPlayer by: distance playing: game [
 	|newPosition playerPosition|
 	playerPosition:= (positions select: [:position | position player= aPlayer ]) first.
@@ -64,66 +74,45 @@ Board >> changePositionOf: aPlayer by: distance playing: game [
 			ifFalse: [self applyEffectFor: newPosition].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #positioning }
 Board >> createPositions [
-	positions:= myPlayers collect: [ :player | (Position of: player at: 0 on: self)].
+	positions:= players collect: [ :player | Position of: player at: 0 on: self].
 ]
 
-{ #category : #'as yet unclassified' }
-Board >> findBoxFor: aPosition [
-	^ myBoxes at:
-			((aPosition absoluteLocation) - (mySize*((aPosition absoluteLocation)//mySize)))+1.
-]
-
-{ #category : #'as yet unclassified' }
-Board >> findPositionOfPlayer: aPlayer [
-	^(positions select: [: position| (position player)=aPlayer]) first.
-]
-
-{ #category : #'as yet unclassified' }
+{ #category : #positioning }
 Board >> generatePositionFor: aPosition at: absoluteLocation [
-	^(Position of: (aPosition player) at: absoluteLocation on: self).
-]
-
-{ #category : #'as yet unclassified' }
-Board >> getACardFor: playerWhoGetsTheCard [
-	myGame getACardFor: playerWhoGetsTheCard.
-]
-
-{ #category : #'as yet unclassified' }
-Board >> giveMeTheLapsOfThisPosition: absoluteLocation [.
-	^absoluteLocation//mySize.
-]
-
-{ #category : #'as yet unclassified' }
-Board >> giveMeTheLocationOfThisPosition: absoluteLocation [.
-	^absoluteLocation -((absoluteLocation//mySize)*mySize).
-]
-
-{ #category : #'as yet unclassified' }
-Board >> hasAnyPlayerSurpassed: someLaps [
-	^(self positions) anySatisfy: [ :position | ((position absoluteLocation)//mySize) >= someLaps].
+	^Position of: (aPosition player) at: absoluteLocation on: self.
 ]
 
 { #category : #initialize }
 Board >> initializeWithBoxes: aCollectionOfBoxes andSomePlayers: somePlayers forAGame: aGame [
-	myBoxes := OrderedCollection new.
-	myBoxes := aCollectionOfBoxes.
-	myBoxes addFirst: (NoEffectBox new).
-	mySize := ( (myBoxes size)-1 ).
-	lastBoxUsed := (NoEffectBox new).
-	myPlayers:= somePlayers.
-	myGame:=aGame.
+	boxes := OrderedCollection new.
+	boxes := aCollectionOfBoxes.
+	boxes addFirst: NoEffectBox new.
+	size :=(boxes size)-1 .
+	lastBoxUsed := NoEffectBox new.
+	players:= somePlayers.
+	game:=aGame.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #positioning }
+Board >> lapsOfPosition: absoluteLocation [.
+	^absoluteLocation//size.
+]
+
+{ #category : #positioning }
+Board >> locationOfPosition: absoluteLocation [.
+	^absoluteLocation -((absoluteLocation//size)*size).
+]
+
+{ #category : #positioning }
 Board >> move: aPosition by: aDistance [
 	self replacePosition: aPosition 
 					with: (self generatePositionFor: aPosition at: (aPosition absoluteLocation)+aDistance).
 					
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #positioning }
 Board >> moveAllPlayersToFirstBoxSlot [
 	positions do: 
 	[:position |self replacePosition: position with:
@@ -131,12 +120,22 @@ Board >> moveAllPlayersToFirstBoxSlot [
 			(self calculateNewLocationFor: position))].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #checking }
+Board >> playerSurpassed: someLaps [
+	^(self positions) anySatisfy: [ :position | ((position absoluteLocation)//size) >= someLaps].
+]
+
+{ #category : #positioning }
+Board >> positionOfPlayer: aPlayer [
+	^(positions select: [: position| (position player)=aPlayer]) first.
+]
+
+{ #category : #positioning }
 Board >> positions [
 	^positions.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #positioning }
 Board >> replacePosition: position with: newPosition [
 	positions at:(positions indexOf: position) put: newPosition.
 ]

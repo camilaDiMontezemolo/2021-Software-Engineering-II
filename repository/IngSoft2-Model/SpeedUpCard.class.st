@@ -2,44 +2,27 @@ Class {
 	#name : #SpeedUpCard,
 	#superclass : #Card,
 	#instVars : [
-		'affectedPlayer',
-		'active'
+		'value'
 	],
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'instance creation' }
-SpeedUpCard class >> of: player on: affectedPlayer [
-	^self new initializeWithPlayer: player andAffectedPlayer: affectedPlayer.
-]
-
-{ #category : #'as yet unclassified' }
-SpeedUpCard >> active [
-	^active
-]
-
-{ #category : #'as yet unclassified' }
-SpeedUpCard >> applyEffectFrom: aDeck [ 
-	(active) 
-	ifTrue:[aDeck lastCardUsed:(self).
-		^1.]
-	ifFalse:[^0].
+{ #category : #initialization }
+SpeedUpCard class >> withValue: newValue [
+	^self new initializeWithNewValue: newValue
 ]
 
 { #category : #initialize }
-SpeedUpCard >> initializeWithPlayer: player andAffectedPlayer: anotherPlayer [
-	owner :=player.
-	affectedPlayer :=anotherPlayer.
-	active := (affectedPlayer isNotEmpty).
-	instant := false.
+SpeedUpCard >> initialize [ 
+	value := 1.
 ]
 
-{ #category : #'as yet unclassified' }
-SpeedUpCard >> isAnEmptyObject [
-	^false.
+{ #category : #initialize }
+SpeedUpCard >> initializeWithNewValue: newValue [
+	value := newValue.
 ]
 
-{ #category : #'as yet unclassified' }
-SpeedUpCard >> usedOn: player [ 
-	^(player = affectedPlayer).
+{ #category : #'apply effects' }
+SpeedUpCard >> value [ 
+	^value
 ]
