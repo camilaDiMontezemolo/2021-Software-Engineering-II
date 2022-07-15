@@ -18,7 +18,7 @@ CardManager class >> with: initialCards in: aGame [
 	^self new initializeWithCards: initialCards in: aGame.
 ]
 
-{ #category : #stocking }
+{ #category : #'adding/removing' }
 CardManager >> addCardTo: oneStock [
 	| newCard |
 	self checkStateOfDeck.
@@ -27,7 +27,7 @@ CardManager >> addCardTo: oneStock [
 				oneStock addToHand: newCard.]
 ]
 
-{ #category : #'in game mechanics' }
+{ #category : #targetting }
 CardManager >> affect: target with: card [
 	| neededStocks validCard |
 	validCard := self validate: target for: card.
@@ -37,7 +37,7 @@ CardManager >> affect: target with: card [
 	neededStocks do: [ :oneStock | oneStock addToCardsAffectingPlayer: validCard. ].
 ]
 
-{ #category : #'in game mechanics' }
+{ #category : #targetting }
 CardManager >> affectCard: target with: card [
 	| validCard |
 	validCard := self checkIfTheCardIsARedo: card.
@@ -57,14 +57,14 @@ CardManager >> cancellateCard: aCard [
 	self delete: aCard from: neededStocks
 ]
 
-{ #category : #stocking }
+{ #category : #'instance variables' }
 CardManager >> cardsAffecting: player [
 	| neededList |
 	neededList := self stockOf: player.
 	^neededList cardsAffecting.
 ]
 
-{ #category : #checking }
+{ #category : #'validations/checks' }
 CardManager >> checkIfTheCardIsARedo: card [
 	(card class = RedoCard)
 	ifTrue: [ self usedCards add: card.
@@ -73,7 +73,7 @@ CardManager >> checkIfTheCardIsARedo: card [
 	
 ]
 
-{ #category : #checking }
+{ #category : #'validations/checks' }
 CardManager >> checkStateOfDeck [
 	(deck numberOfCards = 0)
 	ifTrue: [	
@@ -82,7 +82,7 @@ CardManager >> checkStateOfDeck [
 			discardedCards  removeAll: discardedCards.]
 ]
 
-{ #category : #stocking }
+{ #category : #'adding/removing' }
 CardManager >> createHandsFor: thePlayersOfThisGame [
 	| n |
 	n:=0.
@@ -90,24 +90,24 @@ CardManager >> createHandsFor: thePlayersOfThisGame [
 		[ :onePlayer | playersStockTakings add: (Stocktaking for: onePlayer). ].
 ]
 
-{ #category : #stocking }
+{ #category : #'adding/removing' }
 CardManager >> delete: aCard from: stocks [
 	stocks
 		do: [ :oneStock | oneStock removeCardAffectingPlayer: aCard ]
 ]
 
-{ #category : #stocking }
+{ #category : #'adding/removing' }
 CardManager >> findStocksWith: aCard [
 	^ playersStockTakings
 		select: [ :stock | stock cardsAffecting includes: aCard ]
 ]
 
-{ #category : #stocking }
+{ #category : #'instance variables' }
 CardManager >> handOf: player [ 
 	^(self stockOf: player) hand.
 ]
 
-{ #category : #stocking }
+{ #category : #'adding/removing' }
 CardManager >> handOutInitialCardsFor: thePlayersOfThisGame [
 	| n |
 	self createHandsFor: thePlayersOfThisGame.
@@ -145,7 +145,7 @@ CardManager >> lastTypeOfBoxForPlayer: aPlayer [
 	game lastTypeOfBoxForPlayer: aPlayer.
 ]
 
-{ #category : #positioning }
+{ #category : #modifying }
 CardManager >> modifyDistanceOf: player [ 
 	| playerCards finalDistance|
 	finalDistance:=0.
@@ -154,7 +154,7 @@ CardManager >> modifyDistanceOf: player [
 	^finalDistance.
 ]
 
-{ #category : #stocking }
+{ #category : #'adding/removing' }
 CardManager >> remove: card fromTheHandOf: player [
 	| neededStock |
 	neededStock := self stockOf: player.
@@ -163,23 +163,30 @@ CardManager >> remove: card fromTheHandOf: player [
 
 { #category : #effect }
 CardManager >> speedBoostCard: aCard [
-	| neededStocks newCard |
+	| newCard |
 	self validateInstantaneousEffectFor: aCard.
-	neededStocks := self findStocksWith: aCard.
-	self delete: aCard from: neededStocks.
 	newCard := (aCard class) withValue: ((aCard value) * 2).
+	self speedBoostStockModificationBy: aCard And: newCard.
 	usedCards remove: aCard.
 	usedCards add: newCard.
-	neededStocks do: [ :oneStock | oneStock addToCardsAffectingPlayer: newCard.].
 ]
 
-{ #category : #'in game mechanics' }
+{ #category : #modifying }
+CardManager >> speedBoostStockModificationBy: aCard And: newCard [
+	| neededStocks |
+	neededStocks := self findStocksWith: aCard.
+	self delete: aCard from: neededStocks.
+	neededStocks do: [ :oneStock | oneStock addToCardsAffectingPlayer: newCard.].
+
+]
+
+{ #category : #'validations/checks' }
 CardManager >> speedBoostValidationFor: target [
 	(target isKindOf: Instantaneous)
 		ifTrue: [ Error signal: 'No se puede jugar esta carta sobre una carta Instantanea'].
 ]
 
-{ #category : #stocking }
+{ #category : #'instance variables' }
 CardManager >> stockOf: player [ 
 	| neededStock |
 	neededStock := (playersStockTakings select: [:stock| stock owner = player]) first.
@@ -197,7 +204,7 @@ CardManager >> usedCards [
 	^usedCards
 ]
 
-{ #category : #validations }
+{ #category : #'validations/checks' }
 CardManager >> validate: target for: card [
 	|validCard|
 	validCard := self checkIfTheCardIsARedo: card.
@@ -205,21 +212,21 @@ CardManager >> validate: target for: card [
 	^validCard.
 ]
 
-{ #category : #validations }
+{ #category : #'validations/checks' }
 CardManager >> validate: target forAcceleration: card [
 	(card isMemberOf: AccelerationCard)
 	ifTrue: [ (game players = target) 
 		ifFalse: [Error signal: 'La acceleration card debe tener a todos los otros jugadores como target.']].
 ]
 
-{ #category : #validations }
+{ #category : #'validations/checks' }
 CardManager >> validateInstantaneousEffectFor: target [
 	(usedCards includes: target)
 		ifFalse:[Error signal: 'No se puede aplicar el efecto a esa carta.' ].
 	
 ]
 
-{ #category : #validations }
+{ #category : #'validations/checks' }
 CardManager >> verify: card belongsTo: player [
 	| neededStock |
 	neededStock := self stockOf: player.

@@ -42,37 +42,37 @@ PizzaGame class >> withBoxes: boxes players: somePlayers dice: someDice laps: so
 		initializeWithBoxes: boxes players: somePlayers dice: someDice laps: someLaps andDeck: deck
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'in game commands' }
 PizzaGame >> cardFor: playerWhoGetsTheCard [
 	| stock |
 	stock := cardManager stockOf: playerWhoGetsTheCard.
 	cardManager addCardTo: stock.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance variables' }
 PizzaGame >> cardsAffecting: player [ 
 	^cardManager cardsAffecting: player.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'in game commands' }
 PizzaGame >> changeTurn [
 	(currentTurn == players size) ifTrue:[currentTurn:=0].
 	currentTurn := currentTurn +1.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'validations/checks' }
 PizzaGame >> check: card from: player [
-	(card class = RedoCard)
+	(card isMemberOf: RedoCard)
 		ifFalse: [self sendCardErrorFor: player]
 		ifTrue:[cardManager verify: card belongsTo: player.]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'in game commands' }
 PizzaGame >> firstPlace [
 	^self ranking first.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance variables' }
 PizzaGame >> handOf: player [
 	^cardManager handOf: player.
 ]
@@ -91,23 +91,23 @@ PizzaGame >> initializeWithBoxes: someBoxes players: somePlayers dice: someDie l
 	cardManager handOutInitialCardsFor: somePlayers.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance variables' }
 PizzaGame >> isFinished [
 	^board playerSurpassed: laps.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance variables' }
 PizzaGame >> lastTypeOfBoxForPlayer: aPlayer [
 	board applyLastTypeOfBoxFor: aPlayer.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'in game commands' }
 PizzaGame >> play [
 	[ self isFinished ] whileFalse:
 		[ self playTurnForAllPlayers ]
 ]
 
-{ #category : #accessing }
+{ #category : #'in game commands' }
 PizzaGame >> playNextTurn [
 	self isFinished
 		ifTrue: [ ^ self ].
@@ -115,12 +115,12 @@ PizzaGame >> playNextTurn [
 	self changeTurn.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'in game commands' }
 PizzaGame >> playTurnForAllPlayers [
 	players do: [:player | self playNextTurn ].
 ]
 
-{ #category : #'in game mechanics' }
+{ #category : #'in game commands' }
 PizzaGame >> player: player wantsToApplyCard: card to: target [
  
 	((players at: currentTurn) = player & (players includes: player))
@@ -131,7 +131,7 @@ PizzaGame >> player: player wantsToApplyCard: card to: target [
 
 ]
 
-{ #category : #'in game mechanics' }
+{ #category : #'in game commands' }
 PizzaGame >> player: player wantsToApplyCard: card toCard: target [
 	
 	(players includes: player)
@@ -147,12 +147,12 @@ PizzaGame >> players [
 	^players.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'in game commands' }
 PizzaGame >> ranking [
 	^(board positions) asSortedCollection: [:position1 :position2 | position1 > position2].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'in game commands' }
 PizzaGame >> rollFor: aPlayer [
 	| distance |
 	distance := dice spin.
@@ -160,7 +160,7 @@ PizzaGame >> rollFor: aPlayer [
 	board changePositionOf: aPlayer by: distance playing: self.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'validations/checks' }
 PizzaGame >> sendCardErrorFor: player [
 	(players includes: player)
 	ifTrue: [ Error signal: 'Un jugador no puede tirar una carta fuera de su turno.' ]

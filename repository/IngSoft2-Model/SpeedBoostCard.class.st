@@ -1,6 +1,6 @@
 Class {
 	#name : #SpeedBoostCard,
-	#superclass : #Permanent,
+	#superclass : #Instantaneous,
 	#category : #'IngSoft2-Model'
 }
 
