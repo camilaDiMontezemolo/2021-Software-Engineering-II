@@ -470,6 +470,29 @@ CardsTests >> testUseARepeatCardWhenNoDieWasRolledYet [
 ]
 
 { #category : #tests }
+CardsTests >> testUseASpeedBoostCardOnAnInactiveCardRaiseError [
+
+	| boxes testPlayers dice game cards deck napolitanaHand margaritaHand |
+	
+	boxes := self createStandardNoEffectBoard.
+	cards := OrderedCollection
+		with: SpeedBoostCard new
+		with: SpeedUpCard new
+		with: SpeedUpCard new
+		with: OverloadCard new.
+	deck := Deck withCards: cards. 	
+	testPlayers := OrderedCollection with: #napolitana with: #margarita.
+	dice := Beaker with: (OrderedCollection with: (LoadedDie withTosses: #(2))).
+	game := PizzaGame withBoxes: boxes players: testPlayers dice: dice laps: 1 andDeck: deck.
+	napolitanaHand := game handOf: #napolitana.
+	margaritaHand := game handOf: #margarita.
+
+	self should: [game player: #napolitana wantsToApplyCard: (napolitanaHand first) toCard: (margaritaHand first).] raise: Error withMessage: 'No se puede aplicar el efecto a esa carta.'
+
+	
+]
+
+{ #category : #tests }
 CardsTests >> testUseASpeedBoostOnASpeedUpCard [
 	
 	| board testPlayers dice game cards rankingOne deck napolitanaHand usedCards |
@@ -563,7 +586,7 @@ CardsTests >> testUseASpeedBoostOnAnAccelerationCard [
 ]
 
 { #category : #tests }
-CardsTests >> testUseASpeedBoostOnAnInstantaneousCard [
+CardsTests >> testUseASpeedBoostOnAnInstantaneousCardRaiseError [
 	
 	| boxes testPlayers dice game cards deck napolitanaHand usedCards margaritaHand|
 	
